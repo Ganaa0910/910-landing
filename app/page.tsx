@@ -82,7 +82,7 @@ export default function Home() {
               <Button
                 variant="glow"
                 size="lg"
-                className="mt-8"
+                className="mt-12"
                 iconRight={
                   <svg
                     className="h-4 w-4"

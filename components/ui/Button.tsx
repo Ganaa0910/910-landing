@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "text-gray-800 hover:bg-gray-200 hover:text-accent-600 active:bg-gray-300 rounded-md dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-accent-500 dark:active:bg-gray-900 transition-colors",
         secondary:
           "bg-gray-100 text-base-black border-2 border-base-black active:bg-gray-300 rounded-md shadow-[4px_4px_0px_rgba(10,10,10,1)] hover:shadow-[6px_6px_0px_rgba(10,10,10,1)] active:shadow-[2px_2px_0px_rgba(10,10,10,1)] dark:bg-gray-800 dark:text-gray-100 dark:border-gray-300 dark:shadow-[4px_4px_0px_rgba(115,115,115,1)] dark:hover:shadow-[6px_6px_0px_rgba(115,115,115,1)] dark:active:shadow-[2px_2px_0px_rgba(115,115,115,1)] dark:active:bg-gray-700 transition-shadow",
-        glow: "bg-gradient-to-b from-accent-500 to-accent-600 text-white rounded-lg shadow-[0_0_20px_rgba(15,118,110,0.3)] hover:shadow-[0_0_40px_rgba(15,118,110,0.5)] active:shadow-none transition-shadow duration-200",
+        glow: "bg-gradient-to-b from-purple-500 to-purple-600 text-white rounded-lg shadow-none hover:shadow-[0_0_60px_rgba(168,85,247,0.8),0_0_120px_rgba(255,255,255,0.4)] hover:[text-shadow:0_0_20px_rgba(255,255,255,0.8),0_0_40px_rgba(216,180,254,0.6)] active:shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all duration-300",
       },
       size: {
         sm: "h-10 px-4 text-xs",
