@@ -80,7 +80,7 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               <Button
-                variant="default"
+                variant="glow"
                 size="lg"
                 className="mt-8"
                 iconRight={
