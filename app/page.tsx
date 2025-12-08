@@ -1,20 +1,68 @@
 "use client";
 
-import GradientBlinds from "@/components/GradientBlinds";
+import { useState, useEffect } from "react";
+import Particles from "@/components/Particles";
+import { Button } from "@/components/ui/Button";
+
+const quirkyLines = [
+  "pixels with personality",
+  "crafting digital curiosities",
+  "where code meets chaos",
+  "building the internet's playground",
+  "ctrl+alt+create",
+  "designing the impossible",
+  "brewing digital magic",
+  "making websites weird (in a good way)",
+  "pixels, passion, no pizza",
+  "shipping vibes and code",
+  "professional internet makers",
+  "404: boring not found",
+  "turning caffeine into creativity",
+  "we put the art in startup",
+  "digital dreamweavers at work",
+  "creating the web's next obsession",
+  "pixels before breakfast",
+  "experimental web lab",
+  "designing tomorrow's classics",
+  "where ideas get executed",
+  "building better internet",
+  "code, design, repeat",
+  "making the web interesting again",
+  "creative code collective",
+];
 
 export default function Home() {
+  const [tagline, setTagline] = useState("");
+
+  useEffect(() => {
+    const updateTagline = () => {
+      const hour = new Date().getHours();
+      const index = hour % quirkyLines.length;
+      setTagline(quirkyLines[index]);
+    };
+
+    updateTagline();
+    const interval = setInterval(updateTagline, 60 * 60 * 1000); // Update every hour
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="fixed inset-0 w-full h-full bg-black">
       <div className="absolute inset-0 w-full h-full z-0">
-        <GradientBlinds
+        <Particles
           className="w-full h-full"
-          gradientColors={["#0a0a0a", "#1a1a2e", "#16213e", "#0f3460"]}
-          blindCount={12}
-          spotlightRadius={0.6}
-          spotlightSoftness={1.2}
-          spotlightOpacity={0.8}
-          noise={0.15}
-          mouseDampening={0.08}
+          particleCount={300}
+          particleSpread={12}
+          speed={0.08}
+          particleColors={["#ffffff", "#a0a0ff", "#6060ff"]}
+          moveParticlesOnHover={true}
+          particleHoverFactor={1.5}
+          alphaParticles={true}
+          particleBaseSize={180}
+          sizeRandomness={1.2}
+          cameraDistance={20}
+          disableRotation={false}
         />
       </div>
       <main className="absolute inset-0 z-10 flex h-full w-full flex-col pointer-events-none">
@@ -24,8 +72,36 @@ export default function Home() {
               910studio
             </h1>
             <p className="mt-6 text-xl text-zinc-400 sm:text-2xl">
-              something&apos;s forming
+              {tagline || "something's forming"}
             </p>
+            <a
+              href="https://design.910.studio"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="default"
+                size="lg"
+                className="mt-8"
+                iconRight={
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                }
+              >
+                Visit Design Studio
+              </Button>
+            </a>
           </div>
         </div>
         <footer className="pb-8 text-center pointer-events-auto">
