@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Particles from "@/components/Particles";
 import GradientBlinds from "@/components/GradientBlinds";
 import ColorBends from "@/components/ColorBends";
@@ -298,7 +298,11 @@ const generateBackgrounds = (palette: typeof colorPalettes[0]) => [
   // Dither - noise texture
   <Dither
     key="dither"
-    waveColor="#14B8A6"
+    waveColor={[
+      parseInt(palette.colors[1].slice(1, 3), 16) / 255,
+      parseInt(palette.colors[1].slice(3, 5), 16) / 255,
+      parseInt(palette.colors[1].slice(5, 7), 16) / 255,
+    ]}
     waveSpeed={0.3}
     waveFrequency={2}
     waveAmplitude={0.5}
@@ -308,7 +312,6 @@ const generateBackgrounds = (palette: typeof colorPalettes[0]) => [
   // Hyperspeed - motion blur
   <Hyperspeed
     key="hyperspeed"
-    className="w-full h-full"
     effectOptions={{
       roadWidth: 9,
       islandWidth: 2,
@@ -317,17 +320,6 @@ const generateBackgrounds = (palette: typeof colorPalettes[0]) => [
       fovSpeedUp: 150,
       speedUp: 2,
       carLightsFade: 0.4,
-    }}
-    bloomStrength={0.5}
-    colors={{
-      roadColor: 0x080808,
-      islandColor: 0x0a0a0a,
-      background: 0x000000,
-      shoulderLines: 0x0F766E,
-      brokenLines: 0x14B8A6,
-      leftCars: [0x2DD4BF, 0x5EEAD4, 0x14B8A6],
-      rightCars: [0x0F766E, 0x115E59, 0x134E4A],
-      sticks: 0x14B8A6,
     }}
   />,
   // Lightning - electric energy
@@ -393,7 +385,7 @@ const displayFonts = [
 
 export default function Home() {
   const [tagline, setTagline] = useState("");
-  const [selectedBackground, setSelectedBackground] = useState<JSX.Element | null>(null);
+  const [selectedBackground, setSelectedBackground] = useState<React.ReactElement | null>(null);
   const [displayFont, setDisplayFont] = useState(displayFonts[0]);
 
   useEffect(() => {
