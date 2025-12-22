@@ -606,173 +606,90 @@ const generateBackgrounds = (palette: typeof colorPalettes[0]) => [
   // LightRays - radial beams
   <LightRays
     key="lightrays"
-    color={palette.colors[1]}
-    rayCount={12}
-    speed={0.5}
-    opacity={0.6}
+    raysColor={palette.colors[1]}
+    raysSpeed={0.5}
   />,
   // Plasma - organic flow
   <Plasma
     key="plasma"
-    colors={[palette.colors[0], palette.colors[1], palette.colors[2]]}
-    speed={0.8}
-    complexity={3}
-  />,
-  // PixelSnow - retro particles
-  <PixelSnow
-    key="pixelsnow"
     color={palette.colors[1]}
-    density={100}
-    speed={2}
-    size={3}
+    speed={0.8}
   />,
   // Beams - light streaks
   <Beams
     key="beams"
-    color={palette.colors[1]}
-    count={8}
+    lightColor={palette.colors[1]}
+    beamNumber={8}
     speed={1.5}
-    width={2}
+    beamWidth={2}
   />,
   // PrismaticBurst - color explosion
   <PrismaticBurst
     key="prismaticburst"
     colors={palette.colors}
-    particleCount={150}
-    burstSpeed={1.2}
-  />,
-  // Galaxy - space swirl
-  <Galaxy
-    key="galaxy"
-    starColor={palette.colors[3]}
-    nebulaColors={[palette.colors[0], palette.colors[1], palette.colors[2]]}
-    starCount={200}
-    rotationSpeed={0.3}
-  />,
-  // RippleGrid - wave interference
-  <RippleGrid
-    key="ripplegrid"
-    color={palette.colors[1]}
-    gridSize={20}
-    waveSpeed={1}
-    rippleCount={3}
+    speed={1.2}
+    intensity={1.5}
   />,
   // LightRays alt - different config
   <LightRays
     key="lightrays2"
-    color={palette.colors[2]}
-    rayCount={8}
-    speed={0.8}
-    opacity={0.4}
+    raysColor={palette.colors[2]}
+    raysSpeed={0.8}
   />,
   // Plasma alt - faster flow
   <Plasma
     key="plasma2"
-    colors={[palette.colors[2], palette.colors[3], palette.colors[0]]}
+    color={palette.colors[2]}
     speed={1.5}
-    complexity={2}
-  />,
-  // PixelSnow alt - denser
-  <PixelSnow
-    key="pixelsnow2"
-    color={palette.colors[0]}
-    density={150}
-    speed={3}
-    size={2}
   />,
 ];
 
-// ALL THE FONTS - SHAPESHIFTER MODE
+// CURATED FONT COLLECTION - 35 fonts covering full spectrum
 const displayFonts = [
-  // Original power
+  // Display Modern (3)
   "--font-syne",
   "--font-unbounded",
   "--font-space-grotesk",
-  "--font-archivo",
-  "--font-russo",
+  // Condensed Power (4)
+  "--font-bebas",
+  "--font-anton",
+  "--font-fjalla",
+  "--font-oswald",
+  // Futuristic/Tech (4)
   "--font-orbitron",
-  "--font-chakra-petch",
-  "--font-rajdhani",
-  "--font-saira",
-  "--font-outfit",
-  "--font-michroma",
-  // Body fonts (why not?)
-  "--font-inter",
-  "--font-manrope",
-  "--font-work-sans",
-  "--font-dm-sans",
-  "--font-plus-jakarta",
-  "--font-instrument-sans",
-  "--font-lexend",
-  // Mono madness
-  "--font-jetbrains-mono",
-  "--font-azeret-mono",
-  "--font-ibm-plex-mono",
-  "--font-inconsolata",
-  // NEW WILD SHIT
-  "--font-playfair", // Elegant serif
-  "--font-bebas", // Condensed power
-  "--font-righteous", // Bold display
-  "--font-black-ops", // Stencil military
-  "--font-monoton", // Outline chrome
-  "--font-press-start", // Pixel retro
-  "--font-vt323", // Terminal hacker
-  "--font-bungee", // Colorful pop
-  "--font-ultra", // Extra bold serif
-  "--font-paytone", // Rounded impact
-  "--font-anton", // Condensed sans
-  "--font-teko", // Condensed tech
-  "--font-barlow-condensed", // Condensed modern
-  "--font-fjalla", // Nordic strength
-  "--font-oswald", // Editorial condensed
-  "--font-staatliches", // German industrial
-  "--font-alfa-slab", // Bold slab serif
-  "--font-audiowide", // Wide tech
-  "--font-electrolize", // Futuristic
-  "--font-exo2", // Sci-fi
-  "--font-aldrich", // Geometric future
-  "--font-permanent-marker", // Handwritten punk
-  "--font-faster-one", // Racing speed
-  "--font-creepster", // Horror display
-  "--font-zilla-slab", // Mozilla slab
-  "--font-black-han", // Korean bold
-  "--font-rubik-mono", // Mono display
-  // MORE CHAOS - EXTRA WILD FONTS
-  "--font-wallpoet", // Geometric stencil
-  "--font-vast-shadow", // 3D shadow
-  "--font-plaster", // Rough handmade
-  "--font-eater", // Horror dripping
-  "--font-metal-mania", // Heavy metal
-  "--font-nosifer", // Zombie horror
-  "--font-butcherman", // Butcher block
-  "--font-caesar-dressing", // Casual handwriting
-  "--font-smokum", // Western saloon
-  "--font-skranji", // Hand-drawn bold
-  "--font-rye", // Victorian western
-  "--font-hanalei-fill", // Hawaiian tiki
-  "--font-lacquer", // Japanese brush
-  "--font-shrikhand", // Bold Indian
-  "--font-kumar-one", // Rounded cartoon
-  "--font-sirin-stencil", // Thai stencil
-  "--font-trade-winds", // Bold serif
-  "--font-stalinist-one", // Soviet propaganda
-  "--font-cinzel", // Roman elegance
-  "--font-syncopate", // Wide geometric
-  "--font-iceland", // Nordic angular
-  "--font-poller-one", // Bold geometric
-  "--font-turret-road", // Mechanical
-  "--font-arizonia", // Script elegance
-  "--font-gruppo", // Condensed display
-  "--font-major-mono-display", // Mono display
-  "--font-monofett", // Fat mono
-  "--font-sedgwick-ave", // Graffiti handstyle
-  "--font-special-elite", // Typewriter
-  "--font-fontdiner-swanky", // 50s diner
-  "--font-titan-one", // Super bold
-  "--font-squada-one", // Athletic block
-  "--font-passion-one", // Ultra condensed
-  "--font-londrina-outline", // Outlined display
-  "--font-sancreek", // Western wood type
+  "--font-audiowide",
+  "--font-electrolize",
+  "--font-exo2",
+  // Retro/Pixel (2)
+  "--font-press-start",
+  "--font-vt323",
+  // Bold Display (3)
+  "--font-russo",
+  "--font-ultra",
+  "--font-black-ops",
+  // Horror/Wild (4)
+  "--font-creepster",
+  "--font-nosifer",
+  "--font-eater",
+  "--font-metal-mania",
+  // Racing/Speed (1)
+  "--font-faster-one",
+  // Western (3)
+  "--font-rye",
+  "--font-smokum",
+  "--font-sancreek",
+  // Elegant/Serif (2)
+  "--font-playfair",
+  "--font-cinzel",
+  // Quirky (4)
+  "--font-monoton",
+  "--font-wallpoet",
+  "--font-rubik-mono",
+  "--font-permanent-marker",
+  // Geometric (3)
+  "--font-staatliches",
+  "--font-aldrich",
+  "--font-syncopate",
 ];
 
 export default function Home() {
@@ -807,7 +724,18 @@ export default function Home() {
     const randomQuoteIndex = Math.floor(Math.random() * quirkyLines.length);
     const randomTitleFontIndex = Math.floor(Math.random() * displayFonts.length);
 
-    setSelectedBackground(generatedBackgrounds[randomBgIndex]);
+    const selectedBg = generatedBackgrounds[randomBgIndex];
+
+    // Console log which background is rendering
+    console.log('🎨 Background Selected:', {
+      name: selectedBg.key,
+      palette: randomPalette.name,
+      colors: randomPalette.colors,
+      index: randomBgIndex,
+      totalBackgrounds: generatedBackgrounds.length
+    });
+
+    setSelectedBackground(selectedBg);
     setTagline(quirkyLines[randomQuoteIndex]);
     setDisplayFont(displayFonts[randomTitleFontIndex]); // Only title gets wild font
     setAccentColor(randomPalette.colors[1]); // Use second color from palette
@@ -1062,8 +990,6 @@ export default function Home() {
             ease: "none",
             onComplete: createNeonSequence
           });
-
-          return tl;
         };
 
         createNeonSequence();
@@ -1133,7 +1059,7 @@ export default function Home() {
   }, [showModal, accentColor]);
 
   // Button icon hover animations
-  const handleIconHover = (ref: React.RefObject<SVGSVGElement>, isEntering: boolean) => {
+  const handleIconHover = (ref: React.RefObject<SVGSVGElement | null>, isEntering: boolean) => {
     if (!ref.current) return;
 
     if (isEntering) {
@@ -1208,7 +1134,7 @@ export default function Home() {
                 href="https://design.910.studio"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 lg:px-7 py-2 sm:py-2.5 lg:py-3 bg-black border-2 transition-all duration-300 justify-center text-xs sm:text-sm lg:text-base font-medium whitespace-nowrap overflow-hidden"
+                className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 lg:px-7 py-2 sm:py-2.5 lg:py-3 bg-black border-2 transition-all duration-300 justify-center text-xs sm:text-sm lg:text-base font-medium whitespace-nowrap overflow-hidden w-full sm:w-auto"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   borderColor: accentColor,
@@ -1246,7 +1172,7 @@ export default function Home() {
 
               <button
                 onClick={() => setShowModal(true)}
-                className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 lg:px-7 py-2 sm:py-2.5 lg:py-3 bg-black border-2 transition-all duration-300 justify-center text-xs sm:text-sm lg:text-base font-medium whitespace-nowrap overflow-hidden"
+                className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 lg:px-7 py-2 sm:py-2.5 lg:py-3 bg-black border-2 transition-all duration-300 justify-center text-xs sm:text-sm lg:text-base font-medium whitespace-nowrap overflow-hidden w-full sm:w-auto"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   borderColor: accentColor,
