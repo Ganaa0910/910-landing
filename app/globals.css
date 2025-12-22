@@ -40,26 +40,33 @@
     --font-family-display:
         var(--font-syne), var(--font-golos-text), system-ui, sans-serif;
 
-    /* Font sizes */
+    /* Font sizes - EXPANDED RANGE */
+    --font-size-2xs: 0.625rem;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.125rem;
     --font-size-xl: 1.25rem;
     --font-size-2xl: 1.5rem;
-    --font-size-3xl: 2rem;
-    --font-size-4xl: 2.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
     --font-size-5xl: 3rem;
     --font-size-6xl: 3.75rem;
     --font-size-7xl: 4.5rem;
+    --font-size-8xl: 6rem;
+    --font-size-9xl: 8rem;
+    --font-size-10xl: 10rem;
 
-    /* Font weights */
+    /* Font weights - FULL SPECTRUM */
+    --font-weight-thin: 100;
+    --font-weight-extralight: 200;
     --font-weight-light: 300;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
+    --font-weight-black: 900;
 
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -194,6 +201,28 @@
             opacity: 0.8;
         }
     }
+
+    @keyframes scale-in {
+        0% {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes modal-in {
+        0% {
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+    }
 }
 
 @layer base {
@@ -269,5 +298,17 @@
 
     .glow-hover:hover {
         box-shadow: 0 0 40px rgba(15, 118, 110, 0.5);
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.2s ease-out;
+    }
+
+    .animate-scale-in {
+        animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .animate-modal-in {
+        animation: modal-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 }
