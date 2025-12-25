@@ -379,6 +379,8 @@ function HomePage() {
       const prevIdx = getPrevBackgroundIndex(combo.backgroundIndex);
       setCombo({ ...combo, backgroundIndex: prevIdx });
     },
+    onSwipeUp: handleChangeColor, // NEW: swipe up for colors
+    onSwipeDown: handleChangeColor, // NEW: swipe down for colors
     onDoubleTap: handleRandomizeAll,
     onLongPress: () => setShowFavorites(true),
   });
@@ -492,7 +494,7 @@ function HomePage() {
             {/* Title */}
             <h1
               ref={titleRef}
-              className="mb-4 cursor-pointer text-center text-7xl font-bold leading-tight tracking-tight transition-opacity hover:opacity-80 sm:text-8xl md:text-9xl"
+              className="mb-4 cursor-pointer text-center text-5xl font-bold leading-tight tracking-tight transition-opacity hover:opacity-80 sm:text-7xl md:text-8xl lg:text-9xl"
               style={{
                 fontFamily: `var(${displayFont})`,
                 letterSpacing: getLetterSpacing(displayFont),
@@ -555,8 +557,28 @@ function HomePage() {
                 color: `${accentColor}60`,
               }}
             >
-              Press <kbd className="rounded bg-white/10 px-2 py-1">?</kbd> for shortcuts
+              <span className="hidden sm:inline">
+                Press <kbd className="rounded bg-white/10 px-2 py-1">?</kbd> for shortcuts
+              </span>
+              <span className="sm:hidden">
+                Tap title for font · Swipe for colors/backgrounds
+              </span>
             </p>
+
+            {/* Mobile help button */}
+            <button
+              onClick={() => setShowHelp(true)}
+              className="fixed bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition-all hover:scale-110 sm:hidden"
+              style={{
+                fontFamily: `var(${uiFont})`,
+                borderColor: `${accentColor}60`,
+                color: accentColor,
+                backgroundColor: '#00000080',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              ?
+            </button>
           </div>
 
           {/* Download Modal (existing) */}

@@ -135,14 +135,15 @@ export function HelpOverlay({
             {/* Header */}
             <div className="mb-8 flex items-center justify-between">
               <h2
-                className="text-4xl font-bold tracking-wide"
+                className="text-2xl font-bold tracking-wide sm:text-4xl"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   color: accentColor,
                   textShadow: `0 0 20px ${accentColor}80`,
                 }}
               >
-                KEYBOARD SHORTCUTS
+                <span className="hidden sm:inline">KEYBOARD SHORTCUTS</span>
+                <span className="sm:hidden">CONTROLS</span>
               </h2>
               <button
                 onClick={handleClose}
@@ -154,8 +155,122 @@ export function HelpOverlay({
               </button>
             </div>
 
-            {/* Shortcuts grid */}
-            <div className="grid gap-4 sm:grid-cols-2">
+            {/* Mobile gestures (show on mobile) */}
+            <div className="grid gap-4 sm:hidden">
+              <div
+                className="flex items-center gap-4 border-l-2 px-4 py-3"
+                style={{
+                  borderColor: `${accentColor}40`,
+                  backgroundColor: `${accentColor}05`,
+                }}
+              >
+                <kbd
+                  className="min-w-[4rem] rounded border-2 px-3 py-2 text-center text-xs font-bold"
+                  style={{
+                    borderColor: accentColor,
+                    color: accentColor,
+                    backgroundColor: `${accentColor}10`,
+                    boxShadow: `0 0 10px ${accentColor}40`,
+                  }}
+                >
+                  TAP TITLE
+                </kbd>
+                <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
+                  Change font
+                </span>
+              </div>
+              <div
+                className="flex items-center gap-4 border-l-2 px-4 py-3"
+                style={{
+                  borderColor: `${accentColor}40`,
+                  backgroundColor: `${accentColor}05`,
+                }}
+              >
+                <kbd
+                  className="min-w-[4rem] rounded border-2 px-3 py-2 text-center text-xs font-bold"
+                  style={{
+                    borderColor: accentColor,
+                    color: accentColor,
+                    backgroundColor: `${accentColor}10`,
+                    boxShadow: `0 0 10px ${accentColor}40`,
+                  }}
+                >
+                  SWIPE ←→
+                </kbd>
+                <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
+                  Change background
+                </span>
+              </div>
+              <div
+                className="flex items-center gap-4 border-l-2 px-4 py-3"
+                style={{
+                  borderColor: `${accentColor}40`,
+                  backgroundColor: `${accentColor}05`,
+                }}
+              >
+                <kbd
+                  className="min-w-[4rem] rounded border-2 px-3 py-2 text-center text-xs font-bold"
+                  style={{
+                    borderColor: accentColor,
+                    color: accentColor,
+                    backgroundColor: `${accentColor}10`,
+                    boxShadow: `0 0 10px ${accentColor}40`,
+                  }}
+                >
+                  SWIPE ↑↓
+                </kbd>
+                <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
+                  Change colors
+                </span>
+              </div>
+              <div
+                className="flex items-center gap-4 border-l-2 px-4 py-3"
+                style={{
+                  borderColor: `${accentColor}40`,
+                  backgroundColor: `${accentColor}05`,
+                }}
+              >
+                <kbd
+                  className="min-w-[4rem] rounded border-2 px-3 py-2 text-center text-xs font-bold"
+                  style={{
+                    borderColor: accentColor,
+                    color: accentColor,
+                    backgroundColor: `${accentColor}10`,
+                    boxShadow: `0 0 10px ${accentColor}40`,
+                  }}
+                >
+                  2× TAP
+                </kbd>
+                <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
+                  Randomize all
+                </span>
+              </div>
+              <div
+                className="flex items-center gap-4 border-l-2 px-4 py-3"
+                style={{
+                  borderColor: `${accentColor}40`,
+                  backgroundColor: `${accentColor}05`,
+                }}
+              >
+                <kbd
+                  className="min-w-[4rem] rounded border-2 px-3 py-2 text-center text-xs font-bold"
+                  style={{
+                    borderColor: accentColor,
+                    color: accentColor,
+                    backgroundColor: `${accentColor}10`,
+                    boxShadow: `0 0 10px ${accentColor}40`,
+                  }}
+                >
+                  HOLD
+                </kbd>
+                <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
+                  View favorites
+                </span>
+              </div>
+            </div>
+
+            {/* Keyboard shortcuts (show on desktop) */}
+            <div className="hidden grid-cols-2 gap-4 sm:grid">
               {shortcuts.map((shortcut) => (
                 <div
                   key={shortcut.key}
@@ -198,8 +313,11 @@ export function HelpOverlay({
               className="mt-8 text-center text-xs text-white/50"
               style={{ fontFamily: `var(${uiFont})` }}
             >
-              Press <kbd className="rounded bg-white/10 px-2 py-1">?</kbd> or{" "}
-              <kbd className="rounded bg-white/10 px-2 py-1">ESC</kbd> to close
+              <span className="hidden sm:inline">
+                Press <kbd className="rounded bg-white/10 px-2 py-1">?</kbd> or{" "}
+                <kbd className="rounded bg-white/10 px-2 py-1">ESC</kbd> to close
+              </span>
+              <span className="sm:hidden">Tap anywhere to close</span>
             </p>
           </div>
         </div>
