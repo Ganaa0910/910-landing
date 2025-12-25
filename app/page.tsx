@@ -185,14 +185,6 @@ const colorPalettes = [
   { name: "sky", colors: ["#0284C7", "#0EA5E9", "#38BDF8", "#BAE6FD"], hue: 200 },
   // Yellow sunshine
   { name: "yellow", colors: ["#CA8A04", "#EAB308", "#FACC15", "#FEF08A"], hue: 50 },
-  // Slate steel
-  { name: "slate", colors: ["#475569", "#64748B", "#94A3B8", "#CBD5E1"], hue: 215 },
-  // Stone earth
-  { name: "stone", colors: ["#57534E", "#78716C", "#A8A29E", "#D6D3D1"], hue: 25 },
-  // Zinc metal
-  { name: "zinc", colors: ["#52525B", "#71717A", "#A1A1AA", "#D4D4D8"], hue: 0 },
-  // Neutral gray
-  { name: "neutral", colors: ["#525252", "#737373", "#A3A3A3", "#D4D4D4"], hue: 0 },
   // Mint fresh
   { name: "mint", colors: ["#047857", "#10B981", "#6EE7B7", "#D1FAE5"], hue: 160 },
   // Neon green
@@ -230,18 +222,12 @@ const colorPalettes = [
   { name: "matrix", colors: ["#00FF00", "#39FF14", "#00D100", "#008F00"], hue: 120 },
   // Blood and chrome
   { name: "blood-chrome", colors: ["#FF0000", "#DC143C", "#C0C0C0", "#E8E8E8"], hue: 0 },
-  // Royal purple
-  { name: "royal", colors: ["#4B0082", "#6A0DAD", "#9370DB", "#DDA0DD"], hue: 275 },
   // Toxic waste
   { name: "toxic", colors: ["#00FF00", "#ADFF2F", "#7FFF00", "#32CD32"], hue: 100 },
   // Sunset gradient
   { name: "sunset", colors: ["#FF0080", "#FF8C00", "#FFD700", "#FF1493"], hue: 330 },
-  // Deep ocean
-  { name: "deep-ocean", colors: ["#000080", "#0000CD", "#1E90FF", "#00BFFF"], hue: 240 },
   // Neon rainbow
   { name: "neon-rainbow", colors: ["#FF0080", "#00FF80", "#0080FF", "#FF8000"], hue: 330 },
-  // Midnight blue
-  { name: "midnight", colors: ["#191970", "#000080", "#4169E1", "#6495ED"], hue: 240 },
   // Crimson fire
   { name: "crimson", colors: ["#DC143C", "#FF0000", "#FF4500", "#FF6347"], hue: 0 },
   // Arctic ice
@@ -260,44 +246,55 @@ const colorPalettes = [
   { name: "bubblegum", colors: ["#FF69B4", "#FF1493", "#C71585", "#DB7093"], hue: 330 },
   // Laser red
   { name: "laser", colors: ["#FF0000", "#FF1744", "#FF5252", "#FF8A80"], hue: 0 },
-  // Space purple
-  { name: "space", colors: ["#1A0033", "#2D004D", "#4B0082", "#6A0DAD"], hue: 280 },
   // Radioactive
   { name: "radioactive", colors: ["#39FF14", "#00FF00", "#7FFF00", "#ADFF2F"], hue: 110 },
   // Flamingo
   { name: "flamingo", colors: ["#FC74FD", "#F754E8", "#E91E63", "#C2185B"], hue: 320 },
-  // Copper rust
-  { name: "copper", colors: ["#B87333", "#D2691E", "#CD853F", "#DEB887"], hue: 30 },
   // Holographic
   { name: "holographic", colors: ["#FF00FF", "#00FFFF", "#FF00AA", "#00FF80"], hue: 300 },
   // Blade Runner
   { name: "blade-runner", colors: ["#FF3864", "#00D9FF", "#8338EC", "#FFBE0B"], hue: 350 },
-  // Ghost white
-  { name: "ghost", colors: ["#F8F8FF", "#E6E6FA", "#D8BFD8", "#DDA0DD"], hue: 280 },
-  // Rust
-  { name: "rust", colors: ["#B7410E", "#C1440E", "#D2691E", "#CD853F"], hue: 20 },
   // Aquamarine dream
   { name: "aquamarine", colors: ["#7FFFD4", "#66CDAA", "#40E0D0", "#00CED1"], hue: 160 },
   // Berry blast
   { name: "berry", colors: ["#8B008B", "#9932CC", "#BA55D3", "#DA70D6"], hue: 300 },
   // Neon citrus
   { name: "citrus", colors: ["#FFA500", "#FFD700", "#FFFF00", "#ADFF2F"], hue: 50 },
-  // Chrome luxury
-  { name: "chrome", colors: ["#C0C0C0", "#D3D3D3", "#DCDCDC", "#E8E8E8"], hue: 0 },
   // Blue steel
   { name: "blue-steel", colors: ["#4682B4", "#5F9EA0", "#6495ED", "#7B68EE"], hue: 210 },
   // Violet storm
   { name: "violet-storm", colors: ["#EE82EE", "#DA70D6", "#FF00FF", "#BA55D3"], hue: 300 },
   // Solar flare
   { name: "solar-flare", colors: ["#FF4500", "#FF6347", "#FF7F50", "#FFA07A"], hue: 15 },
-  // Deep space
-  { name: "deep-space", colors: ["#000000", "#0C0C0C", "#1A1A1A", "#2D2D2D"], hue: 0 },
   // Neon nights
   { name: "neon-nights", colors: ["#FF10F0", "#00F5FF", "#FFFF00", "#FF00AA"], hue: 300 },
   // Candy crush
   { name: "candy", colors: ["#FF69B4", "#FFB6C1", "#FFC0CB", "#FFE4E1"], hue: 350 },
   // Emerald city
   { name: "emerald-city", colors: ["#50C878", "#00A86B", "#008B8B", "#2E8B57"], hue: 140 },
+  // ============================================
+  // NEW FIRE PALETTES - Pop on dark
+  // ============================================
+  // Electric Violet - deep purple neon
+  { name: "electric-violet", colors: ["#8B5CF6", "#A78BFA", "#C4B5FD", "#7C3AED"], hue: 260 },
+  // Plasma Pink - hot magenta
+  { name: "plasma-pink", colors: ["#FF0080", "#FF00FF", "#FF69B4", "#FF1493"], hue: 320 },
+  // Toxic Cyan - bright toxic
+  { name: "toxic-cyan", colors: ["#00FFFF", "#00F5FF", "#00CED1", "#40E0D0"], hue: 180 },
+  // Neon Orange - pure fire
+  { name: "neon-orange", colors: ["#FF6600", "#FF8C00", "#FFA500", "#FFAA00"], hue: 30 },
+  // Digital Green - hacker aesthetic
+  { name: "digital-green", colors: ["#00FF66", "#00FF00", "#33FF33", "#66FF66"], hue: 120 },
+  // Ultra Violet - blacklight
+  { name: "ultra-violet", colors: ["#BF00FF", "#9D00FF", "#7B00FF", "#5900FF"], hue: 280 },
+  // Sunrise - warm gradient
+  { name: "sunrise", colors: ["#FF4500", "#FF6347", "#FF7F50", "#FFD700"], hue: 20 },
+  // Ice Blue - cold neon
+  { name: "ice-blue", colors: ["#00BFFF", "#1E90FF", "#4169E1", "#00CED1"], hue: 200 },
+  // Blood Red - pure crimson
+  { name: "blood-red", colors: ["#FF0000", "#DC143C", "#B22222", "#FF4444"], hue: 0 },
+  // Alien Green - extraterrestrial
+  { name: "alien-green", colors: ["#7FFF00", "#ADFF2F", "#00FF7F", "#32CD32"], hue: 90 },
 ];
 
 // Function to generate backgrounds with a given color palette
