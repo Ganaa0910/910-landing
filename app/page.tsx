@@ -644,52 +644,81 @@ const generateBackgrounds = (palette: typeof colorPalettes[0]) => [
   />,
 ];
 
-// CURATED FONT COLLECTION - 35 fonts covering full spectrum
-const displayFonts = [
-  // Display Modern (3)
-  "--font-syne",
-  "--font-unbounded",
-  "--font-space-grotesk",
-  // Condensed Power (4)
-  "--font-bebas",
-  "--font-anton",
+// Fonts that need extra letter spacing (thicc/condensed ones)
+const wideSpacingFonts = new Set([
   "--font-fjalla",
-  "--font-oswald",
-  // Futuristic/Tech (4)
-  "--font-orbitron",
-  "--font-audiowide",
-  "--font-electrolize",
-  "--font-exo2",
-  // Retro/Pixel (2)
-  "--font-press-start",
-  "--font-vt323",
-  // Bold Display (3)
-  "--font-russo",
   "--font-ultra",
   "--font-black-ops",
-  // Horror/Wild (4)
-  "--font-creepster",
-  "--font-nosifer",
-  "--font-eater",
-  "--font-metal-mania",
-  // Racing/Speed (1)
-  "--font-faster-one",
-  // Western (3)
-  "--font-rye",
-  "--font-smokum",
-  "--font-sancreek",
-  // Elegant/Serif (2)
+  "--font-unbounded",
+  "--font-staatliches",
+  "--font-block-talk",
+  "--font-gnaw-hard",
+  "--font-hardstyle",
+  "--font-harden",
+  "--font-vermin-verile",
+  "--font-modeccio",
+  "--font-helicopta",
+]);
+
+// Get letter spacing based on font thickness
+const getLetterSpacing = (font: string): string => {
+  if (wideSpacingFonts.has(font)) {
+    return "0.05em";
+  }
+  return "normal";
+};
+
+// CURATED FONT COLLECTION - Google + Local Custom Fonts
+const displayFonts = [
+  // Display Modern
+  "--font-syne",
+  "--font-unbounded",
+  // Condensed Power
+  "--font-fjalla",
+  // Futuristic/Tech
+  "--font-orbitron",
+  "--font-audiowide",
+  // Retro
+  "--font-vt323",
+  // Bold Display
+  "--font-ultra",
+  "--font-black-ops",
+  // Elegant/Serif
   "--font-playfair",
   "--font-cinzel",
-  // Quirky (4)
+  // Quirky
   "--font-monoton",
   "--font-wallpoet",
   "--font-rubik-mono",
   "--font-permanent-marker",
-  // Geometric (3)
+  // Geometric
   "--font-staatliches",
-  "--font-aldrich",
   "--font-syncopate",
+  // ============================================
+  // LOCAL CUSTOM FONTS
+  // ============================================
+  "--font-atures",
+  "--font-block-talk",
+  "--font-gnaw-hard",
+  "--font-harden",
+  "--font-hardstyle",
+  "--font-helicopta",
+  "--font-modeccio",
+  "--font-monas",
+  "--font-requires-moonshine",
+  "--font-sheeping-cats",
+  "--font-super-shake",
+  "--font-vermin-verile",
+  "--font-beyond-dreams",
+  "--font-brigrette",
+  "--font-cairopixel",
+  "--font-christmas-pipow",
+  "--font-handriyen",
+  "--font-rosa",
+  "--font-secoline",
+  "--font-spotfix",
+  "--font-super-shiny",
+  "--font-the-last-trunks",
 ];
 
 export default function Home() {
@@ -734,6 +763,9 @@ export default function Home() {
       index: randomBgIndex,
       totalBackgrounds: generatedBackgrounds.length
     });
+
+    // Console log which font is selected
+    console.log('🔤 Font Selected:', displayFonts[randomTitleFontIndex]);
 
     setSelectedBackground(selectedBg);
     setTagline(quirkyLines[randomQuoteIndex]);
@@ -805,6 +837,7 @@ export default function Home() {
       duration: 0.12,
       ease: "power2.out",
       onComplete: () => {
+        console.log('🔤 Font Changed:', newFont);
         setDisplayFont(newFont);
       }
     });
@@ -1101,15 +1134,19 @@ export default function Home() {
       <div className="absolute inset-0 w-full h-full z-0">
         {selectedBackground}
       </div>
-      <main className="absolute inset-0 z-10 flex h-full w-full flex-col pointer-events-none">
+      <main className="absolute inset-0 flex h-full w-full flex-col pointer-events-none">
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center pointer-events-auto w-full max-w-4xl">
             <div className="relative inline-block">
               <h1
                 ref={titleRef}
                 onClick={changeFont}
-                className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-8xl break-words cursor-pointer transition-all hover:scale-105 active:scale-95"
-                style={{ fontFamily: `var(${displayFont})` }}
+                className="text-4xl font-bold text-white sm:text-6xl lg:text-8xl break-words cursor-pointer transition-all hover:scale-105 active:scale-95"
+                style={{
+                  fontFamily: `var(${displayFont})`,
+                  letterSpacing: getLetterSpacing(displayFont),
+                  mixBlendMode: "difference",
+                }}
               >
                 910studio
               </h1>
