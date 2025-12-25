@@ -257,11 +257,79 @@ const syncopate = Syncopate({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://910.studio";
+
 export const metadata: Metadata = {
-  title: "910studio",
-  description: "Creative web studio crafting exceptional digital experiences",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "910studio | Creative Web Studio",
+    template: "%s | 910studio",
+  },
+  description:
+    "Creative web studio crafting exceptional digital experiences. Modern web development, UI/UX design, and brand identity for ambitious brands.",
+  keywords: [
+    "web studio",
+    "creative agency",
+    "web development",
+    "UI/UX design",
+    "digital experiences",
+    "Mongolia",
+    "Ulaanbaatar",
+    "frontend development",
+    "Next.js",
+    "React",
+  ],
+  authors: [{ name: "910studio", url: siteUrl }],
+  creator: "910studio",
+  publisher: "910studio",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/web-icon.ico",
+    shortcut: "/web-icon.ico",
+    apple: "/web-icon.ico",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "910studio",
+    title: "910studio | Creative Web Studio",
+    description:
+      "Creative web studio crafting exceptional digital experiences. Modern web development, UI/UX design, and brand identity.",
+    images: [
+      {
+        url: "/OG.png",
+        width: 1200,
+        height: 630,
+        alt: "910studio - Creative Web Studio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "910studio | Creative Web Studio",
+    description:
+      "Creative web studio crafting exceptional digital experiences. Modern web development, UI/UX design, and brand identity.",
+    images: ["/OG.png"],
+    creator: "@910studio",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: siteUrl,
   },
 };
 
@@ -272,6 +340,34 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "910studio",
+              url: "https://910.studio",
+              logo: "https://910.studio/web-icon.ico",
+              description:
+                "Creative web studio crafting exceptional digital experiences. Modern web development, UI/UX design, and brand identity.",
+              foundingDate: "2024",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Ulaanbaatar",
+                addressCountry: "MN",
+              },
+              sameAs: ["https://design.910.studio"],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                availableLanguage: ["English", "Mongolian"],
+              },
+            }),
+          }}
+        />
+      </head>
       <body
         className={`
           ${ibmPlexMono.variable}
