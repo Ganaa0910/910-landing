@@ -390,7 +390,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full bg-black">
       <head>
         <script
           type="application/ld+json"
@@ -437,7 +437,7 @@ export default function RootLayout({
           ${beyondDreams.variable} ${brigrette.variable} ${cairopixel.variable}
           ${christmasPipow.variable} ${handriyen.variable} ${rosa.variable}
           ${secoline.variable} ${spotfix.variable} ${superShiny.variable} ${theLastTrunks.variable}
-          antialiased h-full
+          antialiased h-full bg-black
         `}
       >
         {children}
