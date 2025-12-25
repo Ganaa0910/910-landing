@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import gsap from "gsap";
 
 // New utilities and state management
@@ -191,7 +191,7 @@ const getLetterSpacing = (font: string): string => {
   return wideSpacingFonts.has(font) ? "0.05em" : "normal";
 };
 
-export default function Home() {
+function HomePage() {
   // Consistent UI font
   const uiFont = "--font-ibm-plex-mono";
 
@@ -665,5 +665,14 @@ export default function Home() {
         </div>
       )}
     </>
+  );
+}
+
+// Wrap in Suspense to fix useSearchParams SSR error
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="h-screen w-screen bg-black" />}>
+      <HomePage />
+    </Suspense>
   );
 }
