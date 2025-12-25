@@ -195,10 +195,10 @@ export function HelpOverlay({
                     boxShadow: `0 0 10px ${accentColor}40`,
                   }}
                 >
-                  SWIPE ←→
+                  ← →
                 </kbd>
                 <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
-                  Change background
+                  Swipe left/right • Change background
                 </span>
               </div>
               <div
@@ -217,10 +217,10 @@ export function HelpOverlay({
                     boxShadow: `0 0 10px ${accentColor}40`,
                   }}
                 >
-                  SWIPE ↑↓
+                  ↑ ↓
                 </kbd>
                 <span className="text-sm text-white/80" style={{ fontFamily: `var(${uiFont})` }}>
-                  Change colors
+                  Swipe up/down • Change colors
                 </span>
               </div>
               <div

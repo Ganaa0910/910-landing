@@ -8,6 +8,8 @@ import { useEffect, type RefObject } from "react";
 export interface SwipeGestureConfig {
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
+  onSwipeUp?: () => void;
+  onSwipeDown?: () => void;
   onDoubleTap?: () => void;
   onLongPress?: () => void;
   threshold?: number; // Minimum distance for swipe (default: 50px)
@@ -40,6 +42,8 @@ export function useSwipeGesture(
   const {
     onSwipeLeft,
     onSwipeRight,
+    onSwipeUp,
+    onSwipeDown,
     onDoubleTap,
     onLongPress,
     threshold = 50,
@@ -90,12 +94,23 @@ export function useSwipeGesture(
       const deltaY = touch.clientY - touchStartY;
       const deltaTime = Date.now() - touchStartTime;
 
-      // Swipe detection (horizontal movement > vertical movement)
-      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+      // Swipe detection
+      const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+
+      if (isHorizontal && Math.abs(deltaX) > threshold) {
+        // Horizontal swipe
         if (deltaX > 0 && onSwipeRight) {
           onSwipeRight();
         } else if (deltaX < 0 && onSwipeLeft) {
           onSwipeLeft();
+        }
+        return;
+      } else if (!isHorizontal && Math.abs(deltaY) > threshold) {
+        // Vertical swipe
+        if (deltaY < 0 && onSwipeUp) {
+          onSwipeUp();
+        } else if (deltaY > 0 && onSwipeDown) {
+          onSwipeDown();
         }
         return;
       }
@@ -125,6 +140,8 @@ export function useSwipeGesture(
     containerRef,
     onSwipeLeft,
     onSwipeRight,
+    onSwipeUp,
+    onSwipeDown,
     onDoubleTap,
     onLongPress,
     threshold,
