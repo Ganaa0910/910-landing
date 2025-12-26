@@ -1,10 +1,9 @@
 "use client";
 
-// Background crossfade transition system
-// Manages smooth GSAP transitions between WebGL backgrounds without page reload
+// Background transition system with TV static effect
+// Shows CRT static noise during background swap to hide any flashing
 
 import { useState, useCallback, useRef } from "react";
-import gsap from "gsap";
 
 export interface BackgroundState {
   element: React.ReactElement;
@@ -12,30 +11,28 @@ export interface BackgroundState {
 }
 
 /**
- * Hook to manage smooth background transitions with GSAP crossfade
+ * Hook to manage background transitions with TV static effect
  *
- * Handles two WebGL canvases simultaneously during transition for smooth blend,
- * then cleans up the old background to free memory.
+ * Instead of crossfading (which can flash), shows TV static during the swap.
+ * The static covers the transition, making timing issues invisible.
  *
  * @param initialBackground - Starting background element
  *
- * @returns Object with current/next backgrounds, transition state, and transitionTo function
+ * @returns Object with current background, static state, and transition controls
  *
  * @example
  * ```tsx
- * const { current, next, isTransitioning, currentRef, nextRef, transitionTo } =
+ * const { current, showStatic, transitionTo, handleStaticMidpoint, handleStaticComplete } =
  *   useBackgroundTransition({ element: <Particles />, key: "particles-0" });
  *
  * // Render
  * <div className="fixed inset-0">
- *   <div ref={currentRef} className="absolute inset-0">
- *     {current.element}
- *   </div>
- *   {isTransitioning && next && (
- *     <div ref={nextRef} className="absolute inset-0 opacity-0">
- *       {next.element}
- *     </div>
- *   )}
+ *   <div className="absolute inset-0">{current.element}</div>
+ *   <TVStatic
+ *     visible={showStatic}
+ *     onMidpoint={handleStaticMidpoint}
+ *     onComplete={handleStaticComplete}
+ *   />
  * </div>
  *
  * // Trigger transition
@@ -44,114 +41,71 @@ export interface BackgroundState {
  */
 export function useBackgroundTransition(initialBackground: BackgroundState) {
   const [current, setCurrent] = useState<BackgroundState>(initialBackground);
-  const [next, setNext] = useState<BackgroundState | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showStatic, setShowStatic] = useState(false);
 
-  const currentRef = useRef<HTMLDivElement>(null);
-  const nextRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  // Store pending background during static animation
+  const pendingBackgroundRef = useRef<BackgroundState | null>(null);
+  const isTransitioningRef = useRef(false);
 
   /**
-   * Transition to a new background with GSAP crossfade
+   * Transition to a new background with TV static effect
+   * @param instant - If true, skip static and swap immediately (for palette changes)
    */
   const transitionTo = useCallback(
     (nextBackground: BackgroundState, instant: boolean = false) => {
       // Prevent overlapping transitions
-      if (isTransitioning) {
-        console.warn("⚠️ Transition already in progress, ignoring new request");
+      if (isTransitioningRef.current) {
+        console.warn("⚠️ Transition already in progress, queuing...");
+        pendingBackgroundRef.current = nextBackground;
         return;
       }
 
       // Don't transition if it's the same background
       if (nextBackground.key === current.key) {
-        console.log("Same background, skipping transition");
         return;
       }
 
       console.log(`🎨 Transitioning: ${current.key} → ${nextBackground.key}`);
 
-      setNext(nextBackground);
-      setIsTransitioning(true);
-
-      // Instant transition (for prefers-reduced-motion or initial load from URL)
+      // Instant transition (for palette changes or reduced motion)
       if (instant) {
         setCurrent(nextBackground);
-        setNext(null);
-        setIsTransitioning(false);
         return;
       }
 
-      // Kill any existing timeline
-      if (timelineRef.current) {
-        timelineRef.current.kill();
-      }
-
-      // Wait for React to render the next element before animating
-      // This prevents "GSAP target null not found" errors
-      requestAnimationFrame(() => {
-        // Double RAF to ensure DOM is ready
-        requestAnimationFrame(() => {
-          // Safety check - refs must exist
-          if (!currentRef.current || !nextRef.current) {
-            console.warn("⚠️ Refs not ready, falling back to instant transition");
-            setCurrent(nextBackground);
-            setNext(null);
-            setIsTransitioning(false);
-            return;
-          }
-
-          // GSAP crossfade timeline
-          const tl = gsap.timeline({
-            onComplete: () => {
-              // CRITICAL: Reset opacity on currentRef before swapping
-              // Otherwise it stays at opacity: 0 from the animation
-              if (currentRef.current) {
-                gsap.set(currentRef.current, { opacity: 1 });
-              }
-
-              // Cleanup: current becomes next, next becomes null
-              setCurrent(nextBackground);
-              setNext(null);
-              setIsTransitioning(false);
-              timelineRef.current = null;
-              console.log("✅ Transition complete");
-            },
-          });
-
-          timelineRef.current = tl;
-
-          // Crossfade animation (overlap for smooth blend)
-          // Current fades out fast, next fades in
-          tl.to(
-            currentRef.current,
-            {
-              opacity: 0,
-              duration: 0.3, // Faster fade out to prevent "flash"
-              ease: "power2.in",
-            },
-            0
-          ).fromTo(
-            nextRef.current,
-            { opacity: 0 },
-            {
-              opacity: 1,
-              duration: 0.5,
-              ease: "power2.out",
-            },
-            0.1 // Start earlier for quicker swap
-          );
-        });
-      });
+      // Start TV static transition
+      isTransitioningRef.current = true;
+      pendingBackgroundRef.current = nextBackground;
+      setShowStatic(true);
     },
-    [current.key, isTransitioning]
+    [current.key]
   );
+
+  /**
+   * Called by TVStatic at midpoint - swap the background now (hidden by static)
+   */
+  const handleStaticMidpoint = useCallback(() => {
+    if (pendingBackgroundRef.current) {
+      console.log("📺 Static midpoint - swapping background");
+      setCurrent(pendingBackgroundRef.current);
+    }
+  }, []);
+
+  /**
+   * Called by TVStatic when animation completes - cleanup
+   */
+  const handleStaticComplete = useCallback(() => {
+    console.log("✅ Transition complete");
+    setShowStatic(false);
+    pendingBackgroundRef.current = null;
+    isTransitioningRef.current = false;
+  }, []);
 
   return {
     current,
-    next,
-    isTransitioning,
-    currentRef,
-    nextRef,
+    showStatic,
     transitionTo,
+    handleStaticMidpoint,
+    handleStaticComplete,
   };
 }

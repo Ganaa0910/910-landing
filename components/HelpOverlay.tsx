@@ -20,6 +20,8 @@ export function HelpOverlay({
   const modalRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
+  const isClosingRef = useRef(false);
+
   // Open animation (CRT TV turn on effect)
   useEffect(() => {
     if (!modalRef.current || !backdropRef.current) return;
@@ -57,9 +59,21 @@ export function HelpOverlay({
       });
   }, []);
 
+  // Handle ESC key internally for animated close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isClosingRef.current) {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // Close with animation
   const handleClose = () => {
-    if (!modalRef.current || !backdropRef.current) return;
+    if (!modalRef.current || !backdropRef.current || isClosingRef.current) return;
+    isClosingRef.current = true;
 
     const timeline = gsap.timeline({
       onComplete: onClose,

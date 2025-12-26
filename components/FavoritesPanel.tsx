@@ -28,6 +28,7 @@ export function FavoritesPanel({
 }: FavoritesPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const isClosingRef = useRef(false);
 
   // Slide-in animation on mount
   useEffect(() => {
@@ -48,9 +49,21 @@ export function FavoritesPanel({
     );
   }, []);
 
+  // Handle ESC key internally for animated close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isClosingRef.current) {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // Slide-out animation on close
   const handleClose = () => {
-    if (!panelRef.current || !backdropRef.current) return;
+    if (!panelRef.current || !backdropRef.current || isClosingRef.current) return;
+    isClosingRef.current = true;
 
     const tl = gsap.timeline({
       onComplete: onClose,

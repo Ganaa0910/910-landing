@@ -254,6 +254,15 @@
         margin: 0;
         padding: 0;
         overflow-x: hidden;
+        /* Hide scrollbar on all browsers */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+
+    /* Hide scrollbar for Chrome, Safari, Opera */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
     }
 
     body {

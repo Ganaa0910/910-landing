@@ -39,6 +39,7 @@ import { FavoritesPanel } from "@/components/FavoritesPanel";
 import { Toast, useToast } from "@/components/Toast";
 import { CRTBootLoader } from "@/components/CRTBootLoader";
 import { CustomCursor } from "@/components/CustomCursor";
+import { TVStatic } from "@/components/TVStatic";
 
 // Taglines
 const quirkyLines = [
@@ -219,8 +220,8 @@ function HomePage() {
   const { favorites, addFavorite, removeFavorite, clearFavorites, isFavorited } =
     useFavorites();
 
-  // Background transition system
-  const { current, next, isTransitioning, currentRef, nextRef, transitionTo } =
+  // Background transition system with TV static effect
+  const { current, showStatic, transitionTo, handleStaticMidpoint, handleStaticComplete } =
     useBackgroundTransition({
       element: getBackgroundByIndex(combo.backgroundIndex, palette),
       key: `bg-${combo.backgroundIndex}-${palette.name}`,
@@ -233,11 +234,24 @@ function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // URL parameter sync
+  const hasUrlComboRef = useRef(false);
   const updateUrl = useComboUrlSync((decodedCombo) => {
     console.log("🔗 Loading combo from URL");
+    hasUrlComboRef.current = true;
     setCombo(decodedCombo);
     trackEvent({ type: "combo_share" as const, combo: decodedCombo });
   });
+
+  // Randomize on mount if no URL combo param
+  useEffect(() => {
+    // Small delay to let URL sync run first
+    const timer = setTimeout(() => {
+      if (!hasUrlComboRef.current) {
+        setCombo(generateRandomCombo(quirkyLines.length));
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Update URL when combo changes
   useEffect(() => {
@@ -341,13 +355,12 @@ function HomePage() {
     { key: "v", description: "View favorites", handler: () => setShowFavorites(!showFavorites) },
     { key: "?", description: "Show help", handler: () => setShowHelp(!showHelp) },
     { key: "Escape", description: "Close modal/help", handler: () => {
+      // Only handle main modal here - HelpOverlay and FavoritesPanel handle their own ESC
       if (showModal) closeModal();
-      else if (showHelp) setShowHelp(false);
-      else if (showFavorites) setShowFavorites(false);
     }},
   ];
 
-  useKeyboardShortcuts(shortcuts, !showModal && !showHelp && !showFavorites);
+  useKeyboardShortcuts(shortcuts, !showHelp && !showFavorites);
 
   // Easter eggs
   useKonamiCode(() => {
@@ -474,20 +487,21 @@ function HomePage() {
           {/* Custom cursor */}
           <CustomCursor accentColor={accentColor} />
 
-          {/* Background layers */}
+          {/* Background layer */}
           <div className="fixed inset-0">
-            {/* Current background */}
-            <div ref={currentRef} className="absolute inset-0">
+            <div className="absolute inset-0">
               {current.element}
             </div>
-
-            {/* Next background (during transition) */}
-            {isTransitioning && next && (
-              <div ref={nextRef} className="absolute inset-0 opacity-0">
-                {next.element}
-              </div>
-            )}
           </div>
+
+          {/* CRT line transition overlay */}
+          <TVStatic
+            visible={showStatic}
+            duration={320}
+            onMidpoint={handleStaticMidpoint}
+            onComplete={handleStaticComplete}
+            color={accentColor}
+          />
 
           {/* Main content overlay */}
           <div className="relative z-10 flex h-full flex-col items-center justify-center p-8 text-white">
@@ -508,7 +522,7 @@ function HomePage() {
 
             {/* Tagline */}
             <p
-              className="mb-12 max-w-2xl text-center text-sm uppercase tracking-widest sm:text-base"
+              className="mb-12 max-w-4xl text-center text-sm uppercase tracking-wider sm:text-base"
               style={{
                 fontFamily: `var(${uiFont})`,
                 color: `${accentColor}B0`,
@@ -565,20 +579,34 @@ function HomePage() {
               </span>
             </p>
 
-            {/* Mobile help button */}
-            <button
-              onClick={() => setShowHelp(true)}
-              className="fixed bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition-all hover:scale-110 sm:hidden"
-              style={{
-                fontFamily: `var(${uiFont})`,
-                borderColor: `${accentColor}60`,
-                color: accentColor,
-                backgroundColor: '#00000080',
-                backdropFilter: 'blur(8px)',
-              }}
-            >
-              ?
-            </button>
+            {/* Mobile action buttons */}
+            <div className="fixed bottom-4 left-4 flex gap-2 sm:hidden">
+              <button
+                onClick={() => setShowHelp(true)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition-all hover:scale-110"
+                style={{
+                  fontFamily: `var(${uiFont})`,
+                  borderColor: `${accentColor}60`,
+                  color: accentColor,
+                  backgroundColor: '#00000080',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                ?
+              </button>
+              <button
+                onClick={handleSaveFavorite}
+                className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-lg transition-all hover:scale-110"
+                style={{
+                  borderColor: isFavorited(combo) ? accentColor : `${accentColor}60`,
+                  color: accentColor,
+                  backgroundColor: isFavorited(combo) ? `${accentColor}20` : '#00000080',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                {isFavorited(combo) ? '★' : '☆'}
+              </button>
+            </div>
           </div>
 
           {/* Download Modal (existing) */}
