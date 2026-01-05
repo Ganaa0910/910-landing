@@ -106,7 +106,7 @@ export function decodeCombo(encoded: string): ComboState | null {
       compact.p < 0 || compact.p >= colorPalettes.length ||
       uiPaletteIndex < 0 || uiPaletteIndex >= colorPalettes.length ||
       compact.f < 0 || compact.f >= displayFonts.length ||
-      compact.t < 0 || compact.t >= 155 // 155 taglines
+      compact.t < 0 || compact.t >= 99 // 99 taglines
     ) {
       console.warn('Decoded combo has invalid indices:', compact);
       return null;
@@ -221,6 +221,6 @@ export const SIGNATURE_COMBOS = {
     paletteIndex: colorPalettes.findIndex(p => p.name === 'cyberpunk'),
     uiPaletteIndex: colorPalettes.findIndex(p => p.name === 'cyberpunk'),
     fontIndex: displayFonts.indexOf('--font-orbitron'),
-    taglineIndex: 54,  // "fuck around and find out"
+    taglineIndex: 7,  // "fuck around and find out"
   },
 } as const;
