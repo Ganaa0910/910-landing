@@ -147,6 +147,141 @@ export const colorPalettes: ColorPalette[] = [
   { name: "blood-red", colors: ["#FF0000", "#DC143C", "#B22222", "#FF4444"], hue: 0 },
   // Alien Green - extraterrestrial
   { name: "alien-green", colors: ["#7FFF00", "#ADFF2F", "#00FF7F", "#32CD32"], hue: 90 },
+  // ============================================
+  // MONOCHROME & MINIMAL
+  // ============================================
+  // Pure white gradient
+  { name: "ghost", colors: ["#FFFFFF", "#F0F0F0", "#E0E0E0", "#D0D0D0"], hue: 0 },
+  // Silver metallic
+  { name: "silver", colors: ["#C0C0C0", "#D3D3D3", "#A9A9A9", "#808080"], hue: 0 },
+  // Noir - deep blacks with hints
+  { name: "noir", colors: ["#1A1A2E", "#16213E", "#0F3460", "#E94560"], hue: 240 },
+  // Obsidian - volcanic glass
+  { name: "obsidian", colors: ["#0D0D0D", "#1A1A1A", "#2D2D2D", "#404040"], hue: 0 },
+  // ============================================
+  // DUOTONE BANGERS
+  // ============================================
+  // Spotify green/black
+  { name: "spotify", colors: ["#1DB954", "#1ED760", "#191414", "#121212"], hue: 140 },
+  // Discord blurple
+  { name: "discord", colors: ["#5865F2", "#7289DA", "#99AAB5", "#2C2F33"], hue: 235 },
+  // Twitch purple
+  { name: "twitch", colors: ["#9146FF", "#772CE8", "#BF94FF", "#1F1F23"], hue: 264 },
+  // YouTube red
+  { name: "youtube", colors: ["#FF0000", "#CC0000", "#282828", "#121212"], hue: 0 },
+  // Netflix red
+  { name: "netflix", colors: ["#E50914", "#B20710", "#221F1F", "#000000"], hue: 0 },
+  // ============================================
+  // NATURE INSPIRED
+  // ============================================
+  // Deep ocean
+  { name: "deep-ocean", colors: ["#0077B6", "#00B4D8", "#90E0EF", "#CAF0F8"], hue: 195 },
+  // Forest night
+  { name: "forest-night", colors: ["#1B4332", "#2D6A4F", "#40916C", "#52B788"], hue: 150 },
+  // Aurora borealis
+  { name: "aurora-borealis", colors: ["#00F260", "#0575E6", "#A100FF", "#00F5A0"], hue: 150 },
+  // Desert sand
+  { name: "desert", colors: ["#EDC9AF", "#C19A6B", "#CD853F", "#8B4513"], hue: 30 },
+  // Volcano
+  { name: "volcano", colors: ["#CF000F", "#FF5722", "#FF9800", "#1A1A1A"], hue: 15 },
+  // Northern lights
+  { name: "northern-lights", colors: ["#00C9FF", "#92FE9D", "#F0FF00", "#FF00E4"], hue: 180 },
+  // Midnight blue
+  { name: "midnight", colors: ["#0C1445", "#1A237E", "#283593", "#3949AB"], hue: 230 },
+  // Rainforest
+  { name: "rainforest", colors: ["#004D00", "#006400", "#228B22", "#32CD32"], hue: 120 },
+  // ============================================
+  // RETRO / VINTAGE
+  // ============================================
+  // Retrowave
+  { name: "retrowave", colors: ["#F72585", "#7209B7", "#3A0CA3", "#4361EE"], hue: 320 },
+  // Outrun
+  { name: "outrun", colors: ["#FF2A6D", "#D100D1", "#05D9E8", "#01012B"], hue: 330 },
+  // Commodore 64
+  { name: "c64", colors: ["#4040E8", "#7869C4", "#9F9FED", "#706DEB"], hue: 240 },
+  // Gameboy
+  { name: "gameboy", colors: ["#0F380F", "#306230", "#8BAC0F", "#9BBC0F"], hue: 90 },
+  // Sepia vintage
+  { name: "sepia", colors: ["#704214", "#A0522D", "#D2691E", "#F4A460"], hue: 25 },
+  // VHS glitch
+  { name: "vhs", colors: ["#FF0000", "#00FF00", "#0000FF", "#FFFFFF"], hue: 0 },
+  // ============================================
+  // GRADIENT FLOWS
+  // ============================================
+  // Miami vice
+  { name: "miami", colors: ["#F857A6", "#FF5858", "#FFDD00", "#36D1DC"], hue: 330 },
+  // Cotton candy
+  { name: "cotton-candy", colors: ["#FFAFBD", "#FFC3A0", "#D4FC79", "#96E6A1"], hue: 350 },
+  // Mango tango
+  { name: "mango", colors: ["#FFE259", "#FFA751", "#FF7B54", "#FF6B6B"], hue: 40 },
+  // Ocean breeze
+  { name: "ocean-breeze", colors: ["#2E3192", "#1BFFFF", "#00F5FF", "#00D4FF"], hue: 200 },
+  // Purple rain
+  { name: "purple-rain", colors: ["#360033", "#7B4397", "#DC2430", "#7B4397"], hue: 290 },
+  // Firewatch
+  { name: "firewatch", colors: ["#F95738", "#EE964B", "#F4D35E", "#083D77"], hue: 15 },
+  // Warm flame
+  { name: "warm-flame", colors: ["#FF9A8B", "#FF6A88", "#FF99AC", "#FCB69F"], hue: 10 },
+  // Cool blues
+  { name: "cool-blues", colors: ["#2193B0", "#6DD5ED", "#4CA1AF", "#C4E0E5"], hue: 190 },
+  // ============================================
+  // CYBERPUNK / FUTURISTIC
+  // ============================================
+  // Akira red
+  { name: "akira", colors: ["#FF0000", "#8B0000", "#DC143C", "#1A1A1A"], hue: 0 },
+  // Ghost in shell
+  { name: "gits", colors: ["#00FF9F", "#00B8FF", "#001EFF", "#BD00FF"], hue: 160 },
+  // Tron legacy
+  { name: "tron", colors: ["#00FFFF", "#0AFFE9", "#0D0D0D", "#1A1A1A"], hue: 180 },
+  // Neon Tokyo
+  { name: "neon-tokyo", colors: ["#F900BF", "#6F00FF", "#00F0FF", "#FF003C"], hue: 310 },
+  // Cyberpunk 2077
+  { name: "cyberpunk-2077", colors: ["#FCEE0A", "#00F0FF", "#FF003C", "#1A1A2E"], hue: 55 },
+  // Blade runner 2049
+  { name: "blade-runner-2049", colors: ["#F5AF19", "#F12711", "#0F2027", "#2C5364"], hue: 35 },
+  // ============================================
+  // PASTEL SOFT
+  // ============================================
+  // Pastel dream
+  { name: "pastel-dream", colors: ["#FFB5E8", "#B5DEFF", "#B5FFD9", "#FFFFB5"], hue: 330 },
+  // Soft pastel
+  { name: "soft-pastel", colors: ["#F3E7E9", "#E3EEFF", "#E7F9E7", "#FFF5E3"], hue: 340 },
+  // Baby pink
+  { name: "baby-pink", colors: ["#FFD1DC", "#FFB6C1", "#FFA0B4", "#FF8AAE"], hue: 350 },
+  // Mint cream
+  { name: "mint-cream", colors: ["#A8E6CF", "#DCEDC1", "#FFD3B6", "#FFAAA5"], hue: 150 },
+  // Lavender haze
+  { name: "lavender-haze", colors: ["#E6E6FA", "#D8BFD8", "#DDA0DD", "#EE82EE"], hue: 270 },
+  // ============================================
+  // HIGH CONTRAST BANGERS
+  // ============================================
+  // Black and gold
+  { name: "black-gold", colors: ["#FFD700", "#B8860B", "#1A1A1A", "#0D0D0D"], hue: 50 },
+  // Black and red
+  { name: "black-red", colors: ["#FF0000", "#8B0000", "#1A1A1A", "#0D0D0D"], hue: 0 },
+  // Black and cyan
+  { name: "black-cyan", colors: ["#00FFFF", "#00CED1", "#1A1A1A", "#0D0D0D"], hue: 180 },
+  // White and gold
+  { name: "white-gold", colors: ["#FFD700", "#FFFFFF", "#F5F5F5", "#DAA520"], hue: 50 },
+  // ============================================
+  // EXOTIC / UNIQUE
+  // ============================================
+  // Bioluminescence
+  { name: "bioluminescence", colors: ["#00FFFF", "#00FF7F", "#7FFFD4", "#40E0D0"], hue: 165 },
+  // Plasma storm
+  { name: "plasma-storm", colors: ["#8B00FF", "#FF00FF", "#00FFFF", "#FF1493"], hue: 280 },
+  // Quantum
+  { name: "quantum", colors: ["#6A0DAD", "#301934", "#00FFFF", "#FF00FF"], hue: 280 },
+  // Dark matter
+  { name: "dark-matter", colors: ["#0D0D0D", "#1A0A2E", "#3D1E6D", "#7B2CBF"], hue: 270 },
+  // Supernova
+  { name: "supernova", colors: ["#FF6B6B", "#FFA500", "#FFD93D", "#6BCB77"], hue: 30 },
+  // Nebula
+  { name: "nebula", colors: ["#1A0533", "#3D1A78", "#7B4B94", "#BE8ABF"], hue: 280 },
+  // Event horizon
+  { name: "event-horizon", colors: ["#000000", "#0D0D0D", "#FF4500", "#FFD700"], hue: 30 },
+  // Pulsar
+  { name: "pulsar", colors: ["#00FFFF", "#FF00FF", "#FFFF00", "#00FF00"], hue: 180 },
 ];
 
 // Helper function to get palette by name

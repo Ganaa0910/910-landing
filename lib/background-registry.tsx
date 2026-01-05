@@ -19,15 +19,16 @@ import Hyperspeed from "@/components/Hyperspeed";
 import Lightning from "@/components/Lightning";
 import Prism from "@/components/Prism";
 import LightRays from "@/components/LightRays";
-import Plasma from "@/components/Plasma";
 import PixelSnow from "@/components/PixelSnow";
 import Beams from "@/components/Beams";
 import PrismaticBurst from "@/components/PrismaticBurst";
 import Galaxy from "@/components/Galaxy";
 import RippleGrid from "@/components/RippleGrid";
+import LiquidChrome from "@/components/LiquidChrome";
+import Squares from "@/components/Squares";
 
 // Total number of background variants (fixed order, generated programmatically)
-export const TOTAL_BACKGROUNDS = 38;
+export const TOTAL_BACKGROUNDS = 42;
 
 // Helper to convert hex to RGB array (0-1 range) for Three.js components
 function hexToRgb(hex: string): [number, number, number] {
@@ -329,9 +330,7 @@ export function getBackgroundByIndex(
     />,
     // 32: LightRays - radial beams
     <LightRays key="lightrays" raysColor={palette.colors[1]} raysSpeed={0.5} />,
-    // 33: Plasma - organic flow
-    <Plasma key="plasma" color={palette.colors[1]} speed={0.8} />,
-    // 34: Beams - light streaks
+    // 33: Beams - light streaks
     <Beams
       key="beams"
       lightColor={palette.colors[1]}
@@ -339,17 +338,73 @@ export function getBackgroundByIndex(
       speed={1.5}
       beamWidth={2}
     />,
-    // 35: PrismaticBurst - color explosion
+    // 34: PrismaticBurst - color explosion
     <PrismaticBurst
       key="prismaticburst"
       colors={palette.colors}
       speed={1.2}
       intensity={1.5}
     />,
-    // 36: LightRays alt - different config
+    // 35: LightRays alt - different config
     <LightRays key="lightrays2" raysColor={palette.colors[2]} raysSpeed={0.8} />,
-    // 37: Plasma alt - faster flow
-    <Plasma key="plasma2" color={palette.colors[2]} speed={1.5} />,
+    // 36: LiquidChrome - metallic liquid distortion
+    <LiquidChrome
+      key="liquidchrome"
+      baseColor={hexToRgb(palette.colors[0])}
+      speed={0.2}
+      amplitude={0.3}
+      frequencyX={3}
+      frequencyY={3}
+      interactive={true}
+    />,
+    // 37: Squares - animated grid
+    <Squares
+      key="squares"
+      direction="diagonal"
+      speed={0.5}
+      borderColor={palette.colors[1]}
+      squareSize={40}
+      hoverFillColor={palette.colors[0]}
+    />,
+    // 38: RippleGrid - pulsing grid with vignette
+    <RippleGrid
+      key="ripplegrid"
+      gridColor={palette.colors[1]}
+      rippleIntensity={0.05}
+      gridSize={10}
+      gridThickness={15}
+      glowIntensity={0.1}
+      mouseInteraction={true}
+    />,
+    // 39: LiquidChrome alt - different frequency
+    <LiquidChrome
+      key="liquidchrome2"
+      baseColor={hexToRgb(palette.colors[2])}
+      speed={0.3}
+      amplitude={0.4}
+      frequencyX={5}
+      frequencyY={4}
+      interactive={true}
+    />,
+    // 40: Squares alt - different direction
+    <Squares
+      key="squares2"
+      direction="right"
+      speed={0.8}
+      borderColor={palette.colors[0]}
+      squareSize={50}
+      hoverFillColor={palette.colors[2]}
+    />,
+    // 41: RippleGrid alt - rainbow mode
+    <RippleGrid
+      key="ripplegrid2"
+      enableRainbow={true}
+      rippleIntensity={0.08}
+      gridSize={8}
+      gridThickness={12}
+      glowIntensity={0.2}
+      mouseInteraction={true}
+    />,
   ];
 
   return backgrounds[safeIndex];
@@ -400,11 +455,15 @@ export const backgroundNames = [
   "Prism Alt",
   "Lightning Alt",
   "LightRays",
-  "Plasma",
   "Beams",
   "PrismaticBurst",
   "LightRays Alt",
-  "Plasma Alt",
+  "LiquidChrome",
+  "Squares",
+  "RippleGrid",
+  "LiquidChrome Alt",
+  "Squares Alt",
+  "RippleGrid Alt",
 ];
 
 // Heavy backgrounds (Three.js with postprocessing) for lazy loading optimization
@@ -413,7 +472,7 @@ export const heavyBackgroundIndices = new Set([
   27, // Lightning
   28, // Prism
   31, // Lightning Alt
-  35, // PrismaticBurst
+  34, // PrismaticBurst
 ]);
 
 export function isHeavyBackground(index: number): boolean {
