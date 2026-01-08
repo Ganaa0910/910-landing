@@ -582,3 +582,13 @@ html, body {
         animation: crt-glitch-in 0.4s ease-out forwards;
     }
 }
+
+/* CRT Button hover effect */
+.crt-button:hover {
+    text-shadow: 0 0 10px var(--current-accent), 0 0 20px var(--current-accent), 0 0 40px var(--current-accent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--current-accent) 60%, transparent), inset 0 0 20px color-mix(in srgb, var(--current-accent) 20%, transparent);
+}
+
+.crt-button:hover > div:nth-child(2) {
+    animation-play-state: running !important;
+}

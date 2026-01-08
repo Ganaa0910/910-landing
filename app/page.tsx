@@ -583,7 +583,7 @@ function HomePage() {
             <div className="flex flex-wrap items-center justify-center gap-4">
               <button
                 onClick={openModal}
-                className="group relative overflow-hidden border-2 px-8 py-4 font-bold uppercase tracking-wide transition-all hover:scale-105"
+                className="crt-button group relative overflow-hidden border-2 px-8 py-4 font-bold uppercase tracking-wide transition-all"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   borderColor: accentColor,
@@ -591,23 +591,65 @@ function HomePage() {
                   boxShadow: `0 0 20px ${accentColor}40`,
                 }}
               >
-                <span className="relative z-10">Get Started</span>
+                {/* CRT Scanlines Overlay - visible on hover */}
                 <div
-                  className="absolute inset-0 translate-y-full transition-transform group-hover:translate-y-0"
-                  style={{ backgroundColor: `${accentColor}20` }}
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-30"
+                  style={{
+                    background: `repeating-linear-gradient(
+                      0deg,
+                      transparent,
+                      transparent 2px,
+                      ${accentColor}20 2px,
+                      ${accentColor}20 4px
+                    )`,
+                  }}
                 />
+                {/* Glitch line sweep on hover */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-0 group-hover:opacity-60"
+                  style={{
+                    background: accentColor,
+                    boxShadow: `0 0 10px ${accentColor}`,
+                    animation: "scanline-sweep 3s linear infinite",
+                    animationPlayState: "paused",
+                  }}
+                />
+                <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">Get Started</span>
               </button>
 
               <button
                 onClick={handleRandomizeAll}
-                className="group relative overflow-hidden border-2 px-8 py-4 font-bold uppercase tracking-wide transition-all hover:scale-105"
+                className="crt-button group relative overflow-hidden border-2 px-8 py-4 font-bold uppercase tracking-wide transition-all"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   borderColor: `${accentColor}60`,
                   color: `${accentColor}B0`,
                 }}
               >
-                <span className="relative z-10">Randomize</span>
+                {/* CRT Scanlines Overlay - visible on hover */}
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-30"
+                  style={{
+                    background: `repeating-linear-gradient(
+                      0deg,
+                      transparent,
+                      transparent 2px,
+                      ${accentColor}20 2px,
+                      ${accentColor}20 4px
+                    )`,
+                  }}
+                />
+                {/* Glitch line sweep on hover */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-0 group-hover:opacity-60"
+                  style={{
+                    background: accentColor,
+                    boxShadow: `0 0 10px ${accentColor}`,
+                    animation: "scanline-sweep 3s linear infinite",
+                    animationPlayState: "paused",
+                  }}
+                />
+                <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">Randomize</span>
               </button>
             </div>
 
