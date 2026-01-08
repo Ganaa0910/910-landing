@@ -20,7 +20,6 @@ import {
   getBackgroundByIndex,
   getNextBackgroundIndex,
   getPrevBackgroundIndex,
-  backgroundNames,
 } from "@/lib/background-registry";
 import { trackEvent } from "@/lib/analytics";
 
@@ -37,6 +36,8 @@ import { useSwipeGesture } from "@/hooks/useSwipeGesture";
 import { HelpOverlay } from "@/components/HelpOverlay";
 import { FavoritesPanel } from "@/components/FavoritesPanel";
 import { Toast, useToast } from "@/components/Toast";
+import { CustomSelect } from "@/components/CustomSelect";
+import { MeetingScheduler } from "@/components/MeetingScheduler";
 import { CRTBootLoader } from "@/components/CRTBootLoader";
 import { CustomCursor } from "@/components/CustomCursor";
 import { TVStatic } from "@/components/TVStatic";
@@ -209,6 +210,22 @@ function HomePage() {
   // Toast notifications
   const { toast, showToast } = useToast();
 
+  // Inquiry form state
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    projectType: "Website",
+    budget: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modalView, setModalView] = useState<"form" | "scheduler" | "success">("form");
+
+  // Sync accent color to CSS variable for scrollbars etc
+  useEffect(() => {
+    document.documentElement.style.setProperty("--current-accent", accentColor);
+  }, [accentColor]);
+
   // Favorites management
   const { favorites, addFavorite, removeFavorite, clearFavorites, isFavorited } =
     useFavorites();
@@ -229,7 +246,6 @@ function HomePage() {
   // URL parameter sync
   const hasUrlComboRef = useRef(false);
   const updateUrl = useComboUrlSync((decodedCombo) => {
-    console.log("🔗 Loading combo from URL");
     hasUrlComboRef.current = true;
     setCombo(decodedCombo);
     trackEvent({ type: "combo_share" as const, combo: decodedCombo });
@@ -391,8 +407,43 @@ function HomePage() {
     onLongPress: () => setShowFavorites(true),
   });
 
+  // Form submission handler
+  const handleInquirySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        showToast("Inquiry sent!");
+        closeModal();
+        setFormData({
+          name: "",
+          email: "",
+          projectType: "Website",
+          budget: "",
+          message: "",
+        });
+      } else {
+        showToast("Failed to send. Try again.");
+      }
+    } catch {
+      showToast("Network error. Try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // Modal animations (existing code preserved)
   const openModal = () => {
+    setModalView("form");
     setShowModal(true);
   };
 
@@ -400,7 +451,10 @@ function HomePage() {
     if (!modalRef.current || !backdropRef.current) return;
 
     const timeline = gsap.timeline({
-      onComplete: () => setShowModal(false),
+      onComplete: () => {
+        setShowModal(false);
+        setModalView("form");
+      },
     });
 
     timeline
@@ -603,7 +657,7 @@ function HomePage() {
             </div>
           </div>
 
-          {/* Download Modal (existing) */}
+          {/* Inquiry Modal */}
           {showModal && (
             <div
               className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -618,57 +672,303 @@ function HomePage() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div
-                  className="relative overflow-hidden border-4 bg-black px-8 py-12"
+                  className="relative max-h-[85vh] overflow-y-auto border-4 bg-black px-6 py-8 sm:px-8 sm:py-10"
                   style={{
                     borderColor: accentColor,
                     boxShadow: `0 0 60px ${accentColor}40`,
                   }}
                 >
-                  <h2
-                    className="mb-6 text-center text-3xl font-bold"
-                    style={{
-                      fontFamily: `var(${uiFont})`,
-                      color: accentColor,
-                    }}
-                  >
-                    PROJECT KICKOFF
-                  </h2>
+                  {/* Form View */}
+                  {modalView === "form" && (
+                    <div className="animate-crt-in">
+                      <h2
+                        className="mb-6 text-center text-2xl font-bold sm:text-3xl"
+                        style={{
+                          fontFamily: `var(${uiFont})`,
+                          color: accentColor,
+                        }}
+                      >
+                        START A PROJECT
+                      </h2>
 
-                  <div className="space-y-4">
-                    <a
-                      href="/910studio_Project_Kickoff_Template.xlsx"
-                      download
-                      className="block border-2 p-4 text-center transition-all hover:bg-white/5"
-                      style={{ borderColor: `${accentColor}60`, color: accentColor }}
-                    >
-                      <span style={{ fontFamily: `var(${uiFont})` }}>
-                        📄 English Template
-                      </span>
-                    </a>
+                      <form onSubmit={handleInquirySubmit} className="space-y-4">
+                        {/* Name */}
+                        <div>
+                          <label
+                            className="mb-1 block text-xs uppercase tracking-wider"
+                            style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
+                          >
+                            Name *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            className="w-full bg-transparent px-3 py-2 text-white outline-none transition-colors"
+                            style={{
+                              border: `2px solid ${accentColor}40`,
+                              fontFamily: `var(${uiFont})`,
+                            }}
+                            onFocus={(e) => (e.target.style.borderColor = accentColor)}
+                            onBlur={(e) => (e.target.style.borderColor = `${accentColor}40`)}
+                          />
+                        </div>
 
-                    <a
-                      href="/910studio_Төслийн_Эхлэл_Загвар.xlsx"
-                      download
-                      className="block border-2 p-4 text-center transition-all hover:bg-white/5"
-                      style={{ borderColor: `${accentColor}60`, color: accentColor }}
-                    >
-                      <span style={{ fontFamily: `var(${uiFont})` }}>
-                        📄 Монгол Загвар
-                      </span>
-                    </a>
-                  </div>
+                        {/* Email */}
+                        <div>
+                          <label
+                            className="mb-1 block text-xs uppercase tracking-wider"
+                            style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
+                          >
+                            Email *
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className="w-full bg-transparent px-3 py-2 text-white outline-none transition-colors"
+                            style={{
+                              border: `2px solid ${accentColor}40`,
+                              fontFamily: `var(${uiFont})`,
+                            }}
+                            onFocus={(e) => (e.target.style.borderColor = accentColor)}
+                            onBlur={(e) => (e.target.style.borderColor = `${accentColor}40`)}
+                          />
+                        </div>
 
-                  <button
-                    onClick={closeModal}
-                    className="mt-6 w-full border-2 py-3 transition-all hover:bg-white/5"
-                    style={{
-                      borderColor: `${accentColor}40`,
-                      color: `${accentColor}80`,
-                      fontFamily: `var(${uiFont})`,
-                    }}
-                  >
-                    Close [ESC]
-                  </button>
+                        {/* Project Type & Budget Row */}
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <CustomSelect
+                            label="Project Type"
+                            value={formData.projectType}
+                            onChange={(val) => setFormData({ ...formData, projectType: val })}
+                            accentColor={accentColor}
+                            uiFont={uiFont}
+                            options={[
+                              { value: "Website", label: "Website" },
+                              { value: "Web App", label: "Web App" },
+                              { value: "Mobile App", label: "Mobile App" },
+                              { value: "Branding", label: "Branding" },
+                              { value: "Other", label: "Other" },
+                            ]}
+                          />
+
+                          <CustomSelect
+                            label="Budget Range"
+                            value={formData.budget}
+                            onChange={(val) => setFormData({ ...formData, budget: val })}
+                            accentColor={accentColor}
+                            uiFont={uiFont}
+                            placeholder="Select..."
+                            options={[
+                              { value: "<$1K", label: "<$1K" },
+                              { value: "$1K-5K", label: "$1K - $5K" },
+                              { value: "$5K-10K", label: "$5K - $10K" },
+                              { value: "$10K+", label: "$10K+" },
+                              { value: "Not sure", label: "Not sure" },
+                            ]}
+                          />
+                        </div>
+
+                        {/* Message */}
+                        <div>
+                          <label
+                            className="mb-1 block text-xs uppercase tracking-wider"
+                            style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
+                          >
+                            Tell us about your project *
+                          </label>
+                          <textarea
+                            required
+                            rows={3}
+                            value={formData.message}
+                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                            className="w-full resize-none bg-transparent px-3 py-2 text-white outline-none transition-colors"
+                            style={{
+                              border: `2px solid ${accentColor}40`,
+                              fontFamily: `var(${uiFont})`,
+                            }}
+                            onFocus={(e) => (e.target.style.borderColor = accentColor)}
+                            onBlur={(e) => (e.target.style.borderColor = `${accentColor}40`)}
+                            placeholder="What are you building? What's the vision?"
+                          />
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="w-full py-3 text-sm font-bold uppercase tracking-wider transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                          style={{
+                            backgroundColor: accentColor,
+                            color: "#000",
+                            fontFamily: `var(${uiFont})`,
+                          }}
+                        >
+                          {isSubmitting ? "Sending..." : "Send Inquiry"}
+                        </button>
+
+                        {/* Divider */}
+                        <div className="flex items-center gap-3 py-1">
+                          <div className="h-px flex-1" style={{ backgroundColor: `${accentColor}30` }} />
+                          <span
+                            className="text-xs uppercase"
+                            style={{ color: `${accentColor}60`, fontFamily: `var(${uiFont})` }}
+                          >
+                            or
+                          </span>
+                          <div className="h-px flex-1" style={{ backgroundColor: `${accentColor}30` }} />
+                        </div>
+
+                        {/* Book a Call Button - CRT Style */}
+                        {(() => {
+                          const isDisabled = !formData.name.trim() || !formData.email.trim();
+                          return (
+                            <button
+                              type="button"
+                              onClick={() => setModalView("scheduler")}
+                              disabled={isDisabled}
+                              className={`group relative w-full overflow-hidden border-2 py-3 text-sm font-bold uppercase tracking-wider ${
+                                isDisabled
+                                  ? "cursor-not-allowed opacity-40"
+                                  : ""
+                              }`}
+                              style={{
+                                borderColor: isDisabled ? `${accentColor}40` : accentColor,
+                                color: isDisabled ? `${accentColor}40` : accentColor,
+                                fontFamily: `var(${uiFont})`,
+                                textShadow: isDisabled
+                                  ? "none"
+                                  : `0 0 10px ${accentColor}, 0 0 20px ${accentColor}, 0 0 40px ${accentColor}`,
+                                boxShadow: isDisabled
+                                  ? "none"
+                                  : `0 0 10px ${accentColor}60, inset 0 0 20px ${accentColor}20`,
+                                animation: isDisabled ? "none" : "crt-flicker 4s infinite",
+                              }}
+                            >
+                              {/* CRT Scanlines Overlay */}
+                              {!isDisabled && (
+                                <div
+                                  className="pointer-events-none absolute inset-0 opacity-30"
+                                  style={{
+                                    background: `repeating-linear-gradient(
+                                      0deg,
+                                      transparent,
+                                      transparent 2px,
+                                      ${accentColor}20 2px,
+                                      ${accentColor}20 4px
+                                    )`,
+                                  }}
+                                />
+                              )}
+                              {/* Glitch line that sweeps */}
+                              {!isDisabled && (
+                                <div
+                                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-60"
+                                  style={{
+                                    background: accentColor,
+                                    boxShadow: `0 0 10px ${accentColor}`,
+                                    animation: "scanline-sweep 3s linear infinite",
+                                  }}
+                                />
+                              )}
+                              <span className="relative z-10">
+                                {isDisabled ? "Fill name & email to book a call" : "Book a Call Instead"}
+                              </span>
+                            </button>
+                          );
+                        })()}
+
+                        {/* Close Button */}
+                        <button
+                          type="button"
+                          onClick={closeModal}
+                          className="w-full py-2 text-xs transition-all hover:opacity-70"
+                          style={{
+                            color: `${accentColor}50`,
+                            fontFamily: `var(${uiFont})`,
+                          }}
+                        >
+                          Cancel [ESC]
+                        </button>
+                      </form>
+                    </div>
+                  )}
+
+                  {/* Scheduler View */}
+                  {modalView === "scheduler" && (
+                    <div className="animate-crt-in">
+                      <MeetingScheduler
+                        accentColor={accentColor}
+                        uiFont={uiFont}
+                        clientName={formData.name || "Guest"}
+                        clientEmail={formData.email || ""}
+                        projectType={formData.projectType}
+                        onBooked={() => setModalView("success")}
+                        onBack={() => setModalView("form")}
+                      />
+                    </div>
+                  )}
+
+                  {/* Success View */}
+                  {modalView === "success" && (
+                    <div className="animate-crt-in space-y-6 text-center">
+                      <div
+                        className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
+                        style={{ backgroundColor: `${accentColor}20` }}
+                      >
+                        <svg
+                          className="h-8 w-8"
+                          fill="none"
+                          stroke={accentColor}
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+
+                      <div>
+                        <h2
+                          className="mb-2 text-2xl font-bold"
+                          style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
+                        >
+                          You&apos;re Booked!
+                        </h2>
+                        <p
+                          className="text-sm"
+                          style={{ color: "#888", fontFamily: `var(${uiFont})` }}
+                        >
+                          Check your email for the calendar invite.
+                        </p>
+                        <p
+                          className="mt-2 text-xs"
+                          style={{ color: "#555", fontFamily: `var(${uiFont})` }}
+                        >
+                          Click the .ics attachment to add it to your calendar.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={closeModal}
+                        className="w-full py-3 text-sm font-bold uppercase tracking-wider transition-all"
+                        style={{
+                          backgroundColor: accentColor,
+                          color: "#000",
+                          fontFamily: `var(${uiFont})`,
+                        }}
+                      >
+                        Done
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

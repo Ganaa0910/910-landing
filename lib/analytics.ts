@@ -6,6 +6,7 @@ import type { ComboState } from "./combo-state";
 
 const ANALYTICS_KEY = "910-analytics";
 const BATCH_SIZE = 50; // Send to console when 50 events collected
+const IS_DEV = process.env.NODE_ENV === "development";
 
 export type AnalyticsEvent =
   | { type: "combo_view"; combo: ComboState; timestamp: number }
@@ -44,9 +45,11 @@ export function trackEvent(event: any) {
 }
 
 /**
- * Analyze batch of events and log insights to console
+ * Analyze batch of events (logs to console in dev only)
  */
 function analyzeBatch(events: AnalyticsEvent[]) {
+  if (!IS_DEV) return;
+
   console.log("📊 Analytics Batch Summary:");
   console.log(`Total events: ${events.length}`);
 
@@ -113,5 +116,5 @@ export function getAnalyticsStats() {
  */
 export function clearAnalytics() {
   localStorage.removeItem(ANALYTICS_KEY);
-  console.log("🗑️ Analytics data cleared");
+  if (IS_DEV) console.log("🗑️ Analytics data cleared");
 }
