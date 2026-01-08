@@ -284,6 +284,43 @@ export const colorPalettes: ColorPalette[] = [
   { name: "pulsar", colors: ["#00FFFF", "#FF00FF", "#FFFF00", "#00FF00"], hue: 180 },
 ];
 
+// High contrast palettes for UI elements (buttons, text, etc.)
+// These have saturated colors[1] that pop on dark backgrounds
+export const highContrastPaletteNames = new Set([
+  // Core vibrant
+  "teal", "purple", "pink", "orange", "green", "cyan", "amber", "violet", "emerald",
+  "lime", "fuchsia", "rose", "sky", "yellow", "neon-green", "coral", "gold", "aqua",
+  "magenta", "chartreuse", "turquoise", "tangerine",
+  // Extreme spectrum
+  "vaporwave", "cyberpunk", "retro-80s", "synthwave", "matrix", "toxic", "sunset",
+  "neon-rainbow", "crimson", "arctic", "lava", "electric-blue", "poison", "grape",
+  "nuclear", "bubblegum", "laser", "radioactive", "flamingo", "holographic",
+  "blade-runner", "berry", "citrus", "violet-storm", "solar-flare", "neon-nights",
+  "emerald-city",
+  // Fire palettes
+  "electric-violet", "plasma-pink", "toxic-cyan", "neon-orange", "digital-green",
+  "ultra-violet", "sunrise", "ice-blue", "blood-red", "alien-green",
+  // Brand colors
+  "spotify", "twitch", "youtube", "netflix",
+  // Nature (vibrant ones)
+  "deep-ocean", "forest-night", "aurora-borealis", "volcano", "northern-lights",
+  "rainforest",
+  // Retro
+  "retrowave", "outrun", "vhs", "miami", "mango", "ocean-breeze", "firewatch",
+  // Cyberpunk
+  "akira", "gits", "tron", "neon-tokyo", "cyberpunk-2077", "blade-runner-2049",
+  // High contrast duos
+  "black-gold", "black-red", "black-cyan", "noir", "obsidian",
+  // Exotic
+  "bioluminescence", "plasma-storm", "quantum", "dark-matter", "supernova",
+  "event-horizon", "pulsar",
+]);
+
+// Get indices of high contrast palettes
+export const highContrastPaletteIndices = colorPalettes
+  .map((p, i) => highContrastPaletteNames.has(p.name) ? i : -1)
+  .filter((i) => i !== -1);
+
 // Helper function to get palette by name
 export function getPaletteByName(name: string): ColorPalette | undefined {
   return colorPalettes.find((p) => p.name === name);
@@ -292,4 +329,9 @@ export function getPaletteByName(name: string): ColorPalette | undefined {
 // Helper function to get random palette
 export function getRandomPalette(): ColorPalette {
   return colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+}
+
+// Helper function to get random HIGH CONTRAST palette index (for UI)
+export function getRandomHighContrastPaletteIndex(): number {
+  return highContrastPaletteIndices[Math.floor(Math.random() * highContrastPaletteIndices.length)];
 }

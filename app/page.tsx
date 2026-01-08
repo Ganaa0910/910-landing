@@ -583,7 +583,7 @@ function HomePage() {
             <div className="flex flex-wrap items-center justify-center gap-4">
               <button
                 onClick={openModal}
-                className="crt-button group relative overflow-hidden border-2 px-8 py-4 font-bold uppercase tracking-wide transition-all"
+                className="crt-button group relative overflow-hidden border-2 bg-black/90 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   borderColor: accentColor,
@@ -619,7 +619,7 @@ function HomePage() {
 
               <button
                 onClick={handleRandomizeAll}
-                className="crt-button group relative overflow-hidden border-2 px-8 py-4 font-bold uppercase tracking-wide transition-all"
+                className="crt-button group relative overflow-hidden border-2 bg-black/70 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
                 style={{
                   fontFamily: `var(${uiFont})`,
                   borderColor: `${accentColor}60`,

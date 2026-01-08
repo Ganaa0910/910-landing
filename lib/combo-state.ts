@@ -1,6 +1,6 @@
 // State management types and utilities for 910studio landing page combos
 
-import { colorPalettes, type ColorPalette } from "./palettes";
+import { colorPalettes, type ColorPalette, getRandomHighContrastPaletteIndex } from "./palettes";
 import { TOTAL_BACKGROUNDS } from "./background-registry";
 
 // Display fonts array (matches page.tsx)
@@ -130,7 +130,7 @@ export function generateRandomCombo(quirkyLinesLength: number): ComboState {
   return {
     backgroundIndex: Math.floor(Math.random() * TOTAL_BACKGROUNDS),
     paletteIndex: Math.floor(Math.random() * colorPalettes.length),
-    uiPaletteIndex: Math.floor(Math.random() * colorPalettes.length),
+    uiPaletteIndex: getRandomHighContrastPaletteIndex(), // Only high-contrast for UI
     fontIndex: Math.floor(Math.random() * displayFonts.length),
     taglineIndex: Math.floor(Math.random() * quirkyLinesLength),
   };
@@ -180,9 +180,9 @@ export function changeColorPalette(current: ComboState): ComboState {
     newBgPaletteIndex = Math.floor(Math.random() * colorPalettes.length);
   }
 
-  // Randomize UI palette independently (ensure it changes)
+  // Randomize UI palette independently (ensure it changes, only high-contrast)
   while (newUiPaletteIndex === current.uiPaletteIndex) {
-    newUiPaletteIndex = Math.floor(Math.random() * colorPalettes.length);
+    newUiPaletteIndex = getRandomHighContrastPaletteIndex();
   }
 
   return {
