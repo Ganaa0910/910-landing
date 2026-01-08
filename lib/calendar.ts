@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import { prisma } from "./db";
 
 // Business hours config (UB timezone)
 export const BUSINESS_HOURS = {
@@ -62,24 +62,46 @@ export function isBusinessDay(date: Date): boolean {
 
 // Get all bookings for a specific date
 export async function getBookingsForDate(date: Date): Promise<Booking[]> {
-  const dateKey = date.toISOString().split("T")[0]; // YYYY-MM-DD
-  const bookings = await kv.get<Booking[]>(`bookings:${dateKey}`);
-  return bookings || [];
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const bookings = await prisma.booking.findMany({
+    where: {
+      startTime: {
+        gte: startOfDay,
+        lte: endOfDay,
+      },
+    },
+  });
+
+  return bookings.map((b) => ({
+    id: b.id,
+    name: b.name,
+    email: b.email,
+    startTime: b.startTime.toISOString(),
+    endTime: b.endTime.toISOString(),
+    projectType: b.projectType ?? undefined,
+    notes: b.notes ?? undefined,
+    createdAt: b.createdAt.toISOString(),
+  }));
 }
 
 // Save a booking
 export async function saveBooking(booking: Booking): Promise<void> {
-  const date = new Date(booking.startTime);
-  const dateKey = date.toISOString().split("T")[0];
-
-  const existing = await getBookingsForDate(date);
-  existing.push(booking);
-
-  // Store with 90 day TTL (cleanup old bookings automatically)
-  await kv.set(`bookings:${dateKey}`, existing, { ex: 60 * 60 * 24 * 90 });
-
-  // Also store in a master list for easy lookup
-  await kv.sadd("all_booking_ids", booking.id);
+  await prisma.booking.create({
+    data: {
+      id: booking.id,
+      name: booking.name,
+      email: booking.email,
+      startTime: new Date(booking.startTime),
+      endTime: new Date(booking.endTime),
+      projectType: booking.projectType,
+      notes: booking.notes,
+    },
+  });
 }
 
 // Check if a slot overlaps with existing bookings
