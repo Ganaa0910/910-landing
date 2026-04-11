@@ -91,7 +91,7 @@ export function LoadingScreen() {
         opacity: exiting ? 0 : 1,
       }}
     >
-      <h1
+      <div
         className="font-bebas"
         style={{
           fontSize: "clamp(3rem, 8vw, 4rem)",
@@ -102,7 +102,7 @@ export function LoadingScreen() {
         }}
       >
         910studio
-      </h1>
+      </div>
       <p style={{ marginTop: "8px", fontSize: "12px", letterSpacing: "0.1em", color: "#52525b" }}>
         creative web studio
       </p>

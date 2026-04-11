@@ -13,8 +13,10 @@ const CAPABILITIES = [
 export default function HomePage() {
   return (
     <main>
-      {/* SEO h1 — visually hidden, server-rendered for crawlers */}
-      <h1 className="sr-only">910studio — Creative Web Studio in Ulaanbaatar, Mongolia</h1>
+      {/* SEO h1 — visible but blends into the page */}
+      <h1 className="mx-auto max-w-[1120px] px-8 pt-20 font-mono text-xs font-normal tracking-widest text-zinc-700">
+        910studio — Creative Web Studio in Ulaanbaatar, Mongolia
+      </h1>
 
       {/* Hero */}
       <HeroSection />
