@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" data-dir="polished">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directory — MarketIQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #FAFAFD; --bg-alt: #F4F2FA; --white: #FFFFFF;
+  --fg: #0C0A1D; --fg-2: #44415A; --fg-3: #7A7793;
+  --surface: #F0EEF7; --surface-el: #EAE8F3;
+  --border: #DDDBE8; --border-s: #EDEBF5;
+  --brand: #3E149C; --brand-h: #2E0F75; --brand-l: #6B4CC0; --brand-m: rgba(62,20,156,0.07);
+  --signal: #FCA311; --pos: #059669; --neg: #DC2626; --info: #0891B2;
+  --cat-markets: #3E149C; --cat-companies: #0891B2; --cat-sectors: #059669; --cat-insights: #D97706;
+  --shadow-xs: 0 1px 2px rgba(62,20,156,0.04); --shadow-sm: 0 2px 4px rgba(62,20,156,0.06);
+  --shadow-md: 0 4px 12px rgba(62,20,156,0.08); --shadow-lg: 0 8px 24px rgba(62,20,156,0.1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-d: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-b: 'DM Sans', system-ui, sans-serif;
+  --font-m: 'JetBrains Mono', monospace;
+}
+[data-dir="editorial"] {
+  --d-card-r: 2px; --d-card-bg: transparent; --d-card-bd: none; --d-card-p: 0;
+  --d-card-shadow: none; --d-card-img-r: 2px;
+  --d-card-hover-y: 0px; --d-card-hover-shadow: none; --d-card-hover-bd: none;
+  --d-card-title-s: 1.375rem; --d-card-sep: 1px solid var(--border-s);
+  --d-badge-r: 0; --d-badge-px: 0; --d-badge-py: 0; --d-badge-w: 600;
+  --d-badge-tt: uppercase; --d-badge-ls: 0.1em; --d-badge-s: 0.6875rem; --d-badge-dot: inline-block;
+  --d-btn-r: 2px; --d-btn-h: 44px; --d-grid-gap: 40px; --d-grid-cols: 2;
+  --d-sect-gap: 48px;
+  --d-nav-active-bd: 2px solid var(--brand); --d-nav-active-bg: transparent;
+  --d-logo-size: 42px;
+}
+[data-dir="dense"] {
+  --d-card-r: 4px; --d-card-bg: var(--white); --d-card-bd: 1px solid var(--border); --d-card-p: 14px;
+  --d-card-shadow: var(--shadow-xs); --d-card-img-r: 2px;
+  --d-card-hover-y: 0px; --d-card-hover-shadow: var(--shadow-sm); --d-card-hover-bd: 1px solid var(--brand-l);
+  --d-card-title-s: 0.9375rem; --d-card-sep: none;
+  --d-badge-r: 2px; --d-badge-px: 6px; --d-badge-py: 2px; --d-badge-w: 700;
+  --d-badge-tt: uppercase; --d-badge-ls: 0.06em; --d-badge-s: 0.5625rem; --d-badge-dot: none;
+  --d-btn-r: 4px; --d-btn-h: 34px; --d-grid-gap: 12px; --d-grid-cols: 4;
+  --d-sect-gap: 32px;
+  --d-nav-active-bd: none; --d-nav-active-bg: var(--surface);
+  --d-logo-size: 34px;
+}
+[data-dir="polished"] {
+  --d-card-r: 12px; --d-card-bg: var(--white); --d-card-bd: 1px solid var(--border); --d-card-p: 20px;
+  --d-card-shadow: var(--shadow-xs); --d-card-img-r: 8px;
+  --d-card-hover-y: -3px; --d-card-hover-shadow: var(--shadow-lg); --d-card-hover-bd: 1px solid rgba(107,76,192,0.3);
+  --d-card-title-s: 1.125rem; --d-card-sep: none;
+  --d-badge-r: 4px; --d-badge-px: 10px; --d-badge-py: 4px; --d-badge-w: 600;
+  --d-badge-tt: none; --d-badge-ls: 0.02em; --d-badge-s: 0.6875rem; --d-badge-dot: none;
+  --d-btn-r: 8px; --d-btn-h: 44px; --d-grid-gap: 24px; --d-grid-cols: 3;
+  --d-sect-gap: 40px;
+  --d-nav-active-bd: 2px solid var(--brand); --d-nav-active-bg: transparent;
+  --d-logo-size: 42px;
+}
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-b); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+/* NAV */
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,253,0.88); backdrop-filter: blur(20px) saturate(1.4); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.nav-logo { font-family: var(--font-d); font-weight: 800; font-size: 1.125rem; color: var(--brand); }
+.nav-links { display: flex; align-items: center; }
+.nav-link { font-family: var(--font-b); font-weight: 500; font-size: 0.875rem; color: var(--fg-2); padding: 16px 16px; cursor: pointer; transition: color 200ms; text-decoration: none; }
+a { text-decoration: none; color: inherit; }
+.nav-link:hover { color: var(--fg); }
+.nav-link.on { color: var(--fg); border-bottom: var(--d-nav-active-bd); background: var(--d-nav-active-bg); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-search { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); display: grid; place-items: center; background: none; cursor: pointer; color: var(--fg-3); transition: all 200ms; }
+.nav-search:hover { border-color: var(--brand-l); color: var(--brand); }
+.nav-btn { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; padding: 8px 18px; border-radius: var(--d-btn-r); border: none; background: var(--brand); color: white; cursor: pointer; transition: all 200ms; }
+.nav-btn:hover { background: var(--brand-h); }
+
+/* DIRECTION SWITCHER */
+.dir-sw { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; gap: 3px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 4px; box-shadow: var(--shadow-lg); }
+.dir-btn { padding: 8px 20px; border-radius: 9px; border: none; cursor: pointer; font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg-2); background: transparent; transition: all 200ms var(--ease); }
+.dir-btn:hover { color: var(--fg); }
+.dir-btn.on { background: var(--brand); color: white; box-shadow: 0 2px 8px rgba(62,20,156,0.25); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 500ms var(--ease), transform 500ms var(--ease); }
+.reveal.v { opacity: 1; transform: translateY(0); }
+.rd1 { transition-delay: 60ms; } .rd2 { transition-delay: 120ms; } .rd3 { transition-delay: 180ms; }
+.rd4 { transition-delay: 240ms; } .rd5 { transition-delay: 300ms; }
+
+/* PAGE HEADER */
+.page-head { padding: var(--d-sect-gap) 0 24px; transition: padding 400ms var(--ease); }
+.page-title { font-family: var(--font-d); font-weight: 800; font-size: 2.25rem; letter-spacing: -0.025em; color: var(--fg); margin-bottom: 4px; }
+.page-sub { font-size: 0.9375rem; color: var(--fg-2); }
+
+/* SEARCH BAR */
+.search-bar { position: relative; margin-bottom: 20px; }
+.search-bar input {
+  width: 100%; height: 48px; padding: 0 20px 0 48px;
+  font-family: var(--font-b); font-size: 0.9375rem; color: var(--fg);
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--d-card-r);
+  outline: none; transition: all 300ms var(--ease);
+}
+.search-bar input::placeholder { color: var(--fg-3); }
+.search-bar input:focus { border-color: var(--brand-l); box-shadow: 0 0 0 3px var(--brand-m); }
+.search-bar svg {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--fg-3); pointer-events: none; transition: color 200ms;
+}
+.search-bar input:focus ~ svg { color: var(--brand-l); }
+
+/* STAT STRIP */
+.stat-strip {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding: 14px 0; margin-bottom: 20px;
+  border-top: 1px solid var(--border-s); border-bottom: 1px solid var(--border-s);
+}
+.stat-item { display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+.stat-num { font-family: var(--font-m); font-weight: 600; font-size: 0.9375rem; color: var(--fg); }
+.stat-label { font-family: var(--font-d); font-weight: 600; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-3); }
+.stat-sep { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+
+/* SORT BAR */
+.sort-bar {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+}
+.sort-label { font-family: var(--font-b); font-weight: 500; font-size: 0.8125rem; color: var(--fg-3); flex-shrink: 0; }
+.sort-tabs { display: flex; gap: 0; }
+.sort-tab {
+  font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg-3);
+  padding: 6px 14px; cursor: pointer; transition: all 200ms; position: relative; background: none; border: none;
+}
+.sort-tab::after {
+  content: ''; position: absolute; bottom: 0; left: 14px; right: 14px;
+  height: 2px; background: var(--brand); border-radius: 1px;
+  transform: scaleX(0); transition: transform 250ms var(--ease);
+}
+.sort-tab:hover { color: var(--fg); }
+.sort-tab.on { color: var(--brand); }
+.sort-tab.on::after { transform: scaleX(1); }
+.sort-sep { color: var(--border); font-size: 0.75rem; user-select: none; }
+
+/* GRID */
+.grid { display: grid; grid-template-columns: repeat(var(--d-grid-cols), 1fr); gap: var(--d-grid-gap); transition: all 400ms var(--ease); }
+
+/* ENTITY CARDS */
+.ecard {
+  background: var(--d-card-bg); border: var(--d-card-bd); border-radius: var(--d-card-r);
+  padding: var(--d-card-p); box-shadow: var(--d-card-shadow);
+  transition: all 350ms var(--ease); cursor: pointer;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ecard:hover { transform: translateY(var(--d-card-hover-y)); box-shadow: var(--d-card-hover-shadow); border: var(--d-card-hover-bd); }
+[data-dir="editorial"] .ecard { padding-bottom: var(--d-grid-gap); border-bottom: var(--d-card-sep); }
+[data-dir="editorial"] .ecard:hover .ecard-name { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Card header: logo + name + subtitle */
+.ecard-head { display: flex; align-items: flex-start; gap: 12px; }
+.ecard-logo {
+  width: var(--d-logo-size); height: var(--d-logo-size); min-width: var(--d-logo-size);
+  border-radius: 8px; background: var(--surface);
+  display: grid; place-items: center;
+  font-family: var(--font-d); font-weight: 700; font-size: 0.875rem;
+  transition: all 400ms var(--ease);
+}
+[data-dir="dense"] .ecard-logo { border-radius: 6px; font-size: 0.75rem; }
+.ecard-head-text { flex: 1; min-width: 0; }
+.ecard-name {
+  font-family: var(--font-d); font-weight: 700; font-size: var(--d-card-title-s);
+  color: var(--fg); line-height: 1.3; letter-spacing: -0.01em;
+  transition: font-size 400ms var(--ease);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ecard-sub { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
+.ecard-ticker { font-family: var(--font-m); font-weight: 600; font-size: 0.75rem; color: var(--fg-2); }
+.ecard-change { font-family: var(--font-m); font-weight: 600; font-size: 0.75rem; }
+.ecard-change.up { color: var(--pos); }
+.ecard-change.down { color: var(--neg); }
+.ecard-type { font-family: var(--font-b); font-size: 0.75rem; color: var(--fg-3); }
+
+/* Description */
+.ecard-desc {
+  font-size: 0.8125rem; color: var(--fg-2); line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+[data-dir="dense"] .ecard-desc { -webkit-line-clamp: 1; }
+
+/* Card footer */
+.ecard-foot { display: flex; align-items: center; gap: 6px; margin-top: auto; flex-wrap: wrap; }
+
+/* BADGES */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-d); font-weight: var(--d-badge-w); font-size: var(--d-badge-s);
+  text-transform: var(--d-badge-tt); letter-spacing: var(--d-badge-ls); line-height: 1;
+  border-radius: var(--d-badge-r); padding: var(--d-badge-py) var(--d-badge-px);
+  transition: all 400ms var(--ease); white-space: nowrap;
+}
+.bdot { width: 5px; height: 5px; border-radius: 50%; display: var(--d-badge-dot); flex-shrink: 0; }
+
+/* Type badges */
+[data-dir="editorial"] .b-public { color: var(--cat-markets); } [data-dir="editorial"] .b-public .bdot { background: var(--cat-markets); }
+[data-dir="editorial"] .b-private { color: var(--cat-companies); } [data-dir="editorial"] .b-private .bdot { background: var(--cat-companies); }
+[data-dir="editorial"] .b-project { color: var(--cat-sectors); } [data-dir="editorial"] .b-project .bdot { background: var(--cat-sectors); }
+[data-dir="editorial"] .b-service { color: var(--fg-3); } [data-dir="editorial"] .b-service .bdot { background: var(--fg-3); }
+
+[data-dir="dense"] .b-public { background: var(--cat-markets); color: white; }
+[data-dir="dense"] .b-private { background: var(--cat-companies); color: white; }
+[data-dir="dense"] .b-project { background: var(--cat-sectors); color: white; }
+[data-dir="dense"] .b-service { background: var(--fg-3); color: white; }
+
+[data-dir="polished"] .b-public { background: var(--brand-m); color: var(--cat-markets); }
+[data-dir="polished"] .b-private { background: rgba(8,145,178,0.08); color: var(--cat-companies); }
+[data-dir="polished"] .b-project { background: rgba(5,150,105,0.08); color: var(--cat-sectors); }
+[data-dir="polished"] .b-service { background: var(--surface); color: var(--fg-3); }
+
+/* Sector badges */
+[data-dir="editorial"] .b-sector { color: var(--fg-3); } [data-dir="editorial"] .b-sector .bdot { background: var(--fg-3); }
+[data-dir="dense"] .b-sector { background: var(--surface); color: var(--fg-2); }
+[data-dir="polished"] .b-sector { background: var(--surface); color: var(--fg-2); }
+
+/* Actively Raising badge */
+[data-dir="editorial"] .b-raising { color: var(--signal); } [data-dir="editorial"] .b-raising .bdot { background: var(--signal); }
+[data-dir="dense"] .b-raising { background: var(--signal); color: var(--fg); }
+[data-dir="polished"] .b-raising { background: rgba(252,163,17,0.1); color: #B45309; }
+
+/* PAGINATION */
+.pag { display: flex; align-items: center; justify-content: space-between; margin-top: 40px; padding: 24px 0 80px; border-top: 1px solid var(--border-s); }
+.pag-info { font-size: 0.8125rem; color: var(--fg-3); }
+.pag-btns { display: flex; gap: 4px; }
+.pag-btn { width: 36px; height: 36px; border-radius: var(--d-btn-r); border: 1px solid var(--border); background: var(--white); font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg-2); display: grid; place-items: center; cursor: pointer; transition: all 200ms; }
+.pag-btn:hover { border-color: var(--brand-l); color: var(--brand); }
+.pag-btn.on { background: var(--brand); color: white; border-color: var(--brand); }
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .stat-strip { gap: 12px; }
+}
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr !important; }
+  .nav-links { display: none; }
+  .stat-strip { gap: 8px; }
+  .stat-sep { display: none; }
+}
+</style>
+</head>
+<body data-dir="polished">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="insights-index.html" style="text-decoration:none;color:var(--brand)">MarketIQ</a>
+    <div class="nav-links">
+      <a class="nav-link on" href="directory-index.html">Directory</a>
+      <a class="nav-link" href="insights-index.html">Insights</a>
+      <a class="nav-link" href="#">Market Feed</a>
+      <a class="nav-link" href="#">Events</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <button class="nav-btn">Sign In</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dir-sw">
+  <button class="dir-btn" onclick="go('editorial')">Editorial</button>
+  <button class="dir-btn" onclick="go('dense')">Dense</button>
+  <button class="dir-btn on" onclick="go('polished')">Polished</button>
+</div>
+
+<main class="wrap">
+  <div class="page-head">
+    <h1 class="page-title reveal">Directory</h1>
+    <p class="page-sub reveal rd1">Mongolian companies, projects, and service providers</p>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar reveal rd2">
+    <input type="text" placeholder="Search companies, projects, sectors...">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  </div>
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip reveal rd3">
+    <div class="stat-item"><span class="stat-num">247</span><span class="stat-label">Entities</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">142</span><span class="stat-label">Public</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">58</span><span class="stat-label">Private</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">32</span><span class="stat-label">Projects</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">15</span><span class="stat-label">Service Providers</span></div>
+  </div>
+
+  <!-- SORT BAR -->
+  <div class="sort-bar reveal rd4">
+    <span class="sort-label">Sort by:</span>
+    <div class="sort-tabs">
+      <button class="sort-tab on" onclick="setSort(this)">Relevance</button>
+      <span class="sort-sep">|</span>
+      <button class="sort-tab" onclick="setSort(this)">Name A–Z</button>
+      <span class="sort-sep">|</span>
+      <button class="sort-tab" onclick="setSort(this)">Recently Updated</button>
+    </div>
+  </div>
+
+  <!-- ENTITY GRID -->
+  <div class="grid">
+
+    <!-- 1. Erdene Resource Development -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')"">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #2563EB;">ER</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Erdene Resource Development</div>
+          <div class="ecard-sub">
+            <span class="ecard-ticker">MSE: ERDN</span>
+            <span class="ecard-change up">+3.2%</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">Gold-focused exploration and development company with flagship Bayan Khundii and Altan Nar projects in southwestern Mongolia.</p>
+      <div class="ecard-foot">
+        <span class="badge b-public"><span class="bdot"></span>Public</span>
+        <span class="badge b-sector"><span class="bdot"></span>Mining</span>
+      </div>
+    </div>
+
+    <!-- 2. MCS Group -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd1">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #059669;">MC</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">MCS Group</div>
+          <div class="ecard-sub">
+            <span class="ecard-type">Private Company</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">Mongolia's largest diversified conglomerate spanning banking, fintech, food production, cashmere manufacturing, and information technology.</p>
+      <div class="ecard-foot">
+        <span class="badge b-private"><span class="bdot"></span>Private</span>
+        <span class="badge b-sector"><span class="bdot"></span>Banking & Finance</span>
+      </div>
+    </div>
+
+    <!-- 3. Oyu Tolgoi Underground -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd2">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #D97706;">OT</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Oyu Tolgoi Underground</div>
+          <div class="ecard-sub">
+            <span class="ecard-type">Project (Mining)</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">World-class copper-gold underground mine expansion in the South Gobi. Panel 0 in production ramp-up with full capacity expected by 2028.</p>
+      <div class="ecard-foot">
+        <span class="badge b-project"><span class="bdot"></span>Project</span>
+        <span class="badge b-sector"><span class="bdot"></span>Mining</span>
+        <span class="badge b-raising"><span class="bdot"></span>Actively Raising</span>
+      </div>
+    </div>
+
+    <!-- 4. Golomt Bank -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd3">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #3E149C;">GB</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Golomt Bank</div>
+          <div class="ecard-sub">
+            <span class="ecard-ticker">MSE: GLMT</span>
+            <span class="ecard-change up">+0.8%</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">Leading commercial bank with international ambitions. Southeast Asia expansion underway with Singapore and Vietnam market entry planned.</p>
+      <div class="ecard-foot">
+        <span class="badge b-public"><span class="bdot"></span>Public</span>
+        <span class="badge b-sector"><span class="bdot"></span>Banking</span>
+      </div>
+    </div>
+
+    <!-- 5. Tsakhia Wind Farm -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd4">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #0891B2;">TW</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Tsakhia Wind Farm</div>
+          <div class="ecard-sub">
+            <span class="ecard-type">Project (Energy)</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">250MW wind energy project in the eastern steppe. Key pillar of Mongolia's 2030 renewable energy target with international co-financing.</p>
+      <div class="ecard-foot">
+        <span class="badge b-project"><span class="bdot"></span>Project</span>
+        <span class="badge b-sector"><span class="bdot"></span>Energy</span>
+        <span class="badge b-raising"><span class="bdot"></span>Actively Raising</span>
+      </div>
+    </div>
+
+    <!-- 6. Anderson & Anderson LLP -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd5">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #7A7793;">AA</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Anderson & Anderson LLP</div>
+          <div class="ecard-sub">
+            <span class="ecard-type">Service Provider</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">International law firm specializing in Mongolian mining and natural resources law. Advisory on cross-border M&A and regulatory compliance.</p>
+      <div class="ecard-foot">
+        <span class="badge b-service"><span class="bdot"></span>Service</span>
+        <span class="badge b-sector"><span class="bdot"></span>Legal</span>
+      </div>
+    </div>
+
+    <!-- 7. Mongolian Mining Corp -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')"">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #DC2626;">MM</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Mongolian Mining Corp</div>
+          <div class="ecard-sub">
+            <span class="ecard-ticker">MSE: MMC</span>
+            <span class="ecard-change down">-1.4%</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">Largest coking coal producer in Mongolia. Dual-listed on MSE and HKEX with operations in the Tavan Tolgoi coal basin.</p>
+      <div class="ecard-foot">
+        <span class="badge b-public"><span class="bdot"></span>Public</span>
+        <span class="badge b-sector"><span class="bdot"></span>Mining</span>
+      </div>
+    </div>
+
+    <!-- 8. Ard Financial Group -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd1">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #6B4CC0;">AF</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">Ard Financial Group</div>
+          <div class="ecard-sub">
+            <span class="ecard-ticker">MSE: ARD</span>
+            <span class="ecard-change up">+0.8%</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">Fintech-focused financial group expanding into Central Asian markets. Banking, insurance, and digital payments across Mongolia and Kazakhstan.</p>
+      <div class="ecard-foot">
+        <span class="badge b-public"><span class="bdot"></span>Public</span>
+        <span class="badge b-sector"><span class="bdot"></span>Banking</span>
+      </div>
+    </div>
+
+    <!-- 9. SouthGobi Resources -->
+    <div class="ecard reveal" onclick="nav('entity-profile.html')" rd2">
+      <div class="ecard-head">
+        <div class="ecard-logo" style="color: #059669;">SG</div>
+        <div class="ecard-head-text">
+          <div class="ecard-name">SouthGobi Resources</div>
+          <div class="ecard-sub">
+            <span class="ecard-ticker">MSE: SGR</span>
+            <span class="ecard-change up">+1.1%</span>
+          </div>
+        </div>
+      </div>
+      <p class="ecard-desc">Integrated coal mining and exploration company in southern Mongolia. Ovoot Tolgoi mine supplies thermal and semi-soft coking coal to China.</p>
+      <div class="ecard-foot">
+        <span class="badge b-public"><span class="bdot"></span>Public</span>
+        <span class="badge b-sector"><span class="bdot"></span>Mining</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pag reveal">
+    <div class="pag-info">Showing 1–20 of 247 results</div>
+    <div class="pag-btns">
+      <button class="pag-btn on">1</button><button class="pag-btn">2</button><button class="pag-btn">3</button><button class="pag-btn">4</button><button class="pag-btn">...</button><button class="pag-btn">13</button>
+      <button class="pag-btn">&rarr;</button>
+    </div>
+  </div>
+</main>
+
+<script>
+function nav(page) { location.href = page + location.hash; }
+function go(d) {
+  document.documentElement.setAttribute('data-dir', d);
+  document.body.setAttribute('data-dir', d);
+  document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('on', b.textContent.toLowerCase().includes(d.slice(0,4))));
+  history.replaceState(null, null, '#' + d);
+  document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute('href'); if (h && h.endsWith('.html')) a.setAttribute('href', h.split('#')[0] + '#' + d); });
+}
+function setSort(el) {
+  document.querySelectorAll('.sort-tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+}
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); obs.unobserve(e.target); }}), { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+const h = location.hash.replace('#','');
+go(['editorial','dense','polished'].includes(h) ? h : 'polished');
+</script>
+</body>
+</html>

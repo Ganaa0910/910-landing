@@ -1,0 +1,5268 @@
+<!DOCTYPE html>
+<html lang="en" data-direction="atlas">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMM Market IQ — Design Directions | 910studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fira+Code:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,700;8..60,800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       RESET
+       ============================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ============================================
+       DIRECTION: ATLAS
+       Corporate-grade intelligence. Clean, fast, vector art.
+       ============================================ */
+    [data-direction="atlas"] {
+      --bg: #FFFFFF;
+      --bg-secondary: #F8FAFC;
+      --fg: #0F172A;
+      --fg-secondary: #334155;
+      --surface: #F8FAFC;
+      --surface-elevated: #F1F5F9;
+      --border-color: #E2E8F0;
+      --accent: #1E293B;
+      --accent-hover: #0F172A;
+      --accent-subtle: #F1F5F9;
+      --accent-text: #FFFFFF;
+      --muted: #64748B;
+      --muted-light: #94A3B8;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #D97706;
+      --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 6px;
+      --radius-sm: 4px;
+      --radius-lg: 10px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.04);
+      --shadow-hover: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --hero-size: 3.5rem;
+      --h1-size: 2.25rem;
+      --h2-size: 1.625rem;
+      --h3-size: 1.25rem;
+      --h4-size: 1.0625rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(255,255,255,0.92);
+      --card-hover-transform: translateY(-2px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(30,41,59,0.1);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.8) contrast(1.05) brightness(1.0);
+      --photo-grad: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 50%, #94A3B8 100%);
+      --card-img-grad: linear-gradient(135deg, #F1F5F9, #E2E8F0);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 4px;
+      --letter-spacing-display: -0.02em;
+      --line-height-display: 1.2;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       DIRECTION: LEDGER
+       Mono-first. Monochrome. Investor-grade precision.
+       ============================================ */
+    [data-direction="ledger"] {
+      --bg: #FFFFFF;
+      --bg-secondary: #FAFAFA;
+      --fg: #171717;
+      --fg-secondary: #404040;
+      --surface: #FAFAFA;
+      --surface-elevated: #F5F5F5;
+      --border-color: #E5E5E5;
+      --accent: #171717;
+      --accent-hover: #000000;
+      --accent-subtle: #F5F5F5;
+      --accent-text: #FFFFFF;
+      --muted: #737373;
+      --muted-light: #A3A3A3;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #D97706;
+      --font-display: 'Space Mono', monospace;
+      --font-body: 'Space Grotesk', system-ui, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --radius: 4px;
+      --radius-sm: 2px;
+      --radius-lg: 6px;
+      --border-w: 1px;
+      --shadow-sm: none;
+      --shadow-md: none;
+      --shadow-lg: none;
+      --shadow-hover: none;
+      --hero-size: 3rem;
+      --h1-size: 1.875rem;
+      --h2-size: 1.5rem;
+      --h3-size: 1.125rem;
+      --h4-size: 1rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(255,255,255,0.95);
+      --card-hover-transform: translateY(0);
+      --card-hover-shadow: none;
+      --btn-hover-transform: translateY(0);
+      --input-focus-shadow: none;
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: grayscale(1) contrast(1.1);
+      --photo-grad: linear-gradient(135deg, #E5E5E5 0%, #D4D4D4 50%, #A3A3A3 100%);
+      --card-img-grad: linear-gradient(135deg, #F5F5F5, #E5E5E5);
+      --nav-indicator: none;
+      --badge-radius: 2px;
+      --letter-spacing-display: 0em;
+      --line-height-display: 1.35;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       DIRECTION: VAULT
+       Warm dark. Gold accents. Serif authority. Private bank.
+       ============================================ */
+    [data-direction="vault"] {
+      --bg: #1C1917;
+      --bg-secondary: #292524;
+      --fg: #FAFAF9;
+      --fg-secondary: #D6D3D1;
+      --surface: #292524;
+      --surface-elevated: #44403C;
+      --border-color: rgba(250,250,249,0.1);
+      --accent: #EAB308;
+      --accent-hover: #CA8A04;
+      --accent-subtle: rgba(234,179,8,0.1);
+      --accent-text: #1C1917;
+      --muted: #A8A29E;
+      --muted-light: #78716C;
+      --error: #EF4444;
+      --error-subtle: rgba(239,68,68,0.1);
+      --success: #22C55E;
+      --success-subtle: rgba(34,197,94,0.1);
+      --warning: #F59E0B;
+      --font-display: 'Source Serif 4', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --radius-lg: 14px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+      --shadow-hover: 0 16px 40px rgba(0,0,0,0.45);
+      --hero-size: 4rem;
+      --h1-size: 2.5rem;
+      --h2-size: 1.875rem;
+      --h3-size: 1.375rem;
+      --h4-size: 1.125rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(28,25,23,0.9);
+      --card-hover-transform: translateY(-3px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(234,179,8,0.15);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0.04;
+      --photo-filter: sepia(0.2) contrast(1.1) brightness(0.85);
+      --photo-grad: linear-gradient(135deg, #44403C 0%, #292524 50%, #1C1917 100%);
+      --card-img-grad: linear-gradient(135deg, #44403C, #292524);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 8px;
+      --letter-spacing-display: -0.01em;
+      --line-height-display: 1.2;
+      --line-height-body: 1.65;
+    }
+
+    /* ============================================
+       DIRECTION: BLUEPRINT
+       Technical draft. Cyan accent. IBM Plex. Dashed borders.
+       ============================================ */
+    [data-direction="blueprint"] {
+      --bg: #FFFFFF;
+      --bg-secondary: #F8FAFC;
+      --fg: #0F172A;
+      --fg-secondary: #334155;
+      --surface: #F8FAFC;
+      --surface-elevated: #F1F5F9;
+      --border-color: #CBD5E1;
+      --accent: #0891B2;
+      --accent-hover: #0E7490;
+      --accent-subtle: #ECFEFF;
+      --accent-text: #FFFFFF;
+      --muted: #64748B;
+      --muted-light: #94A3B8;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #059669;
+      --success-subtle: #ECFDF5;
+      --warning: #D97706;
+      --font-display: 'IBM Plex Sans', system-ui, sans-serif;
+      --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --radius: 2px;
+      --radius-sm: 1px;
+      --radius-lg: 4px;
+      --border-w: 1px;
+      --shadow-sm: none;
+      --shadow-md: none;
+      --shadow-lg: none;
+      --shadow-hover: none;
+      --hero-size: 3.25rem;
+      --h1-size: 2rem;
+      --h2-size: 1.5rem;
+      --h3-size: 1.1875rem;
+      --h4-size: 1rem;
+      --body-size: 0.875rem;
+      --small-size: 0.75rem;
+      --header-blur: rgba(255,255,255,0.95);
+      --card-hover-transform: translateY(0);
+      --card-hover-shadow: none;
+      --btn-hover-transform: translateY(0);
+      --input-focus-shadow: 0 0 0 2px rgba(8,145,178,0.2);
+      --grain-display: none;
+      --dot-display: block;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.4) contrast(1.2) brightness(1.05);
+      --photo-grad: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 50%, #94A3B8 100%);
+      --card-img-grad: linear-gradient(135deg, #ECFEFF, #CFFAFE);
+      --nav-indicator: none;
+      --badge-radius: 2px;
+      --letter-spacing-display: 0em;
+      --line-height-display: 1.25;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       DIRECTION: CMM LIGHT
+       Official brand identity — Ghost White canvas, Purple power, Orange signal.
+       Font: Gilroy (falls back to Outfit if not installed locally)
+       ============================================ */
+    [data-direction="cmm-light"] {
+      --bg: #F8F7FF;
+      --bg-secondary: #EFEDF8;
+      --fg: #090C02;
+      --fg-secondary: #2A2D22;
+      --surface: #EFEDF8;
+      --surface-elevated: #E6E4EF;
+      --border-color: #D4D2DE;
+      --accent: #3E149C;
+      --accent-hover: #2E0F75;
+      --accent-subtle: rgba(62,20,156,0.07);
+      --accent-text: #FFFFFF;
+      --muted: #6B6A72;
+      --muted-light: #9997A3;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #FCA311;
+      --font-display: 'Gilroy', 'Outfit', system-ui, sans-serif;
+      --font-body: 'Gilroy', 'Outfit', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 8px;
+      --radius-sm: 4px;
+      --radius-lg: 12px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 3px rgba(62,20,156,0.06);
+      --shadow-md: 0 4px 12px rgba(62,20,156,0.08);
+      --shadow-lg: 0 12px 24px rgba(62,20,156,0.1);
+      --shadow-hover: 0 12px 28px rgba(62,20,156,0.12);
+      --hero-size: 3.5rem;
+      --h1-size: 2.25rem;
+      --h2-size: 1.625rem;
+      --h3-size: 1.25rem;
+      --h4-size: 1.0625rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(248,247,255,0.92);
+      --card-hover-transform: translateY(-2px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(62,20,156,0.12);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.9) contrast(1.05) brightness(1.02);
+      --photo-grad: linear-gradient(135deg, #E6E4EF 0%, #D4D2DE 50%, #C2DFE3 100%);
+      --card-img-grad: linear-gradient(135deg, #EFEDF8, #C2DFE3);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 6px;
+      --letter-spacing-display: -0.02em;
+      --line-height-display: 1.2;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       DIRECTION: CMM LIGHT — ATLAS TYPE
+       CMM brand colors (purple, orange, ghost white) with Atlas typography.
+       Plus Jakarta Sans display, DM Sans body, JetBrains Mono.
+       Tighter radius, clean shadows, corporate-grade type hierarchy.
+       ============================================ */
+    [data-direction="cmm-light-atlas"] {
+      --bg: #F9FAFB;
+      --bg-secondary: #F3F4F6;
+      --fg: #111827;
+      --fg-secondary: #374151;
+      --surface: #F3F4F6;
+      --surface-elevated: #E5E7EB;
+      --border-color: #D1D5DB;
+      --accent: #3E149C;
+      --accent-hover: #2E0F75;
+      --accent-subtle: rgba(62,20,156,0.06);
+      --accent-text: #FFFFFF;
+      --muted: #6B7280;
+      --muted-light: #9CA3AF;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #FCA311;
+      --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 6px;
+      --radius-sm: 4px;
+      --radius-lg: 10px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+      --shadow-hover: 0 10px 25px -5px rgba(0,0,0,0.1);
+      --hero-size: 3.5rem;
+      --h1-size: 2.25rem;
+      --h2-size: 1.625rem;
+      --h3-size: 1.25rem;
+      --h4-size: 1.0625rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(249,250,251,0.92);
+      --card-hover-transform: translateY(-2px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(62,20,156,0.12);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.8) contrast(1.05) brightness(1.02);
+      --photo-grad: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 50%, #9CA3AF 100%);
+      --card-img-grad: linear-gradient(135deg, #F3F4F6, #D1D5DB);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 4px;
+      --letter-spacing-display: -0.02em;
+      --line-height-display: 1.2;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       DIRECTION: CMM ALPHA
+       AlphaSense-inspired. Pure white, maximum readability, structural purple.
+       "Ease on eyes" — client's #1 reference point.
+       ============================================ */
+    [data-direction="cmm-alpha"] {
+      --bg: #FFFFFF;
+      --bg-secondary: #FAFAFA;
+      --fg: #1A1A2E;
+      --fg-secondary: #3D3D56;
+      --surface: #F7F7F9;
+      --surface-elevated: #EEEFF2;
+      --border-color: #E2E3E8;
+      --accent: #3E149C;
+      --accent-hover: #2E0F75;
+      --accent-subtle: rgba(62,20,156,0.05);
+      --accent-text: #FFFFFF;
+      --muted: #6E6E82;
+      --muted-light: #9D9DAF;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #FCA311;
+      --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 8px;
+      --radius-sm: 4px;
+      --radius-lg: 12px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 2px rgba(26,26,46,0.04);
+      --shadow-md: 0 4px 8px -2px rgba(26,26,46,0.06);
+      --shadow-lg: 0 12px 20px -4px rgba(26,26,46,0.08);
+      --shadow-hover: 0 12px 28px -6px rgba(26,26,46,0.1);
+      --hero-size: 3.25rem;
+      --h1-size: 2.125rem;
+      --h2-size: 1.5rem;
+      --h3-size: 1.1875rem;
+      --h4-size: 1rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(255,255,255,0.94);
+      --card-hover-transform: translateY(-2px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(62,20,156,0.08);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.85) contrast(1.05) brightness(1.0);
+      --photo-grad: linear-gradient(135deg, #EEEFF2 0%, #E2E3E8 50%, #9D9DAF 100%);
+      --card-img-grad: linear-gradient(135deg, #F7F7F9, #E2E3E8);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 6px;
+      --letter-spacing-display: -0.02em;
+      --line-height-display: 1.25;
+      --line-height-body: 1.65;
+    }
+
+    /* ============================================
+       DIRECTION: CMM SIGNAL
+       Brand-forward creative. "Creative Sophisticated yet Corp" at full power.
+       Warm surfaces, gradient CTAs, orange pops, purple presence.
+       ============================================ */
+    [data-direction="cmm-signal"] {
+      --bg: #FAFAFF;
+      --bg-secondary: #F2F0FA;
+      --fg: #0F0A1A;
+      --fg-secondary: #2D2640;
+      --surface: #F2F0FA;
+      --surface-elevated: #E9E6F2;
+      --border-color: #DAD6E6;
+      --accent: #3E149C;
+      --accent-hover: #2E0F75;
+      --accent-subtle: rgba(62,20,156,0.08);
+      --accent-text: #FFFFFF;
+      --muted: #6B6580;
+      --muted-light: #9890AA;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #FCA311;
+      --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --radius-lg: 14px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 3px rgba(62,20,156,0.06);
+      --shadow-md: 0 4px 12px rgba(62,20,156,0.08);
+      --shadow-lg: 0 12px 24px rgba(62,20,156,0.1);
+      --shadow-hover: 0 12px 32px rgba(62,20,156,0.14);
+      --hero-size: 3.75rem;
+      --h1-size: 2.5rem;
+      --h2-size: 1.75rem;
+      --h3-size: 1.3125rem;
+      --h4-size: 1.0625rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(250,250,255,0.92);
+      --card-hover-transform: translateY(-3px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(62,20,156,0.15);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.9) contrast(1.05) brightness(1.02);
+      --photo-grad: linear-gradient(135deg, #3E149C 0%, #5A2DB8 40%, #FCA311 100%);
+      --card-img-grad: linear-gradient(135deg, #F2F0FA, #DAD6E6);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 6px;
+      --letter-spacing-display: -0.025em;
+      --line-height-display: 1.15;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       DIRECTION: CMM DENSE
+       Pitchbook/Bloomberg data mode. Tighter metrics, compact spacing.
+       Same brand palette, maximized information density.
+       ============================================ */
+    [data-direction="cmm-dense"] {
+      --bg: #FFFFFF;
+      --bg-secondary: #F8F9FA;
+      --fg: #1A1A2E;
+      --fg-secondary: #3D3D56;
+      --surface: #F5F6F8;
+      --surface-elevated: #ECEDF0;
+      --border-color: #DDDEE2;
+      --accent: #3E149C;
+      --accent-hover: #2E0F75;
+      --accent-subtle: rgba(62,20,156,0.05);
+      --accent-text: #FFFFFF;
+      --muted: #6E6E82;
+      --muted-light: #9D9DAF;
+      --error: #DC2626;
+      --error-subtle: #FEF2F2;
+      --success: #16A34A;
+      --success-subtle: #F0FDF4;
+      --warning: #FCA311;
+      --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 4px;
+      --radius-sm: 2px;
+      --radius-lg: 6px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-lg: 0 6px 12px rgba(0,0,0,0.06);
+      --shadow-hover: 0 6px 16px rgba(0,0,0,0.08);
+      --hero-size: 2.75rem;
+      --h1-size: 1.875rem;
+      --h2-size: 1.375rem;
+      --h3-size: 1.0625rem;
+      --h4-size: 0.9375rem;
+      --body-size: 0.875rem;
+      --small-size: 0.75rem;
+      --header-blur: rgba(255,255,255,0.94);
+      --card-hover-transform: translateY(-1px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(0);
+      --input-focus-shadow: 0 0 0 2px rgba(62,20,156,0.1);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.8) contrast(1.1) brightness(1.0);
+      --photo-grad: linear-gradient(135deg, #ECEDF0 0%, #DDDEE2 50%, #9D9DAF 100%);
+      --card-img-grad: linear-gradient(135deg, #F5F6F8, #DDDEE2);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 3px;
+      --letter-spacing-display: -0.01em;
+      --line-height-display: 1.2;
+      --line-height-body: 1.5;
+    }
+
+    /* ============================================
+       DIRECTION: CMM DARK
+       Brand purple as the darkness. Deep indigo canvas from the brand book cover.
+       Orange burns bright on purple. That's the CMM dark identity.
+       Font: Gilroy (falls back to Outfit if not installed locally)
+       ============================================ */
+    [data-direction="cmm-dark"] {
+      --bg: #0D0527;
+      --bg-secondary: #140A36;
+      --fg: #F8F7FF;
+      --fg-secondary: #D4D0E8;
+      --surface: #170D3A;
+      --surface-elevated: #221548;
+      --border-color: rgba(248,247,255,0.1);
+      --accent: #FCA311;
+      --accent-hover: #FFB840;
+      --accent-subtle: rgba(252,163,17,0.1);
+      --accent-text: #0D0527;
+      --muted: #9088A8;
+      --muted-light: #6A6182;
+      --error: #EF4444;
+      --error-subtle: rgba(239,68,68,0.1);
+      --success: #22C55E;
+      --success-subtle: rgba(34,197,94,0.1);
+      --warning: #FCA311;
+      --font-display: 'Gilroy', 'Outfit', system-ui, sans-serif;
+      --font-body: 'Gilroy', 'Outfit', system-ui, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      --radius: 8px;
+      --radius-sm: 4px;
+      --radius-lg: 12px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 3px rgba(13,5,39,0.4);
+      --shadow-md: 0 4px 12px rgba(13,5,39,0.5);
+      --shadow-lg: 0 12px 32px rgba(13,5,39,0.5);
+      --shadow-hover: 0 0 0 1px rgba(252,163,17,0.25), 0 0 24px rgba(252,163,17,0.08);
+      --hero-size: 3.5rem;
+      --h1-size: 2.25rem;
+      --h2-size: 1.625rem;
+      --h3-size: 1.25rem;
+      --h4-size: 1.0625rem;
+      --body-size: 0.9375rem;
+      --small-size: 0.8125rem;
+      --header-blur: rgba(13,5,39,0.9);
+      --card-hover-transform: translateY(-2px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 2px rgba(252,163,17,0.25);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0.03;
+      --photo-filter: saturate(0.6) contrast(1.15) brightness(0.8);
+      --photo-grad: linear-gradient(135deg, #221548 0%, #170D3A 50%, #3E149C 100%);
+      --card-img-grad: linear-gradient(135deg, #221548, #3E149C);
+      --nav-indicator: 2px solid var(--accent);
+      --badge-radius: 6px;
+      --letter-spacing-display: -0.02em;
+      --line-height-display: 1.15;
+      --line-height-body: 1.6;
+    }
+
+    /* Blueprint grid pattern override for body::after */
+    [data-direction="blueprint"] body::after {
+      background-image:
+        linear-gradient(rgba(8,145,178,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,145,178,0.05) 1px, transparent 1px) !important;
+      background-size: 20px 20px !important;
+      opacity: 1 !important;
+    }
+
+    /* ============================================
+       DIRECTION: KEYNOTE
+       The corp guy who plays electric guitar.
+       Apple dark. Craig Federighi WWDC energy.
+       White buttons on black. One blue accent for the electric moments.
+       ============================================ */
+    [data-direction="keynote"] {
+      --bg: #000000;
+      --bg-secondary: #1C1C1E;
+      --fg: #F5F5F7;
+      --fg-secondary: #A1A1A6;
+      --surface: #1C1C1E;
+      --surface-elevated: #2C2C2E;
+      --border-color: rgba(245,245,247,0.06);
+      --accent: #F5F5F7;
+      --accent-hover: #FFFFFF;
+      --accent-subtle: rgba(245,245,247,0.06);
+      --accent-text: #000000;
+      --muted: #86868B;
+      --muted-light: #636366;
+      --error: #FF453A;
+      --error-subtle: rgba(255,69,58,0.1);
+      --success: #30D158;
+      --success-subtle: rgba(48,209,88,0.1);
+      --warning: #FFD60A;
+      --font-display: 'Inter', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --border-w: 1px;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.5);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+      --shadow-hover: 0 16px 48px rgba(0,0,0,0.5);
+      --hero-size: 4rem;
+      --h1-size: 2.5rem;
+      --h2-size: 1.75rem;
+      --h3-size: 1.375rem;
+      --h4-size: 1.125rem;
+      --body-size: 1rem;
+      --small-size: 0.875rem;
+      --header-blur: rgba(0,0,0,0.85);
+      --card-hover-transform: translateY(-3px);
+      --card-hover-shadow: var(--shadow-hover);
+      --btn-hover-transform: translateY(-1px);
+      --input-focus-shadow: 0 0 0 3px rgba(0,122,255,0.35);
+      --grain-display: none;
+      --dot-display: none;
+      --overlay-opacity: 0;
+      --photo-filter: saturate(0.85) contrast(1.1) brightness(0.9);
+      --photo-grad: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 50%, #3A3A3C 100%);
+      --card-img-grad: linear-gradient(135deg, #1C1C1E, #2C2C2E);
+      --nav-indicator: none;
+      --badge-radius: 8px;
+      --letter-spacing-display: -0.03em;
+      --line-height-display: 1.1;
+      --line-height-body: 1.6;
+    }
+
+    /* ============================================
+       BASE STYLES
+       ============================================ */
+    html {
+      scroll-behavior: smooth;
+      transition: background-color 0.4s ease-out;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: var(--line-height-body);
+      transition: background-color 0.4s ease-out, color 0.4s ease-out;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+    }
+
+    /* Texture overlays */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: var(--overlay-opacity);
+      transition: opacity 0.4s ease-out;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* Dot grid for Signal Room */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      display: var(--dot-display);
+      opacity: 0.4;
+      transition: opacity 0.4s ease-out;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Transitions on all dynamic elements */
+    .t { transition: all 0.4s ease-out; }
+    .tc { transition: color 0.4s ease-out, background-color 0.4s ease-out, border-color 0.4s ease-out, box-shadow 0.4s ease-out, transform 0.15s ease-out; }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 80px 0;
+      border-bottom: var(--border-w) solid var(--border-color);
+      transition: border-color 0.4s ease-out;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      transition: color 0.4s ease-out;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      letter-spacing: var(--letter-spacing-display);
+      line-height: var(--line-height-display);
+      color: var(--fg);
+      margin-bottom: 40px;
+      transition: all 0.4s ease-out;
+    }
+
+    /* ============================================
+       STICKY HEADER
+       ============================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: var(--header-blur);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: var(--border-w) solid var(--border-color);
+      transition: background 0.4s ease-out, border-color 0.4s ease-out;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      font-family: var(--font-display);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: var(--letter-spacing-display);
+      transition: all 0.4s ease-out;
+    }
+
+    .header-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tab {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      border: var(--border-w) solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+      white-space: nowrap;
+    }
+
+    .tab:hover {
+      color: var(--fg);
+      background: var(--surface);
+    }
+
+    .tab.active {
+      color: var(--accent);
+      background: var(--accent-subtle);
+      border-color: var(--accent);
+    }
+
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 120px;
+      padding-bottom: 80px;
+    }
+
+    .hero-direction-name {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      transition: color 0.4s ease-out;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: var(--hero-size);
+      font-weight: 800;
+      letter-spacing: var(--letter-spacing-display);
+      line-height: var(--line-height-display);
+      color: var(--fg);
+      margin-bottom: 20px;
+      max-width: 720px;
+      transition: all 0.4s ease-out;
+    }
+
+    .hero-subtext {
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      line-height: 1.65;
+      color: var(--fg-secondary);
+      max-width: 560px;
+      margin-bottom: 36px;
+      transition: all 0.4s ease-out;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      margin-bottom: 48px;
+      font-style: italic;
+      transition: color 0.4s ease-out;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================
+       BUTTONS
+       ============================================ */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      transform: var(--btn-hover-transform);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--fg);
+      border-color: var(--border-color);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: var(--btn-hover-transform);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border-color: transparent;
+    }
+    .btn-ghost:hover {
+      color: var(--fg);
+      background: var(--surface);
+    }
+
+    .btn-disabled {
+      background: var(--surface);
+      color: var(--muted-light);
+      border-color: var(--border-color);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .btn-loading .btn-text { opacity: 0; }
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    .btn-success { background: var(--success) !important; border-color: var(--success) !important; }
+    .btn-success::after { content: none; }
+    .btn-success .btn-text { opacity: 1 !important; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================
+       COLOR SWATCHES
+       ============================================ */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .swatch {
+      cursor: pointer;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: var(--border-w) solid var(--border-color);
+      transition: all 0.2s ease-out;
+      background: var(--bg);
+    }
+    .swatch:hover { box-shadow: var(--shadow-md); }
+
+    .swatch-color {
+      height: 72px;
+      transition: background-color 0.4s ease-out;
+    }
+
+    .swatch-info {
+      padding: 10px 12px;
+    }
+
+    .swatch-name {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 2px;
+      transition: color 0.4s ease-out;
+    }
+
+    .swatch-hex {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--muted);
+      transition: color 0.4s ease-out;
+    }
+
+    .swatch-copied {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      color: var(--success);
+      display: none;
+    }
+
+    /* ============================================
+       TYPOGRAPHY SHOWCASE
+       ============================================ */
+    .type-showcase { max-width: 680px; }
+
+    .type-item {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: var(--border-w) solid var(--border-color);
+      transition: border-color 0.4s ease-out;
+    }
+    .type-item:last-child { border-bottom: none; }
+
+    .type-meta {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      transition: color 0.4s ease-out;
+    }
+
+    .type-h1 {
+      font-family: var(--font-display);
+      font-size: var(--h1-size);
+      font-weight: 800;
+      letter-spacing: var(--letter-spacing-display);
+      line-height: var(--line-height-display);
+      color: var(--fg);
+      transition: all 0.4s ease-out;
+    }
+
+    .type-h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      letter-spacing: var(--letter-spacing-display);
+      line-height: var(--line-height-display);
+      color: var(--fg);
+      transition: all 0.4s ease-out;
+    }
+
+    .type-h3 {
+      font-family: var(--font-display);
+      font-size: var(--h3-size);
+      font-weight: 700;
+      color: var(--fg);
+      transition: all 0.4s ease-out;
+    }
+
+    .type-h4 {
+      font-family: var(--font-body);
+      font-size: var(--h4-size);
+      font-weight: 600;
+      color: var(--fg);
+      transition: all 0.4s ease-out;
+    }
+
+    .type-body {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: var(--line-height-body);
+      color: var(--fg-secondary);
+      transition: all 0.4s ease-out;
+    }
+
+    .type-small {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      transition: all 0.4s ease-out;
+    }
+
+    .type-mono {
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: var(--accent);
+      background: var(--surface);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      display: block;
+      transition: all 0.4s ease-out;
+      letter-spacing: 0;
+    }
+
+    .type-label {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--accent-subtle);
+      padding: 4px 10px;
+      border-radius: var(--badge-radius);
+      display: inline-block;
+      transition: all 0.4s ease-out;
+    }
+
+    /* ============================================
+       CARDS
+       ============================================ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      overflow: hidden;
+      background: var(--bg);
+      transition: all 0.25s ease-out;
+    }
+    .card:hover {
+      transform: var(--card-hover-transform);
+      box-shadow: var(--card-hover-shadow);
+    }
+
+    .card-img {
+      height: 140px;
+      background: var(--card-img-grad);
+      position: relative;
+      transition: background 0.4s ease-out;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px;
+    }
+
+    .card-badge {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--badge-radius);
+      background: var(--accent);
+      color: var(--accent-text);
+      transition: all 0.4s ease-out;
+    }
+    .card-badge.badge-verified {
+      background: var(--success);
+    }
+    .card-badge.badge-ai {
+      background: var(--warning);
+      color: #1C1917;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-sector {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      transition: color 0.4s ease-out;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 8px;
+      letter-spacing: var(--letter-spacing-display);
+      transition: all 0.4s ease-out;
+    }
+
+    .card-desc {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      line-height: 1.5;
+      transition: all 0.4s ease-out;
+    }
+
+    /* ============================================
+       FORM ELEMENTS
+       ============================================ */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 480px;
+    }
+
+    .input {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--bg);
+      color: var(--fg);
+      outline: none;
+      transition: all 0.2s ease-out;
+      width: 100%;
+    }
+    .input::placeholder { color: var(--muted-light); }
+    .input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--input-focus-shadow);
+    }
+    .input-error {
+      border-color: var(--error) !important;
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.1) !important;
+    }
+
+    .select {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--bg);
+      color: var(--fg);
+      outline: none;
+      transition: all 0.2s ease-out;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      width: 100%;
+    }
+    .select:focus {
+      border-color: var(--accent);
+      box-shadow: var(--input-focus-shadow);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+      background: var(--surface-elevated);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s ease-out;
+    }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.2s ease-out;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle.active {
+      background: var(--accent);
+    }
+    .toggle.active::after {
+      transform: translateX(20px);
+    }
+
+    .toggle-label {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--fg-secondary);
+      transition: color 0.4s ease-out;
+    }
+
+    .input-hint {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: var(--error);
+      margin-top: -8px;
+      transition: color 0.4s ease-out;
+    }
+
+    /* ============================================
+       ALERTS
+       ============================================ */
+    .alert-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .alert {
+      flex: 1;
+      min-width: 280px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid transparent;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.3s ease-out;
+    }
+
+    .alert-success {
+      background: var(--success-subtle);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .alert-error {
+      background: var(--error-subtle);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .alert-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+    .alert-text {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      line-height: 1.5;
+    }
+
+    .alert-dismiss {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.6;
+      font-size: 1rem;
+      transition: opacity 0.15s, transform 0.2s;
+      flex-shrink: 0;
+    }
+    .alert-dismiss:hover { opacity: 1; transform: rotate(90deg); }
+
+    /* ============================================
+       MINI NAV
+       ============================================ */
+    .mini-nav {
+      display: inline-flex;
+      gap: 2px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 4px;
+      transition: background 0.4s ease-out;
+    }
+
+    .mini-nav-item {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+      border: none;
+      background: none;
+    }
+    .mini-nav-item:hover {
+      color: var(--fg);
+    }
+    .mini-nav-item.active {
+      color: var(--fg);
+      background: var(--bg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ============================================
+       MOOD & TEXTURE SECTION
+       ============================================ */
+    .mood-section {
+      background: var(--bg-secondary);
+      transition: background 0.4s ease-out;
+    }
+
+    .mood-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .mood-visual {
+      height: 320px;
+      border-radius: var(--radius-lg);
+      background: var(--photo-grad);
+      filter: var(--photo-filter);
+      transition: all 0.4s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mood-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, var(--bg-secondary));
+      opacity: 0.3;
+    }
+
+    .mood-specs { display: flex; flex-direction: column; gap: 24px; }
+
+    .mood-spec-item {
+      padding-bottom: 20px;
+      border-bottom: var(--border-w) solid var(--border-color);
+      transition: border-color 0.4s ease-out;
+    }
+
+    .mood-spec-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      transition: color 0.4s ease-out;
+    }
+
+    .mood-spec-value {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      color: var(--fg);
+      transition: all 0.4s ease-out;
+    }
+
+    .motion-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-radius: var(--badge-radius);
+      background: var(--accent-subtle);
+      color: var(--accent);
+      transition: all 0.4s ease-out;
+    }
+
+    .motion-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: background 0.4s ease-out;
+    }
+
+    /* ============================================
+       ANTI-PREFERENCES
+       ============================================ */
+    .anti-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .anti-item {
+      padding: 16px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease-out;
+    }
+
+    .anti-item::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: linear-gradient(
+        135deg,
+        transparent 42%,
+        rgba(220, 38, 38, 0.15) 42%,
+        rgba(220, 38, 38, 0.15) 44%,
+        transparent 44%,
+        transparent 56%,
+        rgba(220, 38, 38, 0.15) 56%,
+        rgba(220, 38, 38, 0.15) 58%,
+        transparent 58%
+      );
+      pointer-events: none;
+    }
+
+    .anti-category {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--error);
+      margin-bottom: 6px;
+      transition: color 0.4s ease-out;
+    }
+
+    .anti-label {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 4px;
+      transition: color 0.4s ease-out;
+    }
+
+    .anti-reason {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: color 0.4s ease-out;
+    }
+
+    /* ============================================
+       INSPIRATION
+       ============================================ */
+    .inspo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .inspo-item {
+      padding: 20px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--bg);
+      transition: all 0.4s ease-out;
+    }
+
+    .inspo-source {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 8px;
+      letter-spacing: var(--letter-spacing-display);
+      transition: all 0.4s ease-out;
+    }
+
+    .inspo-steal {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      line-height: 1.5;
+      transition: all 0.4s ease-out;
+    }
+
+    .inspo-steal strong {
+      color: var(--accent);
+      font-weight: 600;
+      transition: color 0.4s ease-out;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      padding: 40px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-left {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      transition: color 0.4s ease-out;
+    }
+
+    .footer-actions { display: flex; gap: 12px; align-items: center; }
+
+    /* ============================================
+       TOOLTIP
+       ============================================ */
+    .tooltip {
+      position: fixed;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--fg);
+      color: var(--bg);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.15s ease-out;
+      z-index: 99999;
+    }
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================
+       COMPONENT GRID LAYOUTS
+       ============================================ */
+    .component-section {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .component-block-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      transition: color 0.4s ease-out;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ============================================
+       STAT CARDS
+       ============================================ */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--bg);
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .stat-card:hover {
+      border-color: var(--accent);
+    }
+
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 12px;
+      transition: color 0.4s ease-out;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: var(--letter-spacing-display);
+      line-height: 1;
+      margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      transition: all 0.4s ease-out;
+    }
+
+    .stat-change {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: color 0.4s ease-out;
+    }
+    .stat-change.up { color: var(--success); }
+    .stat-change.down { color: var(--error); }
+
+    .stat-sparkline {
+      margin-top: 16px;
+      height: 36px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .spark-bar {
+      flex: 1;
+      border-radius: 2px;
+      background: var(--surface-elevated);
+      transition: background 0.4s ease-out;
+      min-height: 3px;
+    }
+    .spark-bar:last-child { background: var(--accent); }
+
+    /* ============================================
+       SEARCH BAR
+       ============================================ */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--bg);
+      overflow: hidden;
+      transition: all 0.2s ease-out;
+      box-shadow: var(--shadow-sm);
+    }
+    .search-bar:focus-within {
+      border-color: var(--accent);
+      box-shadow: var(--input-focus-shadow);
+    }
+
+    .search-icon {
+      padding: 0 0 0 16px;
+      color: var(--muted);
+      font-size: 1.125rem;
+      transition: color 0.4s ease-out;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      padding: 14px 16px;
+      border: none;
+      background: transparent;
+      color: var(--fg);
+      outline: none;
+      min-width: 0;
+    }
+    .search-input::placeholder { color: var(--muted-light); }
+
+    .search-filters {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-right: 8px;
+      flex-shrink: 0;
+    }
+
+    .search-filter-tag {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: var(--badge-radius);
+      background: var(--surface);
+      color: var(--muted);
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+      white-space: nowrap;
+    }
+    .search-filter-tag:hover { background: var(--accent-subtle); color: var(--accent); }
+    .search-filter-tag.active { background: var(--accent-subtle); color: var(--accent); }
+
+    .search-shortcut {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      border: var(--border-w) solid var(--border-color);
+      color: var(--muted);
+      background: var(--surface);
+      transition: all 0.4s ease-out;
+      white-space: nowrap;
+    }
+
+    /* ============================================
+       DATA TABLE
+       ============================================ */
+    .data-table-wrap {
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      overflow: hidden;
+      background: var(--bg);
+      transition: all 0.4s ease-out;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+    }
+
+    .data-table thead {
+      background: var(--surface);
+      transition: background 0.4s ease-out;
+    }
+
+    .data-table th {
+      padding: 10px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: var(--border-w) solid var(--border-color);
+      transition: all 0.4s ease-out;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    .data-table th:hover { color: var(--fg); }
+    .data-table th .sort-icon { opacity: 0.4; margin-left: 4px; font-size: 0.5rem; }
+    .data-table th.sorted .sort-icon { opacity: 1; color: var(--accent); }
+
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: var(--border-w) solid var(--border-color);
+      color: var(--fg);
+      transition: all 0.4s ease-out;
+      white-space: nowrap;
+    }
+
+    .data-table tbody tr {
+      transition: background 0.1s ease-out;
+    }
+    .data-table tbody tr:hover {
+      background: var(--surface);
+    }
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table-numeric {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .table-entity-name {
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      transition: color 0.15s ease-out;
+    }
+    .table-entity-name:hover { text-decoration: underline; }
+
+    .table-badge {
+      font-size: 0.625rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--badge-radius);
+      display: inline-block;
+      transition: all 0.4s ease-out;
+    }
+    .table-badge-premium { background: var(--accent-subtle); color: var(--accent); }
+    .table-badge-verified { background: var(--success-subtle); color: var(--success); }
+    .table-badge-ai { background: rgba(217,119,6,0.1); color: var(--warning); }
+
+    .table-trend {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      transition: color 0.4s ease-out;
+    }
+    .table-trend.up { color: var(--success); }
+    .table-trend.down { color: var(--error); }
+
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--surface);
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: all 0.4s ease-out;
+    }
+
+    .table-pagination {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .table-page-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+    }
+    .table-page-btn:hover { background: var(--surface-elevated); color: var(--fg); }
+    .table-page-btn.active { background: var(--accent); color: var(--accent-text); }
+
+    /* ============================================
+       AI WORKSPACE PREVIEW
+       ============================================ */
+    .ai-workspace {
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      overflow: hidden;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 220px 1fr 280px;
+      height: 480px;
+      transition: all 0.4s ease-out;
+    }
+
+    .ai-sidebar {
+      border-right: var(--border-w) solid var(--border-color);
+      padding: 16px;
+      background: var(--surface);
+      overflow: hidden;
+      transition: all 0.4s ease-out;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ai-sidebar-title {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 8px 8px 12px;
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-session {
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+    }
+    .ai-session:hover { background: var(--surface-elevated); }
+    .ai-session.active { background: var(--accent-subtle); }
+
+    .ai-session-title {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-session-date {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      color: var(--muted);
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-chat {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ai-chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ai-msg {
+      display: flex;
+      gap: 12px;
+      max-width: 100%;
+    }
+
+    .ai-msg-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      transition: all 0.4s ease-out;
+    }
+    .ai-msg-avatar.user { background: var(--surface-elevated); color: var(--fg); }
+    .ai-msg-avatar.ai { background: var(--accent); color: var(--accent-text); }
+
+    .ai-msg-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ai-msg-name {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-msg-text {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--fg);
+      line-height: 1.6;
+      transition: all 0.4s ease-out;
+    }
+
+    .ai-msg-text .citation {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.4s ease-out;
+    }
+    .ai-msg-text .citation:hover { text-decoration: underline; }
+
+    .ai-msg-table {
+      margin-top: 8px;
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .ai-msg-table th, .ai-msg-table td {
+      padding: 6px 10px;
+      border: var(--border-w) solid var(--border-color);
+      transition: border-color 0.4s ease-out;
+    }
+    .ai-msg-table th {
+      background: var(--surface);
+      font-weight: 600;
+      text-align: left;
+      color: var(--muted);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.4s ease-out;
+    }
+    .ai-msg-table td {
+      color: var(--fg);
+      font-variant-numeric: tabular-nums;
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-streaming-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      transition: background 0.4s ease-out;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .ai-chat-input {
+      padding: 16px 24px;
+      border-top: var(--border-w) solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.4s ease-out;
+    }
+
+    .ai-chat-field {
+      flex: 1;
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: var(--border-w) solid var(--border-color);
+      background: var(--surface);
+      color: var(--fg);
+      outline: none;
+      transition: all 0.2s ease-out;
+    }
+    .ai-chat-field::placeholder { color: var(--muted-light); }
+    .ai-chat-field:focus { border-color: var(--accent); background: var(--bg); }
+
+    .ai-chat-send {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--accent);
+      color: var(--accent-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease-out;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .ai-chat-send:hover { background: var(--accent-hover); }
+
+    .ai-sources {
+      border-left: var(--border-w) solid var(--border-color);
+      padding: 16px;
+      background: var(--surface);
+      overflow-y: auto;
+      transition: all 0.4s ease-out;
+    }
+
+    .ai-sources-title {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: var(--border-w) solid var(--border-color);
+      transition: all 0.4s ease-out;
+    }
+
+    .ai-source-item {
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+      border: var(--border-w) solid transparent;
+    }
+    .ai-source-item:hover { background: var(--surface-elevated); border-color: var(--border-color); }
+
+    .ai-source-num {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-source-title {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 2px;
+      transition: color 0.4s ease-out;
+    }
+
+    .ai-source-type {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      color: var(--muted);
+      transition: color 0.4s ease-out;
+    }
+
+    /* ============================================
+       ENTITY PROFILE HEADER
+       ============================================ */
+    .entity-header {
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      overflow: hidden;
+      background: var(--bg);
+      transition: all 0.4s ease-out;
+    }
+
+    .entity-header-banner {
+      height: 80px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      position: relative;
+      transition: background 0.4s ease-out;
+    }
+
+    .entity-header-body {
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .entity-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 3px solid var(--bg);
+      margin-top: -36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--accent);
+      flex-shrink: 0;
+      transition: all 0.4s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    .entity-info { flex: 1; min-width: 0; }
+
+    .entity-name-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .entity-name {
+      font-family: var(--font-display);
+      font-size: var(--h3-size);
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: var(--letter-spacing-display);
+      transition: all 0.4s ease-out;
+    }
+
+    .entity-tier {
+      font-size: 0.625rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--badge-radius);
+      background: var(--accent);
+      color: var(--accent-text);
+      font-family: var(--font-body);
+      transition: all 0.4s ease-out;
+    }
+
+    .entity-meta {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      margin-bottom: 16px;
+      transition: all 0.4s ease-out;
+    }
+
+    .entity-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .entity-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .entity-stat-label {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: color 0.4s ease-out;
+    }
+
+    .entity-stat-value {
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+      font-variant-numeric: tabular-nums;
+      transition: all 0.4s ease-out;
+    }
+
+    .entity-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    /* ============================================
+       PRICING CARDS
+       ============================================ */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .pricing-card {
+      border-radius: var(--radius-lg);
+      border: var(--border-w) solid var(--border-color);
+      padding: 28px 24px;
+      background: var(--bg);
+      transition: all 0.25s ease-out;
+      position: relative;
+    }
+    .pricing-card:hover { box-shadow: var(--shadow-md); }
+
+    .pricing-card.featured {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .pricing-popular {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-body);
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 4px 12px;
+      border-radius: var(--badge-radius);
+      background: var(--accent);
+      color: var(--accent-text);
+      transition: all 0.4s ease-out;
+      white-space: nowrap;
+    }
+
+    .pricing-tier {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+      transition: color 0.4s ease-out;
+    }
+
+    .pricing-name {
+      font-family: var(--font-display);
+      font-size: var(--h3-size);
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: var(--letter-spacing-display);
+      margin-bottom: 4px;
+      transition: all 0.4s ease-out;
+    }
+
+    .pricing-desc {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+      transition: all 0.4s ease-out;
+    }
+
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .pricing-amount {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--fg);
+      letter-spacing: var(--letter-spacing-display);
+      transition: all 0.4s ease-out;
+    }
+
+    .pricing-period {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--muted);
+      transition: color 0.4s ease-out;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .pricing-feature {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--fg-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+      transition: color 0.4s ease-out;
+    }
+
+    .pricing-check {
+      color: var(--accent);
+      font-size: 0.875rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: color 0.4s ease-out;
+    }
+
+    /* ============================================
+       SCROLL PROGRESS BAR
+       ============================================ */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      z-index: 10000;
+      width: 0%;
+      transition: background 0.4s ease-out;
+    }
+
+    /* ============================================
+       ENHANCED HOVER STATES
+       ============================================ */
+
+    /* Table row accent bar on hover */
+    .data-table tbody tr {
+      position: relative;
+    }
+    .data-table tbody tr::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.15s ease-out;
+    }
+    .data-table tbody tr:hover::before {
+      opacity: 1;
+    }
+
+    /* Swatch scale on hover */
+    .swatch:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    /* Pricing card enhanced hover */
+    .pricing-card:hover {
+      transform: translateY(-4px);
+    }
+    .pricing-card.featured:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Search bar alive state */
+    .search-bar:focus-within .search-icon {
+      color: var(--accent);
+    }
+
+    /* Entity logo pulse on hover */
+    .entity-header:hover .entity-logo {
+      box-shadow: 0 0 0 3px var(--accent-subtle);
+    }
+
+    /* AI source item hover slide */
+    .ai-source-item:hover {
+      transform: translateX(4px);
+    }
+
+    /* Mini nav item press */
+    .mini-nav-item:active {
+      transform: scale(0.97);
+    }
+
+    /* Sparkline bar animation */
+    .spark-bar {
+      transform-origin: bottom;
+      transform: scaleY(0);
+    }
+    .spark-bar.animated {
+      transform: scaleY(1);
+    }
+
+    /* Button ripple */
+    @keyframes ripple {
+      to { transform: scale(2.5); opacity: 0; }
+    }
+    .btn-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transform: scale(0);
+      animation: ripple 0.5s ease-out;
+      pointer-events: none;
+    }
+
+    /* Alert dismiss enhanced */
+    .alert.dismissing {
+      opacity: 0;
+      transform: translateX(20px) scale(0.97);
+      transition: all 0.3s ease-out;
+    }
+
+    /* ============================================
+       REDUCED MOTION
+       ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .spark-bar { transform: scaleY(1); }
+      .scroll-progress { display: none; }
+    }
+
+    /* ============================================
+       DIRECTION-SPECIFIC COMPONENT PERSONALITIES
+       Each direction is a different person who designed this.
+       Not a palette swap — a character shift.
+
+       ATLAS: The Tailored Suit — precise, measured, static confidence
+       SILK ROAD: The Warm Storyteller — editorial, generous, inviting
+       SIGNAL ROOM: The Machine Operator — dense, electric, keyboard-first
+       ============================================ */
+
+    /* =============================================
+       ATLAS — The Tailored Suit
+       BUTTONS:    rounded-md, 1px border, shadow hover, semibold
+       CARDS:      rounded-lg, shadow-sm, lift+shadow on hover
+       INPUTS:     standard 44px, accent border focus, clean ring
+       NAV:        underline active, bg tint hover
+       BADGES:     square 4px, filled, uppercase
+       ALERTS:     standard rounded, clean dismiss
+       TOGGLE:     pill slide
+       LOADING:    ring spinner, text swap
+       ============================================= */
+    [data-direction="atlas"] .section { padding: 72px 0; }
+    [data-direction="atlas"] .hero-subtext { font-size: 1.0625rem; }
+
+    /* Buttons — clean, professional, no frills */
+    [data-direction="atlas"] .btn { border-radius: 6px; }
+    [data-direction="atlas"] .btn-primary:hover { box-shadow: var(--shadow-md); }
+
+    /* Cards — professional lift */
+    [data-direction="atlas"] .card { border-radius: 10px; }
+    [data-direction="atlas"] .card-img { border-radius: 10px 10px 0 0; }
+
+    /* Nav — underline active (already default) */
+
+    /* Badges — square, uppercase (already via --badge-radius: 4px) */
+
+    /* =============================================
+       LEDGER — The Precision Engineer
+       BUTTONS:    sharp (4px), 1px border, NO shadow, mono uppercase, hover = bg invert
+       CARDS:      sharp (6px), 1px border, no shadow, hover = border darkens, no lift
+       INPUTS:     standard, full border, sharp, focus = border goes black (no ring)
+       NAV:        mono text, bordered container, clean
+       BADGES:     square (2px), outlined, mono text, uppercase tracking
+       ALERTS:     sharp, tight, minimal
+       TOGGLE:     square, snap animation
+       LOADING:    ring spinner, text swap
+       ============================================= */
+    [data-direction="ledger"] .section { padding: 80px 0; }
+
+    /* Buttons — sharp, mono, black-on-white */
+    [data-direction="ledger"] .btn {
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+    [data-direction="ledger"] .btn-primary {
+      background: #171717;
+      border-color: #171717;
+    }
+    [data-direction="ledger"] .btn-primary:hover {
+      background: #000000;
+      border-color: #000000;
+      box-shadow: none;
+    }
+    [data-direction="ledger"] .btn-outline:hover {
+      border-color: #171717;
+      color: #171717;
+      background: #F5F5F5;
+    }
+
+    /* Cards — sharp, no lift, border darkens on hover */
+    [data-direction="ledger"] .card:hover {
+      border-color: #171717;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Inputs — border goes black on focus, no glow */
+    [data-direction="ledger"] .input:focus,
+    [data-direction="ledger"] .select:focus {
+      border-color: #171717;
+      box-shadow: none;
+    }
+
+    /* Search bar — sharp */
+    [data-direction="ledger"] .search-bar { border-radius: 4px; }
+    [data-direction="ledger"] .search-bar:focus-within {
+      border-color: #171717;
+      box-shadow: none;
+    }
+
+    /* Badges — square, mono, outlined */
+    [data-direction="ledger"] .card-badge,
+    [data-direction="ledger"] .table-badge,
+    [data-direction="ledger"] .type-label,
+    [data-direction="ledger"] .entity-tier,
+    [data-direction="ledger"] .pricing-popular {
+      border-radius: 2px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    /* Toggle — square, snappy */
+    [data-direction="ledger"] .toggle {
+      border-radius: 4px;
+    }
+    [data-direction="ledger"] .toggle::after {
+      border-radius: 2px;
+      box-shadow: none;
+    }
+
+    /* Nav — mono text, bordered, sharp */
+    [data-direction="ledger"] .mini-nav {
+      border-radius: 4px;
+      background: transparent;
+      border: 1px solid #E5E5E5;
+    }
+    [data-direction="ledger"] .mini-nav-item {
+      border-radius: 3px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+    [data-direction="ledger"] .mini-nav-item.active {
+      background: #171717;
+      color: #FFFFFF;
+    }
+
+    /* Alerts — sharp */
+    [data-direction="ledger"] .alert { border-radius: 4px; }
+
+    /* Stat card — border darkens on hover, no shadow */
+    [data-direction="ledger"] .stat-card:hover {
+      border-color: #171717;
+    }
+
+    /* Section labels — mono is already the display/mono font */
+
+    /* Everything sharp — cascading radius */
+    [data-direction="ledger"] .pricing-card { border-radius: 6px; }
+    [data-direction="ledger"] .pricing-popular {
+      border-radius: 2px;
+      font-family: 'Space Mono', monospace;
+    }
+    [data-direction="ledger"] .entity-header { border-radius: 6px; }
+    [data-direction="ledger"] .entity-logo { border-radius: 4px; }
+    [data-direction="ledger"] .ai-workspace { border-radius: 6px; }
+    [data-direction="ledger"] .data-table-wrap { border-radius: 6px; }
+    [data-direction="ledger"] .swatch { border-radius: 4px; }
+    [data-direction="ledger"] .inspo-item { border-radius: 4px; }
+    [data-direction="ledger"] .anti-item { border-radius: 4px; }
+    [data-direction="ledger"] .tab { border-radius: 4px; }
+
+    /* Search filter tags — mono */
+    [data-direction="ledger"] .search-filter-tag {
+      border-radius: 2px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.03em;
+    }
+    [data-direction="ledger"] .search-shortcut {
+      border-radius: 2px;
+    }
+
+    /* Hero — tighter (mono reads larger) */
+    [data-direction="ledger"] .hero-subtext {
+      font-size: 1rem;
+      max-width: 540px;
+    }
+
+    /* =============================================
+       KEYNOTE — The Corp Guy Who Plays Electric Guitar
+       BUTTONS:    rounded-xl (12px), white fill on black, blue glow hover, generous
+       CARDS:      rounded-xl, soft shadow lift, Apple-style elevation
+       INPUTS:     tall (48px), rounded-xl, dark fill, blue focus ring
+       NAV:        rounded-lg, bg fill active, generous
+       BADGES:     rounded-lg (8px), filled, sentence case
+       TOGGLE:     Apple pill, smooth spring
+       ALERTS:     rounded-xl, Apple semantic colors
+       ============================================= */
+    [data-direction="keynote"] .section { padding: 88px 0; }
+
+    /* Buttons — Apple white on black. The electric blue appears on hover glow. */
+    [data-direction="keynote"] .btn {
+      padding: 12px 24px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 12px;
+    }
+    [data-direction="keynote"] .btn-primary {
+      background: #F5F5F7;
+      color: #000000;
+      border-color: #F5F5F7;
+    }
+    [data-direction="keynote"] .btn-primary:hover {
+      background: #FFFFFF;
+      border-color: #FFFFFF;
+      box-shadow: 0 0 0 1px rgba(245,245,247,0.2), 0 8px 32px rgba(0,0,0,0.4);
+    }
+    [data-direction="keynote"] .btn-outline {
+      border-color: rgba(245,245,247,0.2);
+      color: #F5F5F7;
+    }
+    [data-direction="keynote"] .btn-outline:hover {
+      border-color: #007AFF;
+      color: #007AFF;
+      box-shadow: 0 0 16px rgba(0,122,255,0.1);
+    }
+    [data-direction="keynote"] .btn-ghost:hover {
+      background: rgba(245,245,247,0.06);
+    }
+
+    /* Hero — dramatic scale, WWDC energy. Big type, big space. */
+    [data-direction="keynote"] .hero { min-height: 80vh; }
+    [data-direction="keynote"] .hero-headline {
+      max-width: 700px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+    [data-direction="keynote"] .hero-subtext {
+      font-size: 1.125rem;
+      max-width: 520px;
+      color: #86868B;
+    }
+    [data-direction="keynote"] .hero-direction-name {
+      color: #007AFF;
+    }
+
+    /* Cards — Apple-style rounded rectangles, soft shadow on hover */
+    [data-direction="keynote"] .card {
+      border-radius: 16px;
+      background: #1C1C1E;
+      border-color: rgba(245,245,247,0.06);
+    }
+    [data-direction="keynote"] .card:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    [data-direction="keynote"] .card-img {
+      height: 160px;
+      border-radius: 16px 16px 0 0;
+      background: linear-gradient(135deg, #1C1C1E, #2C2C2E, #3A3A3C);
+    }
+    [data-direction="keynote"] .card-body { padding: 18px; }
+
+    /* Badges — the electric blue accent. This is where the guitar shows up. */
+    [data-direction="keynote"] .card-badge {
+      background: rgba(0,122,255,0.12);
+      color: #007AFF;
+      border-radius: 8px;
+    }
+    [data-direction="keynote"] .card-badge.badge-verified {
+      background: rgba(48,209,88,0.1);
+      color: #30D158;
+    }
+    [data-direction="keynote"] .card-badge.badge-ai {
+      background: rgba(255,214,10,0.1);
+      color: #FFD60A;
+    }
+    [data-direction="keynote"] .table-badge-premium {
+      background: rgba(0,122,255,0.1);
+      color: #007AFF;
+    }
+    [data-direction="keynote"] .table-badge-ai {
+      background: rgba(255,214,10,0.08);
+      color: #FFD60A;
+    }
+    [data-direction="keynote"] .type-label {
+      background: rgba(0,122,255,0.1);
+      color: #007AFF;
+    }
+    [data-direction="keynote"] .entity-tier {
+      background: rgba(0,122,255,0.1);
+      color: #007AFF;
+    }
+
+    /* Inputs — tall, dark fill, blue focus ring (the electric moment) */
+    [data-direction="keynote"] .input,
+    [data-direction="keynote"] .select {
+      background: #1C1C1E;
+      border-color: rgba(245,245,247,0.08);
+      padding: 12px 16px;
+      border-radius: 12px;
+    }
+    [data-direction="keynote"] .input:focus,
+    [data-direction="keynote"] .select:focus {
+      border-color: #007AFF;
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.3);
+    }
+
+    /* Search bar — Apple Command Bar energy */
+    [data-direction="keynote"] .search-bar {
+      border-radius: 16px;
+      background: #1C1C1E;
+      border-color: rgba(245,245,247,0.08);
+    }
+    [data-direction="keynote"] .search-bar:focus-within {
+      border-color: #007AFF;
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.25);
+    }
+    [data-direction="keynote"] .search-input {
+      padding: 14px 16px;
+    }
+    [data-direction="keynote"] .search-filter-tag {
+      border-radius: 8px;
+    }
+    [data-direction="keynote"] .search-filter-tag.active {
+      background: rgba(0,122,255,0.1);
+      color: #007AFF;
+    }
+
+    /* Toggle — Apple pill, smooth */
+    [data-direction="keynote"] .toggle {
+      width: 48px;
+      height: 28px;
+      border-radius: 14px;
+      background: #3A3A3C;
+    }
+    [data-direction="keynote"] .toggle::after {
+      width: 22px;
+      height: 22px;
+      border-radius: 11px;
+      top: 3px;
+      left: 3px;
+    }
+    [data-direction="keynote"] .toggle.active {
+      background: #007AFF;
+    }
+    [data-direction="keynote"] .toggle.active::after {
+      transform: translateX(20px);
+    }
+
+    /* Nav — generous, clean */
+    [data-direction="keynote"] .mini-nav {
+      background: #1C1C1E;
+      border-radius: 12px;
+      padding: 4px;
+      border: 1px solid rgba(245,245,247,0.06);
+    }
+    [data-direction="keynote"] .mini-nav-item {
+      border-radius: 10px;
+      padding: 8px 16px;
+    }
+    [data-direction="keynote"] .mini-nav-item.active {
+      background: #2C2C2E;
+    }
+
+    /* Alerts — Apple semantic colors */
+    [data-direction="keynote"] .alert {
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    [data-direction="keynote"] .alert-success {
+      background: rgba(48,209,88,0.08);
+      border-color: rgba(48,209,88,0.3);
+    }
+    [data-direction="keynote"] .alert-error {
+      background: rgba(255,69,58,0.08);
+      border-color: rgba(255,69,58,0.3);
+    }
+
+    /* Pricing — Apple product tier energy */
+    [data-direction="keynote"] .pricing-card {
+      background: #1C1C1E;
+      border-radius: 16px;
+      border-color: rgba(245,245,247,0.06);
+    }
+    [data-direction="keynote"] .pricing-card.featured {
+      border-color: #007AFF;
+      box-shadow: 0 0 0 1px #007AFF, 0 0 32px rgba(0,122,255,0.08);
+    }
+    [data-direction="keynote"] .pricing-popular {
+      background: #007AFF;
+      color: #FFFFFF;
+    }
+
+    /* Stats — generous spacing */
+    [data-direction="keynote"] .stat-card {
+      background: #1C1C1E;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    [data-direction="keynote"] .stat-card:hover {
+      border-color: rgba(0,122,255,0.2);
+    }
+    [data-direction="keynote"] .spark-bar:last-child {
+      background: #007AFF;
+    }
+
+    /* Entity — Apple product card */
+    [data-direction="keynote"] .entity-header {
+      border-radius: 16px;
+    }
+    [data-direction="keynote"] .entity-header-banner {
+      background: linear-gradient(135deg, #1C1C1E, #2C2C2E, #3A3A3C);
+    }
+    [data-direction="keynote"] .entity-logo { border-radius: 12px; }
+
+    /* Data table — Apple Settings energy */
+    [data-direction="keynote"] .data-table-wrap {
+      border-radius: 16px;
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .data-table thead {
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .data-table tbody tr:hover {
+      background: rgba(245,245,247,0.03);
+    }
+    [data-direction="keynote"] .table-footer {
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .table-entity-name {
+      color: #007AFF;
+    }
+
+    /* AI Workspace */
+    [data-direction="keynote"] .ai-workspace {
+      border-radius: 16px;
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .ai-sidebar {
+      background: #1C1C1E;
+    }
+
+    /* Other containers */
+    [data-direction="keynote"] .swatch {
+      border-radius: 12px;
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .inspo-item {
+      border-radius: 12px;
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .anti-item {
+      border-radius: 12px;
+      background: #1C1C1E;
+    }
+    [data-direction="keynote"] .tab { border-radius: 8px; }
+    [data-direction="keynote"] .mood-visual {
+      background: linear-gradient(135deg, #000000, #1C1C1E, #2C2C2E);
+      filter: none;
+    }
+    [data-direction="keynote"] .motion-badge {
+      background: rgba(0,122,255,0.08);
+      color: #007AFF;
+    }
+    [data-direction="keynote"] .motion-dot {
+      background: #007AFF;
+    }
+
+    /* =============================================
+       VAULT — The Private Bank
+       BUTTONS:    rounded-lg (10px), no border primary, warm shadow, hover = shadow deepen + lift
+       CARDS:      rounded-xl (14px), warm shadow, hover = lift + deepen
+       INPUTS:     tall, rounded-lg, warm gold focus ring
+       NAV:        rounded-lg, gold bg active
+       BADGES:     rounded (8px), filled, sentence case
+       TOGGLE:     pill, smooth
+       ALERTS:     rounded-lg, soft warm
+       ============================================= */
+    [data-direction="vault"] .section { padding: 88px 0; }
+
+    /* Buttons — warm, generous, gold fills */
+    [data-direction="vault"] .btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+    }
+    [data-direction="vault"] .btn-primary {
+      border: none;
+    }
+    [data-direction="vault"] .btn-primary:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    [data-direction="vault"] .btn-outline {
+      border-color: rgba(250,250,249,0.15);
+      color: var(--fg);
+    }
+    [data-direction="vault"] .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Hero — generous, serif authority */
+    [data-direction="vault"] .hero-subtext {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      max-width: 540px;
+    }
+
+    /* Cards — warm shadow, generous */
+    [data-direction="vault"] .card {
+      border-radius: 14px;
+    }
+    [data-direction="vault"] .card-img {
+      height: 150px;
+      border-radius: 14px 14px 0 0;
+    }
+    [data-direction="vault"] .card-body { padding: 18px; }
+
+    /* Inputs — tall, warm */
+    [data-direction="vault"] .input,
+    [data-direction="vault"] .select {
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: var(--surface);
+    }
+
+    /* Search — warm radius */
+    [data-direction="vault"] .search-bar { border-radius: 14px; }
+
+    /* Alerts — warm, rounded */
+    [data-direction="vault"] .alert {
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+
+    /* Nav — gold active indicator */
+    [data-direction="vault"] .mini-nav {
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    [data-direction="vault"] .mini-nav-item { border-radius: 8px; }
+    [data-direction="vault"] .mini-nav-item.active {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    /* Toggle — pill, smooth */
+    [data-direction="vault"] .toggle { border-radius: 12px; }
+
+    /* Spacing — premium breathing room */
+    [data-direction="vault"] .pricing-card {
+      padding: 28px 24px;
+      border-radius: 14px;
+    }
+    [data-direction="vault"] .stat-card {
+      padding: 22px;
+      border-radius: 12px;
+    }
+    [data-direction="vault"] .entity-header { border-radius: 14px; }
+    [data-direction="vault"] .entity-header-body { padding: 22px 24px; }
+    [data-direction="vault"] .entity-logo { border-radius: 10px; }
+    [data-direction="vault"] .data-table-wrap { border-radius: 14px; }
+    [data-direction="vault"] .ai-workspace { border-radius: 14px; }
+    [data-direction="vault"] .swatch { border-radius: 10px; }
+    [data-direction="vault"] .inspo-item { border-radius: 10px; }
+    [data-direction="vault"] .anti-item { border-radius: 10px; }
+    [data-direction="vault"] .tab { border-radius: 8px; }
+    [data-direction="vault"] .type-item {
+      margin-bottom: 36px;
+      padding-bottom: 36px;
+    }
+
+    /* =============================================
+       BLUEPRINT — The Technical Draft
+       BUTTONS:    sharp (2px), DASHED border, no shadow, hover = solid + cyan, mono font
+       CARDS:      sharp (4px), DASHED border, no shadow, hover = solid cyan border
+       INPUTS:     standard, DASHED border, focus = solid cyan
+       NAV:        dashed container, mono text
+       BADGES:     square (2px), dashed outline, mono
+       TOGGLE:     square, snap
+       ALERTS:     sharp, dashed
+       Everything dashed. The wireframe made real.
+       ============================================= */
+    [data-direction="blueprint"] .section { padding: 72px 0; }
+
+    /* Buttons — dashed border, mono, technical */
+    [data-direction="blueprint"] .btn {
+      border-radius: 2px;
+      border-style: dashed;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+    [data-direction="blueprint"] .btn-primary {
+      background: var(--accent);
+      border-style: solid;
+      border-color: var(--accent);
+    }
+    [data-direction="blueprint"] .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+    [data-direction="blueprint"] .btn-outline {
+      border-style: dashed;
+    }
+    [data-direction="blueprint"] .btn-outline:hover {
+      border-style: solid;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    [data-direction="blueprint"] .btn-ghost {
+      border-style: none;
+    }
+
+    /* Hero — technical, tight */
+    [data-direction="blueprint"] .hero-subtext {
+      font-size: 0.9375rem;
+      max-width: 500px;
+    }
+    [data-direction="blueprint"] .hero-direction-name {
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* Cards — dashed borders, no shadow, solid on hover */
+    [data-direction="blueprint"] .card {
+      border-style: dashed;
+      border-radius: 4px;
+    }
+    [data-direction="blueprint"] .card:hover {
+      border-style: solid;
+      border-color: var(--accent);
+      transform: none;
+      box-shadow: none;
+    }
+    [data-direction="blueprint"] .card-img {
+      height: 130px;
+      border-radius: 4px 4px 0 0;
+    }
+
+    /* Inputs — dashed border, solid cyan on focus */
+    [data-direction="blueprint"] .input,
+    [data-direction="blueprint"] .select {
+      border-style: dashed;
+      border-radius: 2px;
+      font-size: 0.8125rem;
+    }
+    [data-direction="blueprint"] .input:focus,
+    [data-direction="blueprint"] .select:focus {
+      border-style: solid;
+      border-color: var(--accent);
+    }
+
+    /* Search — dashed */
+    [data-direction="blueprint"] .search-bar {
+      border-style: dashed;
+      border-radius: 2px;
+    }
+    [data-direction="blueprint"] .search-bar:focus-within {
+      border-style: solid;
+      border-color: var(--accent);
+    }
+    [data-direction="blueprint"] .search-filter-tag {
+      border-radius: 2px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.625rem;
+    }
+
+    /* Alerts — dashed, sharp */
+    [data-direction="blueprint"] .alert {
+      border-style: dashed;
+      border-radius: 2px;
+    }
+
+    /* Badges — square, dashed outline, mono */
+    [data-direction="blueprint"] .card-badge,
+    [data-direction="blueprint"] .type-label,
+    [data-direction="blueprint"] .entity-tier,
+    [data-direction="blueprint"] .pricing-popular {
+      border-radius: 2px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.04em;
+    }
+    [data-direction="blueprint"] .table-badge {
+      border-radius: 2px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* Toggle — square, snappy */
+    [data-direction="blueprint"] .toggle {
+      border-radius: 3px;
+      border: 1px dashed var(--border-color);
+    }
+    [data-direction="blueprint"] .toggle.active {
+      border-style: solid;
+      border-color: var(--accent);
+    }
+    [data-direction="blueprint"] .toggle::after {
+      border-radius: 2px;
+      box-shadow: none;
+    }
+
+    /* Nav — dashed container, mono */
+    [data-direction="blueprint"] .mini-nav {
+      border-radius: 2px;
+      background: transparent;
+      border: 1px dashed var(--border-color);
+    }
+    [data-direction="blueprint"] .mini-nav-item {
+      border-radius: 2px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6875rem;
+      letter-spacing: 0.02em;
+    }
+    [data-direction="blueprint"] .mini-nav-item.active {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    /* Stat card — dashed */
+    [data-direction="blueprint"] .stat-card {
+      border-style: dashed;
+      border-radius: 4px;
+    }
+    [data-direction="blueprint"] .stat-card:hover {
+      border-style: solid;
+      border-color: var(--accent);
+    }
+
+    /* Everything dashed + sharp */
+    [data-direction="blueprint"] .pricing-card {
+      border-style: dashed;
+      border-radius: 4px;
+    }
+    [data-direction="blueprint"] .pricing-card.featured {
+      border-style: solid;
+      border-color: var(--accent);
+    }
+    [data-direction="blueprint"] .entity-header {
+      border-style: dashed;
+      border-radius: 4px;
+    }
+    [data-direction="blueprint"] .entity-logo { border-radius: 2px; }
+    [data-direction="blueprint"] .data-table-wrap {
+      border-style: dashed;
+      border-radius: 4px;
+    }
+    [data-direction="blueprint"] .ai-workspace {
+      border-style: dashed;
+      border-radius: 4px;
+    }
+    [data-direction="blueprint"] .ai-sidebar {
+      border-right-style: dashed;
+    }
+    [data-direction="blueprint"] .ai-sources {
+      border-left-style: dashed;
+    }
+    [data-direction="blueprint"] .swatch {
+      border-style: dashed;
+      border-radius: 2px;
+    }
+    [data-direction="blueprint"] .inspo-item {
+      border-style: dashed;
+      border-radius: 2px;
+    }
+    [data-direction="blueprint"] .anti-item {
+      border-style: dashed;
+      border-radius: 2px;
+    }
+    [data-direction="blueprint"] .tab { border-radius: 2px; }
+    [data-direction="blueprint"] .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ============================================
+       CMM LIGHT — Direction Overrides
+       Purple primary, orange secondary signals, lavender surfaces
+       ============================================ */
+    [data-direction="cmm-light"] .btn-primary {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 100%);
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-light"] .btn-primary:hover {
+      background: linear-gradient(135deg, #2E0F75 0%, #4A1FA0 100%);
+      box-shadow: var(--shadow-md);
+    }
+    [data-direction="cmm-light"] .card-badge.badge-ai,
+    [data-direction="cmm-light"] .table-badge-ai {
+      background: rgba(252,163,17,0.12);
+      color: #D48C00;
+    }
+    [data-direction="cmm-light"] .card-badge.badge-verified,
+    [data-direction="cmm-light"] .table-badge-verified {
+      background: rgba(22,163,74,0.08);
+    }
+    [data-direction="cmm-light"] .card-img {
+      background: linear-gradient(135deg, #EFEDF8 0%, #C2DFE3 60%, #D4D2DE 100%);
+    }
+    [data-direction="cmm-light"] .pricing-card.featured {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px #3E149C, var(--shadow-lg);
+    }
+    [data-direction="cmm-light"] .pricing-popular {
+      background: #FCA311;
+      color: #090C02;
+    }
+    [data-direction="cmm-light"] .stat-card:hover {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px rgba(62,20,156,0.15);
+    }
+    [data-direction="cmm-light"] .entity-header-banner {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 50%, #C2DFE3 100%);
+    }
+    [data-direction="cmm-light"] .toggle.active {
+      background: #3E149C;
+    }
+    [data-direction="cmm-light"] .search-filter-tag.active {
+      background: rgba(62,20,156,0.08);
+      color: #3E149C;
+    }
+    [data-direction="cmm-light"] .mini-nav-item.active {
+      box-shadow: var(--shadow-sm);
+    }
+    [data-direction="cmm-light"] .mood-visual {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 30%, #C2DFE3 70%, #F8F7FF 100%);
+      filter: none;
+    }
+    [data-direction="cmm-light"] .motion-badge {
+      background: rgba(252,163,17,0.1);
+      color: #D48C00;
+    }
+    [data-direction="cmm-light"] .motion-dot {
+      background: #FCA311;
+    }
+    [data-direction="cmm-light"] .spark-bar:last-child {
+      background: #3E149C;
+    }
+
+    /* ============================================
+       CMM LIGHT — ATLAS TYPE — Direction Overrides
+       Same brand colors as CMM Light, Atlas-style component treatment
+       ============================================ */
+    [data-direction="cmm-light-atlas"] .section { padding: 72px 0; }
+    [data-direction="cmm-light-atlas"] .hero-subtext { font-size: 1.0625rem; }
+    [data-direction="cmm-light-atlas"] .btn { border-radius: 6px; }
+    [data-direction="cmm-light-atlas"] .btn-primary {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 100%);
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-light-atlas"] .btn-primary:hover {
+      background: linear-gradient(135deg, #2E0F75 0%, #4A1FA0 100%);
+      box-shadow: var(--shadow-md);
+    }
+    [data-direction="cmm-light-atlas"] .card { border-radius: 10px; }
+    [data-direction="cmm-light-atlas"] .card-img {
+      border-radius: 10px 10px 0 0;
+      background: linear-gradient(135deg, #F3F4F6 0%, #D1D5DB 60%, #9CA3AF 100%);
+    }
+    [data-direction="cmm-light-atlas"] .card-badge.badge-ai,
+    [data-direction="cmm-light-atlas"] .table-badge-ai {
+      background: rgba(252,163,17,0.12);
+      color: #D48C00;
+    }
+    [data-direction="cmm-light-atlas"] .card-badge.badge-verified,
+    [data-direction="cmm-light-atlas"] .table-badge-verified {
+      background: rgba(22,163,74,0.08);
+    }
+    [data-direction="cmm-light-atlas"] .pricing-card.featured {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px #3E149C, var(--shadow-lg);
+    }
+    [data-direction="cmm-light-atlas"] .pricing-popular {
+      background: #FCA311;
+      color: #090C02;
+    }
+    [data-direction="cmm-light-atlas"] .stat-card:hover {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px rgba(62,20,156,0.15);
+    }
+    [data-direction="cmm-light-atlas"] .entity-header-banner {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 50%, #D1D5DB 100%);
+    }
+    [data-direction="cmm-light-atlas"] .toggle.active {
+      background: #3E149C;
+    }
+    [data-direction="cmm-light-atlas"] .search-filter-tag.active {
+      background: rgba(62,20,156,0.08);
+      color: #3E149C;
+    }
+    [data-direction="cmm-light-atlas"] .mini-nav-item.active {
+      box-shadow: var(--shadow-sm);
+    }
+    [data-direction="cmm-light-atlas"] .mood-visual {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 30%, #D1D5DB 70%, #F9FAFB 100%);
+      filter: none;
+    }
+    [data-direction="cmm-light-atlas"] .motion-badge {
+      background: rgba(252,163,17,0.1);
+      color: #D48C00;
+    }
+    [data-direction="cmm-light-atlas"] .motion-dot {
+      background: #FCA311;
+    }
+    [data-direction="cmm-light-atlas"] .spark-bar:last-child {
+      background: #3E149C;
+    }
+
+    /* ============================================
+       CMM ALPHA — Direction Overrides
+       AlphaSense readability. Structural purple, generous spacing.
+       ============================================ */
+    [data-direction="cmm-alpha"] .section { padding: 80px 0; }
+    [data-direction="cmm-alpha"] .hero-subtext { font-size: 1.0625rem; line-height: 1.7; }
+    [data-direction="cmm-alpha"] .btn { border-radius: 8px; }
+    [data-direction="cmm-alpha"] .btn-primary {
+      background: #3E149C;
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-alpha"] .btn-primary:hover {
+      background: #2E0F75;
+      box-shadow: var(--shadow-md);
+    }
+    [data-direction="cmm-alpha"] .card { border-radius: 12px; }
+    [data-direction="cmm-alpha"] .card-img {
+      border-radius: 12px 12px 0 0;
+      background: linear-gradient(135deg, #F7F7F9 0%, #E2E3E8 60%, #9D9DAF 100%);
+    }
+    [data-direction="cmm-alpha"] .card-badge.badge-ai,
+    [data-direction="cmm-alpha"] .table-badge-ai {
+      background: rgba(252,163,17,0.1);
+      color: #D48C00;
+    }
+    [data-direction="cmm-alpha"] .pricing-card.featured {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px #3E149C, var(--shadow-lg);
+    }
+    [data-direction="cmm-alpha"] .pricing-popular {
+      background: #3E149C;
+      color: #FFFFFF;
+    }
+    [data-direction="cmm-alpha"] .stat-card:hover {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px rgba(62,20,156,0.12);
+    }
+    [data-direction="cmm-alpha"] .entity-header-banner {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 60%, #E2E3E8 100%);
+    }
+    [data-direction="cmm-alpha"] .toggle.active { background: #3E149C; }
+    [data-direction="cmm-alpha"] .search-filter-tag.active {
+      background: rgba(62,20,156,0.06);
+      color: #3E149C;
+    }
+    [data-direction="cmm-alpha"] .mini-nav-item.active { box-shadow: var(--shadow-sm); }
+    [data-direction="cmm-alpha"] .mood-visual {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 30%, #E2E3E8 70%, #FFFFFF 100%);
+      filter: none;
+    }
+    [data-direction="cmm-alpha"] .motion-badge {
+      background: rgba(252,163,17,0.08);
+      color: #D48C00;
+    }
+    [data-direction="cmm-alpha"] .motion-dot { background: #FCA311; }
+    [data-direction="cmm-alpha"] .spark-bar:last-child { background: #3E149C; }
+
+    /* ============================================
+       CMM SIGNAL — Direction Overrides
+       Brand-forward. Gradient CTAs, orange pops, purple presence.
+       ============================================ */
+    [data-direction="cmm-signal"] .section { padding: 80px 0; }
+    [data-direction="cmm-signal"] .hero-subtext { font-size: 1.125rem; }
+    [data-direction="cmm-signal"] .btn { border-radius: 10px; }
+    [data-direction="cmm-signal"] .btn-primary {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 50%, #7C3AED 100%);
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-signal"] .btn-primary:hover {
+      background: linear-gradient(135deg, #2E0F75 0%, #4A1FA0 50%, #6D28D9 100%);
+      box-shadow: 0 8px 20px rgba(62,20,156,0.2);
+    }
+    [data-direction="cmm-signal"] .card { border-radius: 14px; }
+    [data-direction="cmm-signal"] .card-img {
+      border-radius: 14px 14px 0 0;
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 40%, #FCA311 100%);
+    }
+    [data-direction="cmm-signal"] .card-badge.badge-ai,
+    [data-direction="cmm-signal"] .table-badge-ai {
+      background: rgba(252,163,17,0.15);
+      color: #B87A00;
+    }
+    [data-direction="cmm-signal"] .card-badge.badge-verified,
+    [data-direction="cmm-signal"] .table-badge-verified {
+      background: rgba(22,163,74,0.1);
+    }
+    [data-direction="cmm-signal"] .pricing-card.featured {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px #3E149C, var(--shadow-lg);
+      background: linear-gradient(180deg, rgba(62,20,156,0.03) 0%, var(--bg) 100%);
+    }
+    [data-direction="cmm-signal"] .pricing-popular {
+      background: linear-gradient(135deg, #FCA311, #FFB840);
+      color: #0F0A1A;
+    }
+    [data-direction="cmm-signal"] .stat-card:hover {
+      border-color: #3E149C;
+      box-shadow: 0 0 0 1px rgba(62,20,156,0.15), var(--shadow-md);
+    }
+    [data-direction="cmm-signal"] .entity-header-banner {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 40%, #FCA311 100%);
+    }
+    [data-direction="cmm-signal"] .toggle.active {
+      background: linear-gradient(135deg, #3E149C, #5A2DB8);
+    }
+    [data-direction="cmm-signal"] .search-filter-tag.active {
+      background: rgba(62,20,156,0.1);
+      color: #3E149C;
+    }
+    [data-direction="cmm-signal"] .mini-nav-item.active {
+      box-shadow: var(--shadow-sm);
+      border-color: rgba(62,20,156,0.12);
+    }
+    [data-direction="cmm-signal"] .mood-visual {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 25%, #FCA311 60%, #FAFAFF 100%);
+      filter: none;
+    }
+    [data-direction="cmm-signal"] .motion-badge {
+      background: rgba(252,163,17,0.12);
+      color: #B87A00;
+    }
+    [data-direction="cmm-signal"] .motion-dot { background: #FCA311; }
+    [data-direction="cmm-signal"] .spark-bar:last-child {
+      background: linear-gradient(135deg, #3E149C, #FCA311);
+    }
+
+    /* ============================================
+       CMM DENSE — Direction Overrides
+       Data-first. Compact everything. Pitchbook/Bloomberg density.
+       ============================================ */
+    [data-direction="cmm-dense"] .section { padding: 48px 0; }
+    [data-direction="cmm-dense"] .hero-subtext { font-size: 0.9375rem; }
+    [data-direction="cmm-dense"] .btn { border-radius: 4px; padding: 8px 16px; font-size: 0.8125rem; }
+    [data-direction="cmm-dense"] .btn-primary {
+      background: #3E149C;
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-dense"] .btn-primary:hover {
+      background: #2E0F75;
+    }
+    [data-direction="cmm-dense"] .card { border-radius: 6px; }
+    [data-direction="cmm-dense"] .card-body { padding: 14px; }
+    [data-direction="cmm-dense"] .card-img {
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(135deg, #F5F6F8 0%, #DDDEE2 60%, #9D9DAF 100%);
+    }
+    [data-direction="cmm-dense"] .card-badge.badge-ai,
+    [data-direction="cmm-dense"] .table-badge-ai {
+      background: rgba(252,163,17,0.1);
+      color: #D48C00;
+    }
+    [data-direction="cmm-dense"] .pricing-card.featured {
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-dense"] .pricing-popular {
+      background: #3E149C;
+      color: #FFFFFF;
+      font-size: 0.625rem;
+    }
+    [data-direction="cmm-dense"] .stat-card:hover {
+      border-color: #3E149C;
+    }
+    [data-direction="cmm-dense"] .entity-header-banner {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 60%, #DDDEE2 100%);
+    }
+    [data-direction="cmm-dense"] .toggle.active { background: #3E149C; }
+    [data-direction="cmm-dense"] .search-filter-tag.active {
+      background: rgba(62,20,156,0.06);
+      color: #3E149C;
+    }
+    [data-direction="cmm-dense"] .mini-nav-item.active { box-shadow: var(--shadow-sm); }
+    [data-direction="cmm-dense"] .mood-visual {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 30%, #DDDEE2 70%, #FFFFFF 100%);
+      filter: none;
+    }
+    [data-direction="cmm-dense"] .motion-badge {
+      background: rgba(252,163,17,0.08);
+      color: #D48C00;
+    }
+    [data-direction="cmm-dense"] .motion-dot { background: #FCA311; }
+    [data-direction="cmm-dense"] .spark-bar:last-child { background: #3E149C; }
+
+    /* ============================================
+       CMM DARK — Direction Overrides
+       Deep indigo canvas (brand purple), orange signals burn bright
+       ============================================ */
+    [data-direction="cmm-dark"] .btn-primary {
+      background: #FCA311;
+      border-color: #FCA311;
+      color: #0D0527;
+      font-weight: 600;
+    }
+    [data-direction="cmm-dark"] .btn-primary:hover {
+      background: #FFB840;
+      border-color: #FFB840;
+      box-shadow: 0 0 20px rgba(252,163,17,0.2);
+    }
+    [data-direction="cmm-dark"] .btn-outline {
+      border-color: rgba(248,247,255,0.15);
+    }
+    [data-direction="cmm-dark"] .btn-outline:hover {
+      border-color: #FCA311;
+      color: #FCA311;
+      box-shadow: 0 0 12px rgba(252,163,17,0.1);
+    }
+    [data-direction="cmm-dark"] .card {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .card:hover {
+      border-color: rgba(252,163,17,0.25);
+    }
+    [data-direction="cmm-dark"] .card-img {
+      background: linear-gradient(135deg, #221548 0%, #3E149C 50%, #5A2DB8 100%);
+    }
+    [data-direction="cmm-dark"] .card-badge {
+      background: rgba(194,223,227,0.12);
+      color: #C2DFE3;
+    }
+    [data-direction="cmm-dark"] .card-badge.badge-verified {
+      background: rgba(34,197,94,0.15);
+      color: #4ADE80;
+    }
+    [data-direction="cmm-dark"] .card-badge.badge-ai {
+      background: rgba(252,163,17,0.15);
+      color: #FCA311;
+    }
+    [data-direction="cmm-dark"] .table-badge-premium {
+      background: rgba(194,223,227,0.1);
+      color: #C2DFE3;
+    }
+    [data-direction="cmm-dark"] .table-badge-ai {
+      background: rgba(252,163,17,0.12);
+      color: #FCA311;
+    }
+    [data-direction="cmm-dark"] .pricing-card {
+      background: #140A36;
+      border-color: rgba(248,247,255,0.08);
+    }
+    [data-direction="cmm-dark"] .pricing-card.featured {
+      border-color: #FCA311;
+      box-shadow: 0 0 0 1px rgba(252,163,17,0.3), 0 0 40px rgba(252,163,17,0.08);
+    }
+    [data-direction="cmm-dark"] .pricing-popular {
+      background: #FCA311;
+      color: #0D0527;
+    }
+    [data-direction="cmm-dark"] .stat-card {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .stat-card:hover {
+      border-color: rgba(252,163,17,0.25);
+      box-shadow: 0 0 16px rgba(252,163,17,0.06);
+    }
+    [data-direction="cmm-dark"] .entity-header-banner {
+      background: linear-gradient(135deg, #3E149C 0%, #5A2DB8 50%, #FCA311 100%);
+    }
+    [data-direction="cmm-dark"] .entity-tier {
+      background: rgba(194,223,227,0.1);
+      color: #C2DFE3;
+    }
+    [data-direction="cmm-dark"] .toggle.active {
+      background: #FCA311;
+    }
+    [data-direction="cmm-dark"] .toggle.active::after {
+      background: #0D0527;
+    }
+    [data-direction="cmm-dark"] .input,
+    [data-direction="cmm-dark"] .select {
+      background: #140A36;
+      border-color: rgba(248,247,255,0.1);
+    }
+    [data-direction="cmm-dark"] .input:focus,
+    [data-direction="cmm-dark"] .select:focus {
+      border-color: #FCA311;
+    }
+    [data-direction="cmm-dark"] .search-bar {
+      background: #140A36;
+      border-color: rgba(248,247,255,0.1);
+    }
+    [data-direction="cmm-dark"] .search-bar:focus-within {
+      border-color: #FCA311;
+    }
+    [data-direction="cmm-dark"] .search-filter-tag.active {
+      background: rgba(252,163,17,0.1);
+      color: #FCA311;
+    }
+    [data-direction="cmm-dark"] .mini-nav {
+      background: #140A36;
+      border: 1px solid rgba(248,247,255,0.06);
+    }
+    [data-direction="cmm-dark"] .mini-nav-item.active {
+      background: #221548;
+      color: #F8F7FF;
+    }
+    [data-direction="cmm-dark"] .type-label {
+      background: rgba(252,163,17,0.1);
+      color: #FCA311;
+    }
+    [data-direction="cmm-dark"] .mood-visual {
+      background: linear-gradient(135deg, #0D0527 0%, #3E149C 40%, #FCA311 100%);
+      filter: none;
+    }
+    [data-direction="cmm-dark"] .spark-bar:last-child {
+      background: #FCA311;
+    }
+    [data-direction="cmm-dark"] .data-table thead {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .data-table tbody tr:hover {
+      background: #170D3A;
+    }
+    [data-direction="cmm-dark"] .table-footer {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .ai-sidebar {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .alert-success {
+      background: rgba(34,197,94,0.08);
+      border-color: rgba(34,197,94,0.3);
+    }
+    [data-direction="cmm-dark"] .alert-error {
+      background: rgba(239,68,68,0.08);
+      border-color: rgba(239,68,68,0.3);
+    }
+    [data-direction="cmm-dark"] .inspo-item,
+    [data-direction="cmm-dark"] .anti-item {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .swatch {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .data-table-wrap {
+      background: #140A36;
+    }
+    [data-direction="cmm-dark"] .ai-workspace {
+      background: #140A36;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 768px) {
+      .hero-headline { font-size: calc(var(--hero-size) * 0.7); }
+      .card-grid { grid-template-columns: 1fr; }
+      .inspo-grid { grid-template-columns: 1fr; }
+      .mood-grid { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .header-brand { font-size: 0.875rem; }
+      .tab { font-size: 0.75rem; padding: 5px 10px; }
+      .container { padding: 0 16px; }
+      .section { padding: 56px 0; }
+      .anti-grid { grid-template-columns: 1fr 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .ai-workspace { grid-template-columns: 1fr; height: auto; }
+      .ai-sidebar { display: none; }
+      .ai-sources { display: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .data-table-wrap { overflow-x: auto; }
+      .entity-header-body { flex-direction: column; }
+      .entity-actions { align-self: stretch; }
+      .search-filters { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .header-inner { flex-direction: column; height: auto; padding: 12px 16px; gap: 8px; }
+      .anti-grid { grid-template-columns: 1fr; }
+      .swatch-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <!-- TOOLTIP -->
+  <div class="tooltip" id="tooltip"></div>
+
+  <!-- ============================================
+       HEADER
+       ============================================ -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-brand">CMM Market IQ</div>
+      <div class="header-tabs">
+        <button class="tab active" data-tab="atlas" onclick="switchDirection('atlas')">Atlas</button>
+        <button class="tab" data-tab="ledger" onclick="switchDirection('ledger')">Ledger</button>
+        <button class="tab" data-tab="blueprint" onclick="switchDirection('blueprint')">Blueprint</button>
+        <button class="tab" data-tab="cmm-light" onclick="switchDirection('cmm-light')">CMM Light</button>
+        <button class="tab" data-tab="cmm-light-atlas" onclick="switchDirection('cmm-light-atlas')">Atlas Type</button>
+        <span style="width:1px;height:20px;background:var(--border-color);margin:0 4px;flex-shrink:0;transition:background 0.4s"></span>
+        <button class="tab" data-tab="vault" onclick="switchDirection('vault')">Vault</button>
+        <button class="tab" data-tab="keynote" onclick="switchDirection('keynote')">Keynote</button>
+        <button class="tab" data-tab="cmm-dark" onclick="switchDirection('cmm-dark')">CMM Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================
+         HERO
+         ============================================ -->
+    <section class="hero container">
+      <div class="hero-direction-name" id="direction-name">ZURICH DESK</div>
+      <h1 class="hero-headline">Mongolia's Capital Markets, Decoded</h1>
+      <p class="hero-subtext">AI-native intelligence for investment professionals seeking vetted exposure to one of Asia's most resource-rich frontier markets.</p>
+      <p class="hero-tagline" id="direction-tagline">Swiss precision meets frontier markets. Clinical, data-forward, built for analysts who live in spreadsheets.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary tc" id="hero-cta" onclick="demoCTA(this)">
+          <span class="btn-text">Start Research</span>
+        </button>
+        <button class="btn btn-outline tc">View Directory</button>
+      </div>
+    </section>
+
+    <!-- ============================================
+         COLOR PALETTE
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">01 / Color System</div>
+        <div class="section-title">Palette</div>
+        <div class="swatch-grid" id="swatch-grid">
+          <!-- Swatches injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         TYPOGRAPHY
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">02 / Typography</div>
+        <div class="section-title">Type Scale</div>
+        <div class="type-showcase">
+          <div class="type-item">
+            <div class="type-meta" id="type-meta-display"><span>Display</span><span id="font-display-name">Space Grotesk 800</span></div>
+            <div class="type-h1">Mining Sector Intelligence Report</div>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>H2</span><span id="font-h2-info">700</span></div>
+            <div class="type-h2">Oyu Tolgoi Phase Two Analysis</div>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>H3</span><span id="font-h3-info">700</span></div>
+            <div class="type-h3">Key Financial Indicators</div>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>H4</span></div>
+            <div class="type-h4">Quarterly Revenue Breakdown</div>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>Body</span><span id="font-body-name">Inter 400</span></div>
+            <div class="type-body">Mongolia's mining sector represents over 25% of GDP and continues to attract significant foreign direct investment. The Oyu Tolgoi copper-gold mine, operated by Rio Tinto, remains the largest single project with estimated reserves valued at over $50 billion. Recent regulatory reforms and a stabilized political environment have increased institutional confidence in the market.</div>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>Caption</span></div>
+            <div class="type-small">Updated March 2026 · CMM Verified · 12 min read</div>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>Monospace / Data</span><span id="font-mono-name">JetBrains Mono</span></div>
+            <code class="type-mono">Revenue: ₮2.4T &nbsp;|&nbsp; EBITDA: ₮890B &nbsp;|&nbsp; Market Cap: $3.2B &nbsp;|&nbsp; P/E: 8.4x</code>
+          </div>
+          <div class="type-item">
+            <div class="type-meta"><span>Label</span></div>
+            <span class="type-label">AI GENERATED</span>
+            &nbsp;&nbsp;
+            <span class="type-label" style="background: var(--success-subtle); color: var(--success);">CMM VERIFIED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         COMPONENTS
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03 / Components</div>
+        <div class="section-title">Interactive Elements</div>
+
+        <div class="component-section">
+          <!-- Buttons -->
+          <div>
+            <div class="component-block-label">Buttons</div>
+            <div class="btn-row">
+              <button class="btn btn-primary tc" onclick="demoCTA(this)"><span class="btn-text">Start Research</span></button>
+              <button class="btn btn-outline tc">View Directory</button>
+              <button class="btn btn-ghost tc">Learn More</button>
+              <button class="btn btn-disabled tc" disabled>Unavailable</button>
+            </div>
+          </div>
+
+          <!-- Mini Nav -->
+          <div>
+            <div class="component-block-label">Navigation</div>
+            <div class="mini-nav">
+              <button class="mini-nav-item active" onclick="setNav(this)">Dashboard</button>
+              <button class="mini-nav-item" onclick="setNav(this)">Directory</button>
+              <button class="mini-nav-item" onclick="setNav(this)">Intelligence</button>
+              <button class="mini-nav-item" onclick="setNav(this)">Knowledge Bank</button>
+              <button class="mini-nav-item" onclick="setNav(this)">Watchlist</button>
+            </div>
+          </div>
+
+          <!-- Cards + Form -->
+          <div class="two-col">
+            <!-- Cards -->
+            <div>
+              <div class="component-block-label">Entity Cards</div>
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="card tc">
+                  <div class="card-img tc">
+                    <span class="card-badge tc">Premium</span>
+                  </div>
+                  <div class="card-body">
+                    <div class="card-sector tc">Mining</div>
+                    <div class="card-title tc">Erdenes Gold LLC</div>
+                    <div class="card-desc tc">Gold exploration and development across three licenses in central Mongolia. Active capital raise targeting $45M.</div>
+                  </div>
+                </div>
+
+                <div class="card tc">
+                  <div class="card-img tc">
+                    <span class="card-badge badge-verified tc">CMM Verified</span>
+                  </div>
+                  <div class="card-body">
+                    <div class="card-sector tc">Financial Services</div>
+                    <div class="card-title tc">Golomt Bank</div>
+                    <div class="card-desc tc">Leading commercial bank with $4.2B in total assets. Recently completed successful Eurobond issuance.</div>
+                  </div>
+                </div>
+
+                <div class="card tc">
+                  <div class="card-img tc">
+                    <span class="card-badge badge-ai tc">AI Generated</span>
+                  </div>
+                  <div class="card-body">
+                    <div class="card-sector tc">Conglomerate</div>
+                    <div class="card-title tc">MCS Group</div>
+                    <div class="card-desc tc">Mongolia's largest private group spanning mining, energy, food, and financial services divisions.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form + Alerts -->
+            <div>
+              <div class="component-block-label">Form Elements</div>
+              <div class="form-group">
+                <input class="input tc" type="text" placeholder="Search entities, sectors, or ask a question...">
+                <input class="input input-error tc" type="text" value="revenue > $1B AND" placeholder="">
+                <div class="input-hint tc">Invalid query syntax. Expected value after AND operator.</div>
+                <select class="select tc">
+                  <option>Sector: All</option>
+                  <option>Mining</option>
+                  <option>Financial Services</option>
+                  <option>Energy</option>
+                  <option>Infrastructure</option>
+                </select>
+                <div class="toggle-row">
+                  <button class="toggle active tc" onclick="this.classList.toggle('active')"></button>
+                  <span class="toggle-label tc">AI-enhanced results</span>
+                </div>
+                <button class="btn btn-primary tc" style="align-self: flex-start;" onclick="demoCTA(this)">
+                  <span class="btn-text">Search</span>
+                </button>
+              </div>
+
+              <div style="margin-top: 32px;">
+                <div class="component-block-label">Alerts</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <div class="alert alert-success tc" id="alert-success">
+                    <span class="alert-icon"><i class="hgi-stroke hgi-tick-02"></i></span>
+                    <span class="alert-text">Erdenes Gold added to your watchlist. You'll be notified of profile updates and deal activity.</span>
+                    <button class="alert-dismiss" onclick="dismissAlert(this)">&times;</button>
+                  </div>
+                  <div class="alert alert-error tc" id="alert-error">
+                    <span class="alert-icon">!</span>
+                    <span class="alert-text">Export failed. The selected date range contains no financial data. Adjust your filters.</span>
+                    <button class="alert-dismiss" onclick="dismissAlert(this)">&times;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         SEARCH BAR
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03.1 / Search</div>
+        <div class="section-title">Command Bar</div>
+        <div style="max-width: 720px;">
+          <div class="search-bar tc">
+            <div class="search-icon tc">&#8981;</div>
+            <input class="search-input" type="text" placeholder="Search entities, sectors, or ask AI a question...">
+            <div class="search-filters">
+              <button class="search-filter-tag tc active">All</button>
+              <button class="search-filter-tag tc" onclick="this.classList.toggle('active')">Mining</button>
+              <button class="search-filter-tag tc" onclick="this.classList.toggle('active')">Finance</button>
+              <button class="search-filter-tag tc" onclick="this.classList.toggle('active')">Energy</button>
+              <span class="search-shortcut tc">&#8984;K</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         STAT CARDS
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03.2 / Dashboard</div>
+        <div class="section-title">Stat Cards</div>
+        <div class="stat-row">
+          <div class="stat-card tc">
+            <div class="stat-label tc">Entities Tracked</div>
+            <div class="stat-value tc">512</div>
+            <div class="stat-change up tc">+23 this month</div>
+            <div class="stat-sparkline">
+              <div class="spark-bar" style="height: 40%"></div>
+              <div class="spark-bar" style="height: 55%"></div>
+              <div class="spark-bar" style="height: 45%"></div>
+              <div class="spark-bar" style="height: 70%"></div>
+              <div class="spark-bar" style="height: 60%"></div>
+              <div class="spark-bar" style="height: 85%"></div>
+              <div class="spark-bar" style="height: 75%"></div>
+              <div class="spark-bar" style="height: 100%"></div>
+            </div>
+          </div>
+          <div class="stat-card tc">
+            <div class="stat-label tc">AI Queries (30d)</div>
+            <div class="stat-value tc">2,847</div>
+            <div class="stat-change up tc">+18.3%</div>
+            <div class="stat-sparkline">
+              <div class="spark-bar" style="height: 30%"></div>
+              <div class="spark-bar" style="height: 45%"></div>
+              <div class="spark-bar" style="height: 50%"></div>
+              <div class="spark-bar" style="height: 40%"></div>
+              <div class="spark-bar" style="height: 65%"></div>
+              <div class="spark-bar" style="height: 80%"></div>
+              <div class="spark-bar" style="height: 70%"></div>
+              <div class="spark-bar" style="height: 95%"></div>
+            </div>
+          </div>
+          <div class="stat-card tc">
+            <div class="stat-label tc">Active Subscribers</div>
+            <div class="stat-value tc">89</div>
+            <div class="stat-change up tc">+12 new</div>
+            <div class="stat-sparkline">
+              <div class="spark-bar" style="height: 50%"></div>
+              <div class="spark-bar" style="height: 55%"></div>
+              <div class="spark-bar" style="height: 60%"></div>
+              <div class="spark-bar" style="height: 58%"></div>
+              <div class="spark-bar" style="height: 65%"></div>
+              <div class="spark-bar" style="height: 72%"></div>
+              <div class="spark-bar" style="height: 80%"></div>
+              <div class="spark-bar" style="height: 88%"></div>
+            </div>
+          </div>
+          <div class="stat-card tc">
+            <div class="stat-label tc">Introductions Made</div>
+            <div class="stat-value tc">34</div>
+            <div class="stat-change down tc">-2 vs last month</div>
+            <div class="stat-sparkline">
+              <div class="spark-bar" style="height: 80%"></div>
+              <div class="spark-bar" style="height: 75%"></div>
+              <div class="spark-bar" style="height: 90%"></div>
+              <div class="spark-bar" style="height: 65%"></div>
+              <div class="spark-bar" style="height: 70%"></div>
+              <div class="spark-bar" style="height: 55%"></div>
+              <div class="spark-bar" style="height: 50%"></div>
+              <div class="spark-bar" style="height: 60%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         ENTITY PROFILE HEADER
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03.3 / Entity Profile</div>
+        <div class="section-title">Profile Header</div>
+        <div class="entity-header tc">
+          <div class="entity-header-banner tc"></div>
+          <div class="entity-header-body">
+            <div class="entity-logo tc">EG</div>
+            <div class="entity-info">
+              <div class="entity-name-row">
+                <span class="entity-name tc">Erdenes Gold LLC</span>
+                <span class="entity-tier tc">Premium</span>
+              </div>
+              <div class="entity-meta tc">Mining &middot; Gold Exploration &middot; Ulaanbaatar, Mongolia &middot; Founded 2011</div>
+              <div class="entity-stats">
+                <div class="entity-stat">
+                  <span class="entity-stat-label tc">Market Cap</span>
+                  <span class="entity-stat-value tc">$280M</span>
+                </div>
+                <div class="entity-stat">
+                  <span class="entity-stat-label tc">Revenue (2025)</span>
+                  <span class="entity-stat-value tc">₮156B</span>
+                </div>
+                <div class="entity-stat">
+                  <span class="entity-stat-label tc">Employees</span>
+                  <span class="entity-stat-value tc">1,240</span>
+                </div>
+                <div class="entity-stat">
+                  <span class="entity-stat-label tc">Capital Raise</span>
+                  <span class="entity-stat-value tc" style="color: var(--accent);">$45M Active</span>
+                </div>
+              </div>
+            </div>
+            <div class="entity-actions">
+              <button class="btn btn-primary tc" onclick="demoCTA(this)"><span class="btn-text">Request Introduction</span></button>
+              <button class="btn btn-outline tc">AI Summary</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         DATA TABLE
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03.4 / Data</div>
+        <div class="section-title">Entity Directory Table</div>
+        <div class="data-table-wrap tc">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="sorted">Entity <span class="sort-icon">&#9660;</span></th>
+                <th>Sector <span class="sort-icon">&#9660;</span></th>
+                <th>Tier <span class="sort-icon">&#9660;</span></th>
+                <th style="text-align:right">Market Cap <span class="sort-icon">&#9660;</span></th>
+                <th style="text-align:right">Revenue <span class="sort-icon">&#9660;</span></th>
+                <th style="text-align:right">YoY <span class="sort-icon">&#9660;</span></th>
+                <th style="text-align:right">Capital Raise <span class="sort-icon">&#9660;</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="table-entity-name">Erdenes Gold LLC</span></td>
+                <td>Mining</td>
+                <td><span class="table-badge table-badge-premium tc">Premium</span></td>
+                <td class="table-numeric">$280M</td>
+                <td class="table-numeric">₮156B</td>
+                <td class="table-numeric"><span class="table-trend up tc">+12.4%</span></td>
+                <td class="table-numeric">$45M</td>
+              </tr>
+              <tr>
+                <td><span class="table-entity-name">Golomt Bank</span></td>
+                <td>Financial Services</td>
+                <td><span class="table-badge table-badge-verified tc">Verified</span></td>
+                <td class="table-numeric">$620M</td>
+                <td class="table-numeric">₮892B</td>
+                <td class="table-numeric"><span class="table-trend up tc">+8.1%</span></td>
+                <td class="table-numeric">—</td>
+              </tr>
+              <tr>
+                <td><span class="table-entity-name">MCS Group</span></td>
+                <td>Conglomerate</td>
+                <td><span class="table-badge table-badge-premium tc">Premium</span></td>
+                <td class="table-numeric">$1.4B</td>
+                <td class="table-numeric">₮3.2T</td>
+                <td class="table-numeric"><span class="table-trend up tc">+5.7%</span></td>
+                <td class="table-numeric">—</td>
+              </tr>
+              <tr>
+                <td><span class="table-entity-name">Mongolyn Alt (MAK)</span></td>
+                <td>Mining</td>
+                <td><span class="table-badge table-badge-verified tc">Verified</span></td>
+                <td class="table-numeric">$890M</td>
+                <td class="table-numeric">₮1.1T</td>
+                <td class="table-numeric"><span class="table-trend down tc">-3.2%</span></td>
+                <td class="table-numeric">$120M</td>
+              </tr>
+              <tr>
+                <td><span class="table-entity-name">Khan Bank</span></td>
+                <td>Financial Services</td>
+                <td><span class="table-badge table-badge-ai tc">AI Gen</span></td>
+                <td class="table-numeric">$510M</td>
+                <td class="table-numeric">₮780B</td>
+                <td class="table-numeric"><span class="table-trend up tc">+9.8%</span></td>
+                <td class="table-numeric">—</td>
+              </tr>
+              <tr>
+                <td><span class="table-entity-name">Tavan Tolgoi JSC</span></td>
+                <td>Mining</td>
+                <td><span class="table-badge table-badge-premium tc">Premium</span></td>
+                <td class="table-numeric">$2.1B</td>
+                <td class="table-numeric">₮4.8T</td>
+                <td class="table-numeric"><span class="table-trend up tc">+15.2%</span></td>
+                <td class="table-numeric">$200M</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-footer tc">
+            <span>Showing 6 of 512 entities</span>
+            <div class="table-pagination">
+              <button class="table-page-btn tc active">1</button>
+              <button class="table-page-btn tc">2</button>
+              <button class="table-page-btn tc">3</button>
+              <button class="table-page-btn tc">...</button>
+              <button class="table-page-btn tc">86</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         AI WORKSPACE PREVIEW
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03.5 / AI Workspace</div>
+        <div class="section-title">Intelligence Interface</div>
+        <div class="ai-workspace tc">
+          <!-- Left sidebar: sessions -->
+          <div class="ai-sidebar tc">
+            <div class="ai-sidebar-title tc">Sessions</div>
+            <div class="ai-session active">
+              <div class="ai-session-title tc">Mining sector overview</div>
+              <div class="ai-session-date tc">Today, 14:32</div>
+            </div>
+            <div class="ai-session">
+              <div class="ai-session-title tc">Erdenes Gold due diligence</div>
+              <div class="ai-session-date tc">Yesterday</div>
+            </div>
+            <div class="ai-session">
+              <div class="ai-session-title tc">Banking sector comparison</div>
+              <div class="ai-session-date tc">Mar 21</div>
+            </div>
+            <div class="ai-session">
+              <div class="ai-session-title tc">Oyu Tolgoi Phase 2 risks</div>
+              <div class="ai-session-date tc">Mar 19</div>
+            </div>
+            <div class="ai-session">
+              <div class="ai-session-title tc">Energy infrastructure deals</div>
+              <div class="ai-session-date tc">Mar 17</div>
+            </div>
+          </div>
+
+          <!-- Center: chat -->
+          <div class="ai-chat">
+            <div class="ai-chat-messages">
+              <div class="ai-msg">
+                <div class="ai-msg-avatar user tc">JC</div>
+                <div class="ai-msg-content">
+                  <div class="ai-msg-name tc">You</div>
+                  <div class="ai-msg-text tc">Give me an overview of Mongolia's mining sector. Key players, recent deals, and who's actively raising capital.</div>
+                </div>
+              </div>
+              <div class="ai-msg">
+                <div class="ai-msg-avatar ai tc">IQ</div>
+                <div class="ai-msg-content">
+                  <div class="ai-msg-name tc">Market IQ</div>
+                  <div class="ai-msg-text tc">
+                    Mongolia's mining sector accounts for approximately 27% of GDP and remains the primary driver of foreign direct investment. Here are the key players and recent activity:
+                    <br><br>
+                    <strong>Major Entities by Market Cap:</strong>
+                    <table class="ai-msg-table">
+                      <thead>
+                        <tr><th>Entity</th><th>Sub-sector</th><th>Market Cap</th><th>Status</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>Tavan Tolgoi JSC</td><td>Coal</td><td>$2.1B</td><td>Raising $200M</td></tr>
+                        <tr><td>Oyu Tolgoi (Rio Tinto)</td><td>Copper-Gold</td><td>$50B+ reserves</td><td>Phase 2 active</td></tr>
+                        <tr><td>Mongolyn Alt</td><td>Coal</td><td>$890M</td><td>Raising $120M</td></tr>
+                        <tr><td>Erdenes Gold</td><td>Gold</td><td>$280M</td><td>Raising $45M</td></tr>
+                      </tbody>
+                    </table>
+                    <br>
+                    Three companies are actively raising capital totaling $365M <span class="citation">[1]</span>. Regulatory reforms passed in Q4 2025 have reduced the licensing timeline from 18 months to 6 months for exploration permits <span class="citation">[2]</span>, significantly improving the investment climate.
+                    <br><br>
+                    The sector saw $1.2B in completed transactions in 2025, up 34% year-over-year <span class="citation">[3]</span>.<span class="ai-streaming-cursor"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ai-chat-input tc">
+              <input class="ai-chat-field" type="text" placeholder="Follow up on this research...">
+              <button class="ai-chat-send tc">&#8593;</button>
+            </div>
+          </div>
+
+          <!-- Right: sources -->
+          <div class="ai-sources tc">
+            <div class="ai-sources-title tc">Sources</div>
+            <div class="ai-source-item tc">
+              <div class="ai-source-num tc">[1]</div>
+              <div class="ai-source-title tc">CMM Deal Pipeline Q1 2026</div>
+              <div class="ai-source-type tc">Internal Report</div>
+            </div>
+            <div class="ai-source-item tc">
+              <div class="ai-source-num tc">[2]</div>
+              <div class="ai-source-title tc">Mongolia Mining Reform Act 2025</div>
+              <div class="ai-source-type tc">Government Filing</div>
+            </div>
+            <div class="ai-source-item tc">
+              <div class="ai-source-num tc">[3]</div>
+              <div class="ai-source-title tc">Annual Mining Transaction Summary</div>
+              <div class="ai-source-type tc">CMM Knowledge Bank</div>
+            </div>
+            <div class="ai-source-item tc">
+              <div class="ai-source-num tc">[4]</div>
+              <div class="ai-source-title tc">Erdenes Gold Investor Deck</div>
+              <div class="ai-source-type tc">Entity Document</div>
+            </div>
+            <div class="ai-source-item tc">
+              <div class="ai-source-num tc">[5]</div>
+              <div class="ai-source-title tc">MSE Mining Index Performance</div>
+              <div class="ai-source-type tc">Market Data</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         PRICING CARDS
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">03.6 / Monetization</div>
+        <div class="section-title">Subscription Tiers</div>
+        <div class="pricing-grid">
+          <div class="pricing-card tc">
+            <div class="pricing-tier tc">Free</div>
+            <div class="pricing-name tc">Explorer</div>
+            <div class="pricing-desc tc">Browse AI-generated entity profiles and public market data.</div>
+            <div class="pricing-price">
+              <span class="pricing-amount tc">$0</span>
+              <span class="pricing-period tc">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> 500+ AI-generated entity profiles</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Basic directory search</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> 5 AI queries per month</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Public market data</li>
+            </ul>
+            <button class="btn btn-outline tc" style="width: 100%; justify-content: center;">Get Started</button>
+          </div>
+
+          <div class="pricing-card featured tc">
+            <div class="pricing-popular tc">Most Popular</div>
+            <div class="pricing-tier tc">Subscriber</div>
+            <div class="pricing-name tc">Analyst</div>
+            <div class="pricing-desc tc">Full intelligence access. Unlimited AI research and verified profiles.</div>
+            <div class="pricing-price">
+              <span class="pricing-amount tc">$299</span>
+              <span class="pricing-period tc">/month</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Everything in Explorer</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Unlimited AI queries (Sonnet)</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> CMM-verified premium profiles</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Financial data + analyst insights</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> CSV/PDF data export</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Watchlist + email alerts</li>
+            </ul>
+            <button class="btn btn-primary tc" style="width: 100%; justify-content: center;" onclick="demoCTA(this)"><span class="btn-text">Subscribe</span></button>
+          </div>
+
+          <div class="pricing-card tc">
+            <div class="pricing-tier tc">Enterprise</div>
+            <div class="pricing-name tc">Institutional</div>
+            <div class="pricing-desc tc">Dedicated intelligence desk. Opus-tier AI, concierge introductions, priority access.</div>
+            <div class="pricing-price">
+              <span class="pricing-amount tc">Custom</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Everything in Analyst</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Opus-tier AI (deeper analysis)</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Concierge introductions</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Multi-seat team access</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> API access + CRM integration</li>
+              <li class="pricing-feature tc"><span class="pricing-check tc"><i class="hgi-stroke hgi-tick-02"></i></span> Dedicated account manager</li>
+            </ul>
+            <button class="btn btn-outline tc" style="width: 100%; justify-content: center;">Contact Sales</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         MOOD & TEXTURE
+         ============================================ -->
+    <section class="section mood-section">
+      <div class="container">
+        <div class="section-label">04 / Mood & Texture</div>
+        <div class="section-title">Atmosphere</div>
+
+        <div class="mood-grid">
+          <div class="mood-visual tc"></div>
+          <div class="mood-specs">
+            <div class="mood-spec-item tc">
+              <div class="mood-spec-label tc">Mood</div>
+              <div class="mood-spec-value" id="mood-sentence">Cold, precise, clinical, refined, modern, minimal</div>
+            </div>
+            <div class="mood-spec-item tc">
+              <div class="mood-spec-label tc">Texture</div>
+              <div class="mood-spec-value" id="mood-texture">None. Pure, clean surfaces. Elevation through subtle shadows and background shifts.</div>
+            </div>
+            <div class="mood-spec-item tc">
+              <div class="mood-spec-label tc">Photography Direction</div>
+              <div class="mood-spec-value" id="mood-photo">No photography in-product. Data visualizations and abstract geometric patterns. Marketing pages: architectural photography, desaturated, high contrast.</div>
+            </div>
+            <div class="mood-spec-item tc">
+              <div class="mood-spec-label tc">Motion Level</div>
+              <div class="motion-badge tc" id="motion-badge">
+                <span class="motion-dot tc"></span>
+                <span id="motion-text">Level 2 — Subtle</span>
+              </div>
+            </div>
+            <div class="mood-spec-item tc" style="border-bottom: none;">
+              <div class="mood-spec-label tc">Shadow System</div>
+              <div class="mood-spec-value" id="mood-shadow">Minimal layered shadows. shadow-sm for cards, shadow-md on hover. Elevation hierarchy through 3 background tones.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         ANTI-PREFERENCES
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">05 / Anti-Preferences</div>
+        <div class="section-title">Hard No</div>
+
+        <div class="anti-grid">
+          <div class="anti-item tc">
+            <div class="anti-category tc">Color</div>
+            <div class="anti-label tc">Corporate Blue</div>
+            <div class="anti-reason tc">Reads "bank website." CMM is intelligence, not banking.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Color</div>
+            <div class="anti-label tc">Neon / Fluorescent</div>
+            <div class="anti-reason tc">Crypto exchange energy. This is institutional finance.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Layout</div>
+            <div class="anti-label tc">Hero Carousels</div>
+            <div class="anti-reason tc">It's 2026. Nobody clicks slide 3.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Imagery</div>
+            <div class="anti-label tc">Stock Handshakes</div>
+            <div class="anti-reason tc">If you can buy it on iStock, it doesn't build trust.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Components</div>
+            <div class="anti-label tc">Glassmorphism</div>
+            <div class="anti-reason tc">Trend that peaked in 2022. Ages the product instantly.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Content</div>
+            <div class="anti-label tc">"Leverage" / "Synergy"</div>
+            <div class="anti-reason tc">Corporate AI slop. Real intelligence doesn't need buzzwords.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Vibe</div>
+            <div class="anti-label tc">Bloomberg Terminal Cosplay</div>
+            <div class="anti-reason tc">Dense ≠ intimidating. Modern data tools prove this.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Vibe</div>
+            <div class="anti-label tc">Consumer Fintech</div>
+            <div class="anti-reason tc">Robinhood/Revolut aesthetic. Too casual for institutional desks.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Components</div>
+            <div class="anti-label tc">"AI-Powered" Badge Spam</div>
+            <div class="anti-reason tc">The AI should be seamless, not marketed within the UI.</div>
+          </div>
+          <div class="anti-item tc">
+            <div class="anti-category tc">Content</div>
+            <div class="anti-label tc">Skeleton Loader Everywhere</div>
+            <div class="anti-reason tc">AI responses stream. Real data loads fast. Skeletons mask laziness.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         INSPIRATION
+         ============================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">06 / Inspiration</div>
+        <div class="section-title">References</div>
+        <div class="inspo-grid" id="inspo-grid">
+          <!-- Injected by JS per direction -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer>
+    <div class="container footer">
+      <div class="footer-left">Design direction by 910studio · March 2026</div>
+      <div class="footer-actions">
+        <div class="motion-badge tc" id="footer-motion">
+          <span class="motion-dot tc"></span>
+          <span id="footer-motion-text">Level 2</span>
+        </div>
+        <button class="btn btn-outline tc" onclick="copyTokens()">
+          <span class="btn-text">Copy Tailwind Tokens</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
+  <script>
+    // Direction data
+    const directions = {
+      atlas: {
+        name: 'ATLAS',
+        tagline: 'Corporate-grade intelligence. Clean lines, vector clarity, built for the pitch deck and the trading floor.',
+        fontDisplay: 'Plus Jakarta Sans 800',
+        fontBody: 'DM Sans 400',
+        fontMono: 'JetBrains Mono',
+        mood: 'Light, clean, professional, polished, modern, balanced',
+        texture: 'None. Pure white surfaces, clean shadows. Speed is the aesthetic.',
+        photo: 'No photography. Custom vector illustrations and geometric graphics for concepts. Clean line art, flat or isometric style. Stripe-tier illustration language.',
+        motion: 'Level 2 — Subtle',
+        motionShort: 'Level 2',
+        shadow: 'Clean, professional shadow hierarchy. Subtle elevation on cards, stronger on hover. Neutral-tinted, never colored.',
+        colors: [
+          { name: 'Background', hex: '#FFFFFF', css: '#FFFFFF' },
+          { name: 'Foreground', hex: '#0F172A', css: '#0F172A' },
+          { name: 'Surface', hex: '#F8FAFC', css: '#F8FAFC' },
+          { name: 'Surface Elevated', hex: '#F1F5F9', css: '#F1F5F9' },
+          { name: 'Border', hex: '#E2E8F0', css: '#E2E8F0' },
+          { name: 'Accent', hex: '#1E293B', css: '#1E293B' },
+          { name: 'Accent Hover', hex: '#0F172A', css: '#0F172A' },
+          { name: 'Accent Subtle', hex: '#F1F5F9', css: '#F1F5F9' },
+          { name: 'Muted', hex: '#64748B', css: '#64748B' },
+          { name: 'Muted Light', hex: '#94A3B8', css: '#94A3B8' },
+          { name: 'Error', hex: '#DC2626', css: '#DC2626' },
+          { name: 'Success', hex: '#16A34A', css: '#16A34A' },
+        ],
+        inspiration: [
+          { source: 'Stripe', steal: '<strong>Steal:</strong> Professional layout with custom vector illustrations that explain complex concepts. No stock photos needed when your graphics are this intentional.' },
+          { source: 'Mercury', steal: '<strong>Steal:</strong> Banking UI that feels modern, not legacy. Clean white, professional without being stuffy. How they handle financial data with clarity.' },
+          { source: 'Pitch', steal: '<strong>Steal:</strong> Vector art that humanizes corporate software. How illustration becomes the visual language instead of photography. Fast, clean, presentation-ready.' },
+        ],
+        tokens: `// Tailwind Config — Atlas
+const colors = {
+  background: '#FFFFFF',
+  foreground: '#0F172A',
+  surface: { DEFAULT: '#F8FAFC', elevated: '#F1F5F9' },
+  accent: { DEFAULT: '#1E293B', hover: '#0F172A', subtle: '#F1F5F9' },
+  muted: { DEFAULT: '#64748B', light: '#94A3B8' },
+  border: '#E2E8F0',
+  error: '#DC2626',
+  success: '#16A34A',
+  warning: '#D97706',
+};
+
+const fontFamily = {
+  display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+  body: ['DM Sans', 'system-ui', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '4px', DEFAULT: '6px', lg: '10px' };`
+      },
+      'ledger': {
+        name: 'LEDGER',
+        tagline: 'Mono-first. Monochrome. Zero accent color. The investor pitch book as a design system.',
+        fontDisplay: 'Space Mono 700',
+        fontBody: 'Space Grotesk 400',
+        fontMono: 'Space Mono',
+        mood: 'Light, cold, precise, corporate, static, clean',
+        texture: 'None. Pure surfaces. No grain, no dots. Speed is the texture.',
+        photo: 'No photography. Heavy vector art — geometric diagrams, flowcharts, isometric illustrations. Structured, not decorative. Black and white only.',
+        motion: 'Level 1 — Static',
+        motionShort: 'Level 1',
+        shadow: 'None. Zero elevation shadows. Hierarchy through borders, typography weight, and spacing only. Notion energy.',
+        colors: [
+          { name: 'Background', hex: '#FFFFFF', css: '#FFFFFF' },
+          { name: 'Foreground', hex: '#171717', css: '#171717' },
+          { name: 'Surface', hex: '#FAFAFA', css: '#FAFAFA' },
+          { name: 'Surface Elevated', hex: '#F5F5F5', css: '#F5F5F5' },
+          { name: 'Border', hex: '#E5E5E5', css: '#E5E5E5' },
+          { name: 'Accent', hex: '#171717', css: '#171717' },
+          { name: 'Accent Hover', hex: '#000000', css: '#000000' },
+          { name: 'Accent Subtle', hex: '#F5F5F5', css: '#F5F5F5' },
+          { name: 'Muted', hex: '#737373', css: '#737373' },
+          { name: 'Muted Light', hex: '#A3A3A3', css: '#A3A3A3' },
+          { name: 'Error', hex: '#DC2626', css: '#DC2626' },
+          { name: 'Success', hex: '#16A34A', css: '#16A34A' },
+        ],
+        inspiration: [
+          { source: 'Notion', steal: '<strong>Steal:</strong> Monochrome UI with zero accent color. How they create clear hierarchy using only black, white, and gray. Content blocks as design language.' },
+          { source: 'Sequoia Capital', steal: '<strong>Steal:</strong> Investor-grade presentation. How they present complex data with zero decoration. Clean structure. The data IS the design.' },
+          { source: 'Linear', steal: '<strong>Steal:</strong> Monospace as a precision tool — in labels, keyboard shortcuts, meta info. How mono accents make everything feel engineered.' },
+        ],
+        tokens: `// Tailwind Config — Ledger
+const colors = {
+  background: '#FFFFFF',
+  foreground: '#171717',
+  surface: { DEFAULT: '#FAFAFA', elevated: '#F5F5F5' },
+  accent: { DEFAULT: '#171717', hover: '#000000', subtle: '#F5F5F5' },
+  muted: { DEFAULT: '#737373', light: '#A3A3A3' },
+  border: '#E5E5E5',
+  error: '#DC2626',
+  success: '#16A34A',
+  warning: '#D97706',
+};
+
+const fontFamily = {
+  display: ['Space Mono', 'monospace'],
+  body: ['Space Grotesk', 'system-ui', 'sans-serif'],
+  mono: ['Space Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '2px', DEFAULT: '4px', lg: '6px' };`
+      },
+      'vault': {
+        name: 'VAULT',
+        tagline: 'The private bank. Warm dark, gold authority, serif headlines. Where serious capital gets presented.',
+        fontDisplay: 'Source Serif 4 800',
+        fontBody: 'Inter 400',
+        fontMono: 'JetBrains Mono',
+        mood: 'Dark, warm, refined, authoritative, timeless, premium',
+        texture: 'Paper grain at 4% opacity. Warm, tactile. Feels like a leather-bound report.',
+        photo: 'Mongolian landscapes, mining infrastructure, Ulaanbaatar skyline. Warm color grade, sepia tint, crushed blacks, cinematic. Small editorial-style images.',
+        motion: 'Level 3 — Polished',
+        motionShort: 'Level 3',
+        shadow: 'Deep warm shadows. Heavy on hover. Cards float with authority. The only direction where shadow is a primary design tool.',
+        colors: [
+          { name: 'Background', hex: '#1C1917', css: '#1C1917' },
+          { name: 'Foreground', hex: '#FAFAF9', css: '#FAFAF9' },
+          { name: 'Surface', hex: '#292524', css: '#292524' },
+          { name: 'Surface Elevated', hex: '#44403C', css: '#44403C' },
+          { name: 'Border', hex: 'rgba(250,250,249,0.1)', css: 'rgba(250,250,249,0.1)' },
+          { name: 'Accent', hex: '#EAB308', css: '#EAB308' },
+          { name: 'Accent Hover', hex: '#CA8A04', css: '#CA8A04' },
+          { name: 'Accent Subtle', hex: 'rgba(234,179,8,0.1)', css: 'rgba(234,179,8,0.1)' },
+          { name: 'Muted', hex: '#A8A29E', css: '#A8A29E' },
+          { name: 'Muted Light', hex: '#78716C', css: '#78716C' },
+          { name: 'Error', hex: '#EF4444', css: '#EF4444' },
+          { name: 'Success', hex: '#22C55E', css: '#22C55E' },
+        ],
+        inspiration: [
+          { source: 'Private banking apps', steal: '<strong>Steal:</strong> Warm dark + gold. How luxury finance uses darkness as a signal of exclusivity, not intimidation. The vault door, not the Bloomberg terminal.' },
+          { source: 'Monocle Magazine', steal: '<strong>Steal:</strong> Serif headlines + clean sans body. How editorial authority works on dark backgrounds. The marriage of warmth and precision.' },
+          { source: 'Apple Pro products', steal: '<strong>Steal:</strong> Warm shadows on dark surfaces. How depth creates hierarchy without color. The card that floats tells you it matters.' },
+        ],
+        tokens: `// Tailwind Config — Vault
+const colors = {
+  background: '#1C1917',
+  foreground: '#FAFAF9',
+  surface: { DEFAULT: '#292524', elevated: '#44403C' },
+  accent: { DEFAULT: '#EAB308', hover: '#CA8A04', subtle: 'rgba(234,179,8,0.1)' },
+  muted: { DEFAULT: '#A8A29E', light: '#78716C' },
+  border: 'rgba(250,250,249,0.1)',
+  error: '#EF4444',
+  success: '#22C55E',
+  warning: '#F59E0B',
+};
+
+const fontFamily = {
+  display: ['Source Serif 4', 'Georgia', 'serif'],
+  body: ['Inter', 'system-ui', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '6px', DEFAULT: '10px', lg: '14px' };`
+      },
+      'blueprint': {
+        name: 'BLUEPRINT',
+        tagline: 'The technical draft. Dashed borders, grid background, mono labels. The wireframe that ships.',
+        fontDisplay: 'IBM Plex Sans 700',
+        fontBody: 'IBM Plex Sans 400',
+        fontMono: 'IBM Plex Mono',
+        mood: 'Light, cold, technical, systematic, static, structured',
+        texture: 'Cyan grid pattern (20px, 5% opacity). Blueprint paper energy. Every pixel on the grid.',
+        photo: 'No photography. Technical vector diagrams, flowcharts, system architecture illustrations. Cyan line art on white. Everything looks like a schematic.',
+        motion: 'Level 1 — Static',
+        motionShort: 'Level 1',
+        shadow: 'None. Zero shadows. Dashed borders define every boundary. Hover states transition dashed → solid + cyan.',
+        colors: [
+          { name: 'Background', hex: '#FFFFFF', css: '#FFFFFF' },
+          { name: 'Foreground', hex: '#0F172A', css: '#0F172A' },
+          { name: 'Surface', hex: '#F8FAFC', css: '#F8FAFC' },
+          { name: 'Surface Elevated', hex: '#F1F5F9', css: '#F1F5F9' },
+          { name: 'Border', hex: '#CBD5E1', css: '#CBD5E1' },
+          { name: 'Accent', hex: '#0891B2', css: '#0891B2' },
+          { name: 'Accent Hover', hex: '#0E7490', css: '#0E7490' },
+          { name: 'Accent Subtle', hex: '#ECFEFF', css: '#ECFEFF' },
+          { name: 'Muted', hex: '#64748B', css: '#64748B' },
+          { name: 'Muted Light', hex: '#94A3B8', css: '#94A3B8' },
+          { name: 'Error', hex: '#DC2626', css: '#DC2626' },
+          { name: 'Success', hex: '#059669', css: '#059669' },
+        ],
+        inspiration: [
+          { source: 'Figma Config', steal: '<strong>Steal:</strong> How a technical tool uses systematic design as its brand. The grid IS the brand. Monospace accents, dashed guides, cyan highlights.' },
+          { source: 'GitHub', steal: '<strong>Steal:</strong> Data density with mono labels, clean tables, structured layouts. How technical precision builds trust with developers and investors alike.' },
+          { source: 'Framer', steal: '<strong>Steal:</strong> The wireframe-to-production aesthetic. Dashed lines that feel intentional, not unfinished. Technical craft as visual language.' },
+        ],
+        tokens: `// Tailwind Config — Blueprint
+const colors = {
+  background: '#FFFFFF',
+  foreground: '#0F172A',
+  surface: { DEFAULT: '#F8FAFC', elevated: '#F1F5F9' },
+  accent: { DEFAULT: '#0891B2', hover: '#0E7490', subtle: '#ECFEFF' },
+  muted: { DEFAULT: '#64748B', light: '#94A3B8' },
+  border: '#CBD5E1',
+  error: '#DC2626',
+  success: '#059669',
+  warning: '#D97706',
+};
+
+const fontFamily = {
+  display: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
+  body: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
+  mono: ['IBM Plex Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '1px', DEFAULT: '2px', lg: '4px' };`
+      },
+      'keynote': {
+        name: 'KEYNOTE',
+        tagline: 'The corp guy who plays electric guitar. Apple dark, WWDC main stage energy. White buttons, one electric blue accent, dramatic whitespace.',
+        fontDisplay: 'Inter 700',
+        fontBody: 'Inter 400',
+        fontMono: 'JetBrains Mono',
+        mood: 'Dark, refined, confident, premium, polished, generous',
+        texture: 'None. Pure black. The absence of texture IS the texture. Stage lighting, not material. Content sits in the spotlight.',
+        photo: 'Minimal product photography. Clean, studio-lit, on black. Think Apple product pages — the product floating in darkness, every detail visible. If people: professional, natural light, candid (not posed stock).',
+        motion: 'Level 3 — Polished',
+        motionShort: 'Level 3',
+        shadow: 'Deep soft shadows. Apple-style elevation — diffused, subtle, creating depth without being obvious. Cards float gently. The shadows are felt, not seen.',
+        colors: [
+          { name: 'Background', hex: '#000000', css: '#000000' },
+          { name: 'Foreground', hex: '#F5F5F7', css: '#F5F5F7' },
+          { name: 'Surface', hex: '#1C1C1E', css: '#1C1C1E' },
+          { name: 'Surface Elevated', hex: '#2C2C2E', css: '#2C2C2E' },
+          { name: 'Border', hex: 'rgba(245,245,247,0.06)', css: 'rgba(245,245,247,0.06)' },
+          { name: 'Accent (White)', hex: '#F5F5F7', css: '#F5F5F7' },
+          { name: 'Electric Blue', hex: '#007AFF', css: '#007AFF' },
+          { name: 'Muted', hex: '#86868B', css: '#86868B' },
+          { name: 'Muted Dark', hex: '#636366', css: '#636366' },
+          { name: 'Error', hex: '#FF453A', css: '#FF453A' },
+          { name: 'Success', hex: '#30D158', css: '#30D158' },
+          { name: 'Warning', hex: '#FFD60A', css: '#FFD60A' },
+        ],
+        inspiration: [
+          { source: 'Apple.com (product pages)', steal: '<strong>Steal:</strong> Pure black canvas. White typography hierarchy. One product in the spotlight. The confidence to leave 70% of the page empty. Every element earns its space.' },
+          { source: 'WWDC Keynote Slides', steal: '<strong>Steal:</strong> Craig Federighi energy. Dark slides, white text, dramatic reveals. The electric blue that lights up when a feature drops. Corporate polish with genuine charisma underneath.' },
+          { source: 'Linear', steal: '<strong>Steal:</strong> How a dark tool can feel premium without feeling heavy. Clean elevation, minimal borders, white buttons on dark. The engineering-meets-design confidence.' },
+        ],
+        tokens: `// Tailwind Config — Keynote
+const colors = {
+  background: '#000000',
+  foreground: '#F5F5F7',
+  surface: { DEFAULT: '#1C1C1E', elevated: '#2C2C2E' },
+  accent: { DEFAULT: '#F5F5F7', hover: '#FFFFFF', subtle: 'rgba(245,245,247,0.06)' },
+  electric: '#007AFF',
+  muted: { DEFAULT: '#86868B', light: '#636366' },
+  border: 'rgba(245,245,247,0.06)',
+  error: '#FF453A',
+  success: '#30D158',
+  warning: '#FFD60A',
+};
+
+const fontFamily = {
+  display: ['Inter', 'system-ui', 'sans-serif'],
+  body: ['Inter', 'system-ui', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '8px', DEFAULT: '12px', lg: '16px' };`
+      },
+      'cmm-light': {
+        name: 'CMM LIGHT',
+        tagline: 'The official brand. Gilroy type, purple authority, orange signals on ghost white. Straight from the brand book.',
+        fontDisplay: 'Gilroy 700 (→ Outfit)',
+        fontBody: 'Gilroy 400 (→ Outfit)',
+        fontMono: 'JetBrains Mono',
+        mood: 'Light, warm-neutral, professional, branded, modern, clean',
+        texture: 'None. Ghost white (#F8F7FF) has a natural lavender warmth that gives surfaces personality without any added texture.',
+        photo: 'No photography in-product. CMM brand illustrations using purple-to-light-blue gradients. Marketing: Mongolian business/finance imagery with slight desaturation.',
+        motion: 'Level 2 — Subtle',
+        motionShort: 'Level 2',
+        shadow: 'Purple-tinted shadows. Subtle elevation on cards, stronger on hover. Shadow color derived from brand purple for cohesion.',
+        colors: [
+          { name: 'Background', hex: '#F8F7FF', css: '#F8F7FF' },
+          { name: 'Foreground', hex: '#090C02', css: '#090C02' },
+          { name: 'Surface', hex: '#EFEDF8', css: '#EFEDF8' },
+          { name: 'Surface Elevated', hex: '#E6E4EF', css: '#E6E4EF' },
+          { name: 'Border', hex: '#D4D2DE', css: '#D4D2DE' },
+          { name: 'Accent (Purple)', hex: '#3E149C', css: '#3E149C' },
+          { name: 'Accent Hover', hex: '#2E0F75', css: '#2E0F75' },
+          { name: 'Orange Signal', hex: '#FCA311', css: '#FCA311' },
+          { name: 'Light Blue', hex: '#C2DFE3', css: '#C2DFE3' },
+          { name: 'Muted', hex: '#6B6A72', css: '#6B6A72' },
+          { name: 'Error', hex: '#DC2626', css: '#DC2626' },
+          { name: 'Success', hex: '#16A34A', css: '#16A34A' },
+        ],
+        inspiration: [
+          { source: 'CMM Brand Book', steal: '<strong>Steal:</strong> The brand itself. Purple (#3E149C) as authority, Orange (#FCA311) as signal/action, Ghost White (#F8F7FF) as premium canvas. Gilroy for geometric precision.' },
+          { source: 'Stripe Docs', steal: '<strong>Steal:</strong> How a single brand accent + clean white creates instant recognition. Purple as the through-line on every interactive element.' },
+          { source: 'Wise (TransferWise)', steal: '<strong>Steal:</strong> Financial product that uses bold brand color as primary accent without looking like a children\'s app. Professional restraint with branded personality.' },
+        ],
+        tokens: `// Tailwind Config — CMM Light (Brand Identity)
+const colors = {
+  background: '#F8F7FF',
+  foreground: '#090C02',
+  surface: { DEFAULT: '#EFEDF8', elevated: '#E6E4EF' },
+  accent: { DEFAULT: '#3E149C', hover: '#2E0F75', subtle: 'rgba(62,20,156,0.07)' },
+  orange: '#FCA311',
+  lightBlue: '#C2DFE3',
+  muted: { DEFAULT: '#6B6A72', light: '#9997A3' },
+  border: '#D4D2DE',
+  error: '#DC2626',
+  success: '#16A34A',
+  warning: '#FCA311',
+};
+
+const fontFamily = {
+  display: ['Gilroy', 'Outfit', 'system-ui', 'sans-serif'],
+  body: ['Gilroy', 'Outfit', 'system-ui', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '4px', DEFAULT: '8px', lg: '12px' };`
+      },
+      'cmm-light-atlas': {
+        name: 'CMM LIGHT — ATLAS TYPE',
+        tagline: 'CMM brand identity meets Atlas typography. Plus Jakarta Sans precision on neutral gray, purple authority, orange signals. The corporate pitch deck version.',
+        fontDisplay: 'Plus Jakarta Sans 800',
+        fontBody: 'DM Sans 400',
+        fontMono: 'JetBrains Mono',
+        mood: 'Light, neutral, professional, branded, corporate, polished',
+        texture: 'None. Gray-50 (#F9FAFB) neutral canvas with clean shadows. Zero color tint on surfaces. Speed and brand in one.',
+        photo: 'No photography. Custom vector illustrations using purple-to-gray gradients. Stripe-tier illustration language with CMM brand palette.',
+        motion: 'Level 2 — Subtle',
+        motionShort: 'Level 2',
+        shadow: 'Clean neutral shadow hierarchy. Subtle elevation on cards, professional lift on hover. Atlas precision with zero color bleed in shadows.',
+        colors: [
+          { name: 'Background', hex: '#F9FAFB', css: '#F9FAFB' },
+          { name: 'Foreground', hex: '#111827', css: '#111827' },
+          { name: 'Surface', hex: '#F3F4F6', css: '#F3F4F6' },
+          { name: 'Surface Elevated', hex: '#E5E7EB', css: '#E5E7EB' },
+          { name: 'Border', hex: '#D1D5DB', css: '#D1D5DB' },
+          { name: 'Accent (Purple)', hex: '#3E149C', css: '#3E149C' },
+          { name: 'Accent Hover', hex: '#2E0F75', css: '#2E0F75' },
+          { name: 'Orange Signal', hex: '#FCA311', css: '#FCA311' },
+          { name: 'Muted', hex: '#6B7280', css: '#6B7280' },
+          { name: 'Muted Light', hex: '#9CA3AF', css: '#9CA3AF' },
+          { name: 'Error', hex: '#DC2626', css: '#DC2626' },
+          { name: 'Success', hex: '#16A34A', css: '#16A34A' },
+        ],
+        inspiration: [
+          { source: 'CMM Brand Book + Stripe', steal: '<strong>Steal:</strong> CMM\'s purple/orange palette with Stripe-level typographic precision. Plus Jakarta Sans brings geometric sharpness that Gilroy can\'t match on web. The pitch deck font.' },
+          { source: 'Mercury Banking', steal: '<strong>Steal:</strong> How professional fintech uses clean sans-serif hierarchy (not rounded, not playful) to signal institutional credibility. DM Sans body text for financial data readability.' },
+          { source: 'Vercel Dashboard', steal: '<strong>Steal:</strong> Tight radius (6px), clean shadows, sharp type hierarchy. How modern SaaS tools feel both friendly and professional. Atlas component treatment on neutral surfaces.' },
+        ],
+        tokens: `// Tailwind Config — CMM Light Atlas Type
+const colors = {
+  background: '#F9FAFB',
+  foreground: '#111827',
+  surface: { DEFAULT: '#F3F4F6', elevated: '#E5E7EB' },
+  accent: { DEFAULT: '#3E149C', hover: '#2E0F75', subtle: 'rgba(62,20,156,0.06)' },
+  orange: '#FCA311',
+  muted: { DEFAULT: '#6B7280', light: '#9CA3AF' },
+  border: '#D1D5DB',
+  error: '#DC2626',
+  success: '#16A34A',
+  warning: '#FCA311',
+};
+
+const fontFamily = {
+  display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+  body: ['DM Sans', 'system-ui', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'],
+};
+
+const borderRadius = { sm: '4px', DEFAULT: '6px', lg: '10px' };`
+      },
+      'cmm-dark': {
+        name: 'CMM DARK',
+        tagline: 'The brand book cover brought to life. Deep indigo canvas from CMM\'s own purple, orange signals burning bright. Their dark mode.',
+        fontDisplay: 'Gilroy 700 (→ Outfit)',
+        fontBody: 'Gilroy 400 (→ Outfit)',
+        fontMono: 'Fira Code',
+        mood: 'Dark, deep-purple, precise, branded, premium, immersive',
+        texture: 'Subtle noise at 3% opacity. Deep indigo base (#0D0527) derived from brand purple #3E149C — not generic black, distinctly CMM.',
+        photo: 'No photography in-product. Brand gradients (purple → orange) as hero backgrounds, matching the brand book cover energy. Data viz: orange + light blue on indigo. Marketing: Mongolian finance imagery with purple color grade.',
+        motion: 'Level 3 — Polished',
+        motionShort: 'Level 3',
+        shadow: 'Deep purple-black shadows for elevation. Orange glow on hover for interactive elements. Cards lift with warm amber edge-light against the indigo canvas.',
+        colors: [
+          { name: 'Background', hex: '#0D0527', css: '#0D0527' },
+          { name: 'Foreground', hex: '#F8F7FF', css: '#F8F7FF' },
+          { name: 'Surface', hex: '#170D3A', css: '#170D3A' },
+          { name: 'Surface Elevated', hex: '#221548', css: '#221548' },
+          { name: 'Border', hex: 'rgba(248,247,255,0.1)', css: 'rgba(248,247,255,0.1)' },
+          { name: 'Accent (Orange)', hex: '#FCA311', css: '#FCA311' },
+          { name: 'Accent Hover', hex: '#FFB840', css: '#FFB840' },
+          { name: 'Brand Purple', hex: '#3E149C', css: '#3E149C' },
+          { name: 'Light Blue', hex: '#C2DFE3', css: '#C2DFE3' },
+          { name: 'Muted', hex: '#9088A8', css: '#9088A8' },
+          { name: 'Error', hex: '#EF4444', css: '#EF4444' },
+          { name: 'Success', hex: '#22C55E', css: '#22C55E' },
+        ],
+        inspiration: [
+          { source: 'CMM Brand Book Cover', steal: '<strong>Steal:</strong> That deep purple/navy gradient IS the dark mode. Not inverted white — purpose-built darkness using the brand\'s own purple (#3E149C) as the foundation. Orange (#FCA311) as the signal layer.' },
+          { source: 'Framer Dark', steal: '<strong>Steal:</strong> Colored dark backgrounds (not pure black) that feel branded. How a purple-tinted dark canvas creates depth and distinction vs generic dark mode.' },
+          { source: 'Figma Dark', steal: '<strong>Steal:</strong> How warm accent (orange) on a cool dark base creates visual hierarchy without competing. Every bright element earns its brightness.' },
+        ],
+        tokens: `// Tailwind Config — CMM Dark (Brand Identity)
+const colors = {
+  background: '#0D0527',
+  foreground: '#F8F7FF',
+  surface: { DEFAULT: '#170D3A', elevated: '#221548' },
+  accent: { DEFAULT: '#FCA311', hover: '#FFB840', subtle: 'rgba(252,163,17,0.1)' },
+  purple: '#3E149C',
+  lightBlue: '#C2DFE3',
+  muted: { DEFAULT: '#9088A8', light: '#6A6182' },
+  border: 'rgba(248,247,255,0.1)',
+  error: '#EF4444',
+  success: '#22C55E',
+  warning: '#FCA311',
+};
+
+const fontFamily = {
+  display: ['Gilroy', 'Outfit', 'system-ui', 'sans-serif'],
+  body: ['Gilroy', 'Outfit', 'system-ui', 'sans-serif'],
+  mono: ['Fira Code', 'monospace'],
+};
+
+const borderRadius = { sm: '4px', DEFAULT: '8px', lg: '12px' };`
+      }
+    };
+
+    // Current direction
+    let currentDirection = 'atlas';
+
+    // Switch direction
+    function switchDirection(dir) {
+      currentDirection = dir;
+      document.documentElement.setAttribute('data-direction', dir);
+
+      // Update tabs
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${dir}"]`).classList.add('active');
+
+      // Update dynamic content
+      const d = directions[dir];
+      document.getElementById('direction-name').textContent = d.name;
+      document.getElementById('direction-tagline').textContent = d.tagline;
+      document.getElementById('font-display-name').textContent = d.fontDisplay;
+      document.getElementById('font-body-name').textContent = d.fontBody;
+      document.getElementById('font-mono-name').textContent = d.fontMono;
+      document.getElementById('mood-sentence').textContent = d.mood;
+      document.getElementById('mood-texture').textContent = d.texture;
+      document.getElementById('mood-photo').textContent = d.photo;
+      document.getElementById('mood-shadow').textContent = d.shadow;
+      document.getElementById('motion-text').textContent = d.motion;
+      document.getElementById('footer-motion-text').textContent = d.motionShort;
+
+      // Update swatches
+      renderSwatches(d.colors);
+
+      // Update inspiration
+      renderInspo(d.inspiration);
+
+      // Update URL hash
+      history.replaceState(null, '', '#' + dir);
+    }
+
+    // Render color swatches
+    function renderSwatches(colors) {
+      const grid = document.getElementById('swatch-grid');
+      grid.innerHTML = colors.map(c => `
+        <div class="swatch tc" onclick="copyHex('${c.hex}', event)">
+          <div class="swatch-color" style="background: ${c.css}; ${c.name === 'Background' ? 'border-bottom: 1px solid var(--border-color);' : ''}"></div>
+          <div class="swatch-info">
+            <span class="swatch-name tc">${c.name}</span>
+            <span class="swatch-hex tc">${c.hex}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render inspiration
+    function renderInspo(items) {
+      const grid = document.getElementById('inspo-grid');
+      grid.innerHTML = items.map(i => `
+        <div class="inspo-item tc">
+          <div class="inspo-source tc">${i.source}</div>
+          <div class="inspo-steal tc">${i.steal}</div>
+        </div>
+      `).join('');
+    }
+
+    // Copy hex to clipboard
+    function copyHex(hex, event) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showTooltip(event, 'Copied ' + hex);
+      });
+    }
+
+    // Copy Tailwind tokens
+    function copyTokens() {
+      const d = directions[currentDirection];
+      navigator.clipboard.writeText(d.tokens).then(() => {
+        const btn = event.target.closest('.btn');
+        const text = btn.querySelector('.btn-text');
+        const orig = text.textContent;
+        text.textContent = 'Copied!';
+        btn.style.borderColor = 'var(--success)';
+        btn.style.color = 'var(--success)';
+        setTimeout(() => {
+          text.textContent = orig;
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 1500);
+      });
+    }
+
+    // Show tooltip
+    function showTooltip(event, text) {
+      const tt = document.getElementById('tooltip');
+      tt.textContent = text;
+      tt.style.left = event.clientX + 'px';
+      tt.style.top = (event.clientY - 36) + 'px';
+      tt.classList.add('visible');
+      setTimeout(() => tt.classList.remove('visible'), 1000);
+    }
+
+    // Demo CTA: loading → success (preserves original text)
+    function demoCTA(btn) {
+      if (btn.classList.contains('btn-loading') || btn.classList.contains('btn-success')) return;
+      const textEl = btn.querySelector('.btn-text');
+      const originalText = textEl.textContent;
+      btn.classList.add('btn-loading');
+      setTimeout(() => {
+        btn.classList.remove('btn-loading');
+        btn.classList.add('btn-success');
+        textEl.textContent = 'Done';
+        setTimeout(() => {
+          btn.classList.remove('btn-success');
+          textEl.textContent = originalText;
+        }, 1500);
+      }, 1200);
+    }
+
+    // Button ripple effect
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-primary, .btn-outline');
+      if (!btn || btn.classList.contains('btn-disabled')) return;
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const ripple = document.createElement('span');
+      ripple.className = 'btn-ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 500);
+    });
+
+    // Mini nav
+    function setNav(el) {
+      el.parentElement.querySelectorAll('.mini-nav-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // Dismiss alert (smoother)
+    function dismissAlert(btn) {
+      const alertEl = btn.closest('.alert');
+      alertEl.classList.add('dismissing');
+      setTimeout(() => { alertEl.style.display = 'none'; }, 300);
+    }
+
+    // ==========================================
+    // SCROLL PROGRESS BAR
+    // ==========================================
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = (window.scrollY / total) * 100;
+      progressBar.style.width = pct + '%';
+    }, { passive: true });
+
+    // ==========================================
+    // STAT COUNTER ANIMATION
+    // ==========================================
+    function animateCounter(el, target, duration = 1400) {
+      let start = null;
+      const isDecimal = String(target).includes('.');
+      const step = (ts) => {
+        if (!start) start = ts;
+        const progress = Math.min((ts - start) / duration, 1);
+        // ease-out quad
+        const eased = 1 - (1 - progress) * (1 - progress);
+        const current = Math.round(eased * target);
+        el.textContent = current.toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    // Observe stat values
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        const raw = el.textContent.replace(/[^0-9.]/g, '');
+        const num = parseFloat(raw);
+        if (!isNaN(num) && num > 0) {
+          const prefix = el.textContent.match(/^[^0-9]*/)?.[0] || '';
+          const suffix = el.textContent.match(/[^0-9]*$/)?.[0] || '';
+          animateCounter({
+            set textContent(v) { el.textContent = prefix + v + suffix; }
+          }, num);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-value').forEach(el => statObserver.observe(el));
+
+    // ==========================================
+    // SPARKLINE BAR ANIMATION
+    // ==========================================
+    const sparkObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const bars = entry.target.querySelectorAll('.spark-bar');
+        bars.forEach((bar, i) => {
+          setTimeout(() => bar.classList.add('animated'), i * 60);
+        });
+        sparkObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.stat-sparkline').forEach(el => sparkObserver.observe(el));
+
+    // ==========================================
+    // TABLE SORT VISUAL FEEDBACK
+    // ==========================================
+    document.querySelectorAll('.data-table th').forEach(th => {
+      th.addEventListener('click', () => {
+        document.querySelectorAll('.data-table th').forEach(t => t.classList.remove('sorted'));
+        th.classList.add('sorted');
+      });
+    });
+
+    // ==========================================
+    // SEARCH FILTER TAG TOGGLE
+    // ==========================================
+    document.querySelectorAll('.search-filter-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        if (tag.textContent === 'All') {
+          document.querySelectorAll('.search-filter-tag').forEach(t => t.classList.remove('active'));
+          tag.classList.add('active');
+        } else {
+          document.querySelector('.search-filter-tag.active[onclick]')?.classList.remove('active');
+          tag.classList.toggle('active');
+          const anyActive = document.querySelectorAll('.search-filter-tag.active:not([onclick])');
+          // noop, handled by onclick attr
+        }
+      });
+    });
+
+    // ==========================================
+    // AI SESSION CLICK
+    // ==========================================
+    document.querySelectorAll('.ai-session').forEach(session => {
+      session.addEventListener('click', () => {
+        document.querySelectorAll('.ai-session').forEach(s => s.classList.remove('active'));
+        session.classList.add('active');
+      });
+    });
+
+    // ==========================================
+    // INIT
+    // ==========================================
+    const hash = location.hash.replace('#', '');
+    if (directions[hash]) {
+      switchDirection(hash);
+    } else {
+      switchDirection('atlas');
+    }
+  </script>
+</body>
+</html>

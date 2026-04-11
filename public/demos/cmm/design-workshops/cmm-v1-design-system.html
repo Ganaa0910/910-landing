@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MarketIQ v1 — Production Design System | 910studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ====== TOKENS — LIGHT ====== */
+    :root, [data-mode="light"] {
+      --bg: #FAFAFD;
+      --bg-alt: #F4F2FA;
+      --fg: #0C0A1D;
+      --fg-2: #44415A;
+      --surface: #F0EEF7;
+      --surface-up: #EAE8F3;
+      --surface-down: #FCFBFE;
+      --border: #DDDBE8;
+      --border-s: #EDEBF5;
+      --brand: #3E149C;
+      --brand-h: #2E0F75;
+      --brand-l: #6B4CC0;
+      --brand-m: rgba(62,20,156,0.07);
+      --brand-t: #FFFFFF;
+      --signal: #FCA311;
+      --signal-h: #E89200;
+      --signal-m: rgba(252,163,17,0.1);
+      --pos: #059669; --pos-t: #065F46; --pos-m: rgba(5,150,105,0.08);
+      --neg: #DC2626; --neg-t: #991B1B; --neg-m: rgba(220,38,38,0.08);
+      --info: #0891B2; --info-m: rgba(8,145,178,0.08);
+      --cat-mk: #3E149C; --cat-co: #0891B2; --cat-sc: #059669; --cat-in: #D97706; --cat-ai: #7C3AED;
+      --font-d: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-b: 'DM Sans', system-ui, sans-serif;
+      --font-m: 'JetBrains Mono', monospace;
+      --shadow-sm: 0 2px 4px rgba(62,20,156,0.06);
+      --shadow-md: 0 4px 12px rgba(62,20,156,0.08);
+      --shadow-lg: 0 8px 24px rgba(62,20,156,0.1);
+      --shadow-xl: 0 16px 40px rgba(62,20,156,0.12);
+      --shadow-brand: 0 4px 16px rgba(62,20,156,0.2);
+      --ease: cubic-bezier(0.22,1,0.36,1);
+      --ease-b: cubic-bezier(0.34,1.56,0.64,1);
+      --dur: 300ms;
+      --dur-f: 150ms;
+      --r-xs: 4px; --r-sm: 6px; --r: 8px; --r-lg: 12px; --r-xl: 16px; --r-full: 9999px;
+      --header-blur: rgba(250,250,253,0.88);
+      --grad-brand: linear-gradient(135deg, #3E149C 0%, #4A1AAF 100%);
+      --grad-signal: linear-gradient(135deg, #FCA311 0%, #FDBA3B 100%);
+    }
+
+    /* ====== TOKENS — DARK ====== */
+    [data-mode="dark"] {
+      --bg: #0A0720; --bg-alt: #0F0B2C;
+      --fg: #F0EEFF; --fg-2: #A9A4C4;
+      --surface: #141038; --surface-up: #1C1648; --surface-down: #0C0826;
+      --border: rgba(240,238,255,0.1); --border-s: rgba(240,238,255,0.05);
+      --brand: #8B6CD4; --brand-h: #A58BE0; --brand-l: #5B25C9;
+      --brand-m: rgba(139,108,212,0.12); --brand-t: #0A0720;
+      --signal-m: rgba(252,163,17,0.12);
+      --pos: #34D399; --pos-t: #34D399; --pos-m: rgba(52,211,153,0.12);
+      --neg: #F87171; --neg-t: #F87171; --neg-m: rgba(248,113,113,0.12);
+      --info: #22D3EE; --info-m: rgba(34,211,238,0.12);
+      --cat-mk: #8B6CD4; --cat-co: #22D3EE; --cat-sc: #34D399; --cat-in: #FBBF24; --cat-ai: #A78BFA;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-xl: 0 16px 40px rgba(0,0,0,0.6);
+      --shadow-brand: 0 4px 16px rgba(139,108,212,0.3);
+      --header-blur: rgba(10,7,32,0.88);
+      --grad-brand: linear-gradient(135deg, #6B4CC0 0%, #7B5CD0 100%);
+    }
+
+    /* ====== BASE ====== */
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-b); font-size: 15px; line-height: 1.6; color: var(--fg); background: var(--bg); -webkit-font-smoothing: antialiased; transition: background var(--dur) var(--ease), color var(--dur) var(--ease); }
+    h1,h2,h3,h4,h5,h6 { font-family: var(--font-d); letter-spacing: -0.02em; line-height: 1.2; }
+    ::selection { background: var(--brand); color: var(--brand-t); }
+
+    /* ====== HEADER ====== */
+    .hdr { position:fixed;top:0;left:0;right:0;z-index:100;background:var(--header-blur);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--border);transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease); }
+    .hdr-in { max-width:1200px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between; }
+    .hdr-brand { font-family:var(--font-d);font-weight:800;font-size:17px;color:var(--fg);display:flex;align-items:center;gap:8px; }
+    .hdr-brand .dot { width:8px;height:8px;border-radius:50%;background:var(--brand); }
+    .hdr-right { display:flex;align-items:center;gap:20px; }
+    .hdr-nav { display:flex;gap:24px; }
+    .hdr-nav a { font-family:var(--font-b);font-size:13px;font-weight:500;color:var(--fg-2);text-decoration:none;transition:color var(--dur-f) var(--ease); }
+    .hdr-nav a:hover { color:var(--fg); }
+    .hdr-nav a.act { color:var(--brand); }
+    .mode-tog { display:flex;gap:0;padding:3px;background:var(--surface);border-radius:var(--r-full);border:1px solid var(--border);cursor:pointer; }
+    .mode-tog:hover { border-color:var(--brand); }
+    .m-btn { padding:3px 12px;border-radius:var(--r-full);font-family:var(--font-b);font-size:11px;font-weight:600;color:var(--fg-2);background:transparent;border:none;cursor:pointer;transition:all var(--dur) var(--ease); }
+    .m-btn.act { background:var(--brand);color:var(--brand-t); }
+
+    /* ====== SECTIONS ====== */
+    .sec { padding:80px 24px;max-width:1200px;margin:0 auto; }
+    .sec-full { padding:80px 24px; }
+    .sec-lbl { font-family:var(--font-m);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand);margin-bottom:12px; }
+    .sec-title { font-size:2rem;font-weight:800;margin-bottom:12px; }
+    .sec-desc { font-size:15px;color:var(--fg-2);max-width:600px;line-height:1.7;margin-bottom:40px; }
+
+    /* ====== HERO ====== */
+    .hero { background:var(--bg-alt);padding:140px 24px 64px;border-bottom:1px solid var(--border);transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease); }
+    .hero-in { max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center; }
+    .hero-lbl { font-family:var(--font-m);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand);margin-bottom:20px; }
+    .hero-title { font-size:3.5rem;font-weight:800;line-height:1.06;letter-spacing:-0.035em;margin-bottom:20px; }
+    .hero-title .hl { color:var(--brand); }
+    .hero-sub { font-size:17px;color:var(--fg-2);line-height:1.65;margin-bottom:32px; }
+    .hero-acts { display:flex;gap:16px;flex-wrap:wrap; }
+
+    /* ====== BUTTONS ====== */
+    .btn { display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:var(--r);font-family:var(--font-d);font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all var(--dur) var(--ease);position:relative;overflow:hidden; }
+    .btn:active { transform:scale(0.97); }
+    .btn-p { background:var(--grad-brand);color:var(--brand-t);box-shadow:var(--shadow-brand); }
+    .btn-p:hover { box-shadow:var(--shadow-xl);transform:translateY(-1px); }
+    .btn-s { background:var(--surface-up);color:var(--fg);border:1px solid var(--border); }
+    .btn-s:hover { background:var(--border); }
+    .btn-o { background:transparent;color:var(--brand);border:1.5px solid var(--brand); }
+    .btn-o:hover { background:var(--brand);color:var(--brand-t); }
+    .btn-g { background:transparent;color:var(--brand); }
+    .btn-g:hover { background:var(--brand-m); }
+    .btn-sig { background:var(--grad-signal);color:#0C0A1D;box-shadow:0 4px 16px rgba(252,163,17,0.2); }
+    .btn-sig:hover { box-shadow:var(--shadow-xl);transform:translateY(-1px); }
+    .btn-dis { background:var(--surface-up);color:var(--fg-2);opacity:0.5;cursor:not-allowed; }
+    .btn-sm { padding:6px 14px;font-size:11px; }
+    .btn-lg { padding:14px 28px;font-size:15px; }
+
+    /* ====== BADGES ====== */
+    .badge { display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:var(--r-xs);font-family:var(--font-d);font-size:11px;font-weight:600;letter-spacing:0.02em; }
+    .b-brand { background:var(--brand-m);color:var(--brand); }
+    .b-sig { background:var(--signal-m);color:var(--signal-h); }
+    .b-pos { background:var(--pos-m);color:var(--pos-t); }
+    .b-neg { background:var(--neg-m);color:var(--neg-t); }
+    .b-info { background:var(--info-m);color:var(--info); }
+    .b-mk { background:rgba(62,20,156,0.08);color:var(--cat-mk); }
+    .b-co { background:rgba(8,145,178,0.08);color:var(--cat-co); }
+    .b-sc { background:rgba(5,150,105,0.08);color:var(--cat-sc); }
+    .b-in { background:rgba(217,119,6,0.08);color:var(--cat-in); }
+    .b-ai { background:rgba(124,58,237,0.08);color:var(--cat-ai); }
+    [data-mode="dark"] .b-mk { background:rgba(139,108,212,0.12);color:var(--cat-mk); }
+    [data-mode="dark"] .b-co { background:rgba(34,211,238,0.12);color:var(--cat-co); }
+    [data-mode="dark"] .b-sc { background:rgba(52,211,153,0.12);color:var(--cat-sc); }
+    [data-mode="dark"] .b-in { background:rgba(251,191,36,0.12);color:var(--cat-in); }
+    [data-mode="dark"] .b-ai { background:rgba(167,139,250,0.12);color:var(--cat-ai); }
+    [data-mode="dark"] .b-pos { background:var(--pos-m);color:var(--pos); }
+    [data-mode="dark"] .b-neg { background:var(--neg-m);color:var(--neg); }
+    [data-mode="dark"] .b-sig { background:var(--signal-m);color:var(--signal); }
+
+    /* ====== INPUTS ====== */
+    .inp { padding:10px 14px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:13px;transition:all var(--dur) var(--ease);outline:none;width:100%; }
+    .inp::placeholder { color:var(--fg-2);opacity:0.5; }
+    .inp:focus { border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-m); }
+    .inp.err { border-color:var(--neg);box-shadow:0 0 0 3px var(--neg-m); }
+    .inp-lbl { font-family:var(--font-d);font-size:11px;font-weight:600;margin-bottom:6px;display:block; }
+    .inp-err { font-size:11px;color:var(--neg);font-weight:500;margin-top:4px; }
+
+    /* ====== CARDS ====== */
+    .card { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:all var(--dur) var(--ease); }
+    .card:hover { transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--brand-l); }
+    .card-bar { height:3px;background:var(--brand); }
+    .card-body { padding:20px; }
+    .card-body h4 { font-size:15px;font-weight:700;margin-bottom:8px; }
+    .card-body p { font-size:13px;color:var(--fg-2);line-height:1.6;margin-bottom:12px; }
+    .card-meta { display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--fg-2); }
+
+    /* ====== DATA TABLE ====== */
+    .dtbl { width:100%;border-collapse:collapse;font-size:13px; }
+    .dtbl th { font-family:var(--font-d);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--fg-2);text-align:left;padding:12px 16px;border-bottom:2px solid var(--border); }
+    .dtbl td { padding:12px 16px;border-bottom:1px solid var(--border-s);vertical-align:middle; }
+    .dtbl tr { transition:background var(--dur-f) var(--ease); }
+    .dtbl tr:hover { background:var(--brand-m); }
+    .dtbl .pos { color:var(--pos);font-weight:600;font-family:var(--font-m); }
+    .dtbl .neg { color:var(--neg);font-weight:600;font-family:var(--font-m); }
+    .dtbl .mn { font-family:var(--font-m); }
+    .dtbl .co { font-weight:600;color:var(--fg); }
+
+    /* ====== WIDGET SYSTEM ====== */
+    .widget { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:all var(--dur) var(--ease); }
+    .widget-hdr { padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between; }
+    .widget-title { font-family:var(--font-d);font-size:13px;font-weight:700; }
+    .widget-body { padding:20px; }
+    .widget-meta { font-family:var(--font-m);font-size:11px;color:var(--fg-2); }
+
+    /* Skeleton loading */
+    .skel { background:var(--surface-up);border-radius:var(--r-sm);animation:pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+    .skel-line { height:14px;margin-bottom:10px; }
+    .skel-line.w75 { width:75%; }
+    .skel-line.w50 { width:50%; }
+    .skel-line.w100 { width:100%; }
+    .skel-block { height:120px;margin-bottom:12px; }
+    .skel-circle { width:40px;height:40px;border-radius:50%; }
+
+    /* Error state */
+    .widget-err { padding:16px;background:var(--neg-m);border-radius:var(--r);display:flex;align-items:center;gap:12px;font-size:13px; }
+    .widget-err-icon { width:20px;height:20px;border-radius:50%;background:var(--neg);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0; }
+    .widget-err a { color:var(--brand);font-weight:600;text-decoration:none;margin-left:auto;white-space:nowrap; }
+
+    /* Paywall */
+    .paywall { position:relative; }
+    .paywall-fade { position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(transparent,var(--bg));pointer-events:none; }
+    .paywall-card { text-align:center;padding:40px 24px;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface);margin-top:-60px;position:relative;z-index:1; }
+    .paywall-card h3 { font-size:20px;margin-bottom:8px; }
+    .paywall-card p { font-size:13px;color:var(--fg-2);margin-bottom:20px; }
+    .paywall-counter { display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--signal-m);border-radius:var(--r-full);font-family:var(--font-m);font-size:11px;font-weight:500;color:var(--signal-h);margin-bottom:20px; }
+
+    /* ====== PAGE WIREFRAMES ====== */
+    .wireframe { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;overflow:hidden; }
+    .wf-label { font-family:var(--font-m);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand);margin-bottom:12px; }
+    .wf-box { border:1.5px dashed var(--border);border-radius:var(--r-sm);padding:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;min-height:40px;transition:all var(--dur) var(--ease); }
+    .wf-box:hover { border-color:var(--brand);color:var(--brand);background:var(--brand-m); }
+    .wf-box.filled { background:var(--brand-m);border-style:solid;border-color:var(--brand);color:var(--brand); }
+    .wf-grid { display:grid;gap:8px; }
+    .wf-row { display:flex;gap:8px; }
+    .wf-flex { display:flex;gap:8px; }
+
+    /* ====== TOGGLE ====== */
+    .toggle { width:44px;height:24px;background:var(--border);border-radius:var(--r-full);position:relative;cursor:pointer;transition:background var(--dur) var(--ease); }
+    .toggle.on { background:var(--brand); }
+    .toggle-thumb { width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:3px;left:3px;transition:transform var(--dur) var(--ease-b);box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    .toggle.on .toggle-thumb { transform:translateX(20px); }
+
+    /* ====== MINI CHART (CSS only) ====== */
+    .mini-chart { display:flex;align-items:flex-end;gap:2px;height:48px; }
+    .mini-chart .bar { flex:1;border-radius:2px 2px 0 0;background:var(--brand);opacity:0.3;transition:opacity var(--dur) var(--ease); }
+    .mini-chart:hover .bar { opacity:0.6; }
+
+    /* ====== ANTI-PREFS ====== */
+    .anti { position:relative;padding:16px;border:1px solid var(--neg);border-radius:var(--r);opacity:0.5;overflow:hidden; }
+    .anti::after { content:'';position:absolute;top:50%;left:-10%;width:120%;height:2px;background:var(--neg);transform:rotate(-5deg); }
+    .anti-label { font-family:var(--font-m);font-size:10px;color:var(--neg);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px; }
+
+    /* ====== SCROLL REVEAL ====== */
+    .rv { opacity:0;transform:translateY(24px);transition:opacity 0.6s var(--ease),transform 0.6s var(--ease); }
+    .rv.vis { opacity:1;transform:translateY(0); }
+    .rv-d1 { transition-delay:0.1s; }
+    .rv-d2 { transition-delay:0.2s; }
+    .rv-d3 { transition-delay:0.3s; }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width:900px) {
+      .hero-in { grid-template-columns:1fr;gap:32px; }
+      .hero-title { font-size:2rem; }
+      .g3 { grid-template-columns:1fr!important; }
+      .g2 { grid-template-columns:1fr!important; }
+      .hdr-nav { display:none; }
+      .wf-sidebar-layout { grid-template-columns:1fr!important; }
+    }
+    @media (max-width:600px) {
+      .hero { padding:100px 16px 48px; }
+      .sec { padding:48px 16px; }
+      .sec-full { padding:48px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="hdr">
+    <div class="hdr-in">
+      <div class="hdr-brand">
+        <span class="dot"></span>
+        MarketIQ Design System
+        <span style="font-size:11px;font-weight:500;color:var(--fg-2);margin-left:4px;">v1 Production</span>
+      </div>
+      <div class="hdr-right">
+        <nav class="hdr-nav">
+          <a href="#color" class="act">Color</a>
+          <a href="#type">Type</a>
+          <a href="#components">Components</a>
+          <a href="#widgets">Widgets</a>
+          <a href="#pages">Pages</a>
+          <a href="#states">States</a>
+        </nav>
+        <div class="mode-tog" id="modeTog">
+          <button class="m-btn act" data-mode="light">Light</button>
+          <button class="m-btn" data-mode="dark">Pro</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-in">
+      <div>
+        <div class="hero-lbl">MarketIQ v1 &mdash; Production Design System</div>
+        <h1 class="hero-title">
+          The Mongolian market<br>doesn't have a <span class="hl">Bloomberg.</span><br>Yet.
+        </h1>
+        <p class="hero-sub">
+          Intelligence platform for global investors evaluating Mongolian capital markets. 100 entity profiles, 150 migrated articles, live market feed, events hub. Ship date: May 26.
+        </p>
+        <div class="hero-acts">
+          <button class="btn btn-p btn-lg">Start Research</button>
+          <button class="btn btn-s btn-lg">Browse Directory</button>
+        </div>
+      </div>
+
+      <!-- Live data card -->
+      <div class="widget">
+        <div class="widget-hdr">
+          <div class="widget-title">MSE Top 20</div>
+          <span class="badge b-pos" style="font-family:var(--font-m);">&#9679; Live</span>
+        </div>
+        <div style="padding:0;">
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:12px 20px;border-bottom:1px solid var(--border-s);align-items:center;font-size:13px;" class="dtbl-row">
+            <div><div style="font-family:var(--font-d);font-weight:700;">APU</div><div style="font-size:11px;color:var(--fg-2);">APU Company</div></div>
+            <div style="font-family:var(--font-m);font-weight:500;text-align:right;">&#8366;1,247</div>
+            <span class="badge b-pos" style="font-family:var(--font-m);">+2.4%</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:12px 20px;border-bottom:1px solid var(--border-s);align-items:center;font-size:13px;">
+            <div><div style="font-family:var(--font-d);font-weight:700;">TTL</div><div style="font-size:11px;color:var(--fg-2);">Tavan Tolgoi</div></div>
+            <div style="font-family:var(--font-m);font-weight:500;text-align:right;">&#8366;28,450</div>
+            <span class="badge b-pos" style="font-family:var(--font-m);">+0.6%</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:12px 20px;border-bottom:1px solid var(--border-s);align-items:center;font-size:13px;">
+            <div><div style="font-family:var(--font-d);font-weight:700;">KHAN</div><div style="font-size:11px;color:var(--fg-2);">Khan Bank</div></div>
+            <div style="font-family:var(--font-m);font-weight:500;text-align:right;">&#8366;2,890</div>
+            <span class="badge b-neg" style="font-family:var(--font-m);">-1.2%</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:12px 20px;align-items:center;font-size:13px;">
+            <div><div style="font-family:var(--font-d);font-weight:700;">MMC</div><div style="font-size:11px;color:var(--fg-2);">Mongolian Mining</div></div>
+            <div style="font-family:var(--font-m);font-weight:500;text-align:right;">&#8366;3,240</div>
+            <span class="badge b-pos" style="font-family:var(--font-m);">+5.1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COLOR ===================== -->
+  <section class="sec" id="color">
+    <div class="rv">
+      <div class="sec-lbl">01 &mdash; Color Architecture</div>
+      <h2 class="sec-title">Lavender Canvas, Purple Structure</h2>
+      <p class="sec-desc">Brand purple #3E149C as the anchor. Signal orange for CTAs. Desaturated lavender backgrounds. Every color earns its place through function.</p>
+    </div>
+
+    <!-- Core palette -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;" class="rv g-auto">
+      <div style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="copySwatch(this)" data-hex="#3E149C">
+        <div style="height:72px;background:#3E149C;"></div>
+        <div style="padding:12px;background:var(--surface);"><div style="font-family:var(--font-d);font-size:11px;font-weight:700;">Brand</div><div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);">#3E149C</div></div>
+      </div>
+      <div style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="copySwatch(this)" data-hex="#FCA311">
+        <div style="height:72px;background:#FCA311;"></div>
+        <div style="padding:12px;background:var(--surface);"><div style="font-family:var(--font-d);font-size:11px;font-weight:700;">Signal</div><div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);">#FCA311</div></div>
+      </div>
+      <div style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="copySwatch(this)" data-hex="#FAFAFD">
+        <div style="height:72px;background:#FAFAFD;border-bottom:1px solid var(--border-s);"></div>
+        <div style="padding:12px;background:var(--surface);"><div style="font-family:var(--font-d);font-size:11px;font-weight:700;">Background</div><div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);">#FAFAFD</div></div>
+      </div>
+      <div style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="copySwatch(this)" data-hex="#F4F2FA">
+        <div style="height:72px;background:#F4F2FA;"></div>
+        <div style="padding:12px;background:var(--surface);"><div style="font-family:var(--font-d);font-size:11px;font-weight:700;">Bg Alt</div><div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);">#F4F2FA</div></div>
+      </div>
+      <div style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="copySwatch(this)" data-hex="#F0EEF7">
+        <div style="height:72px;background:#F0EEF7;"></div>
+        <div style="padding:12px;background:var(--surface);"><div style="font-family:var(--font-d);font-size:11px;font-weight:700;">Surface</div><div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);">#F0EEF7</div></div>
+      </div>
+      <div style="border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);cursor:pointer;" onclick="copySwatch(this)" data-hex="#0C0A1D">
+        <div style="height:72px;background:#0C0A1D;"></div>
+        <div style="padding:12px;background:var(--surface);"><div style="font-family:var(--font-d);font-size:11px;font-weight:700;">Foreground</div><div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);">#0C0A1D</div></div>
+      </div>
+    </div>
+
+    <!-- Semantic in context -->
+    <div style="margin-top:40px;" class="rv">
+      <h3 style="font-size:17px;font-weight:700;margin-bottom:20px;">Semantic &mdash; In Context</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+        <div style="padding:16px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+          <div style="font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Positive / Gain</div>
+          <span style="font-family:var(--font-m);font-weight:600;font-size:20px;color:var(--pos);">&#9650; +12.4%</span>
+        </div>
+        <div style="padding:16px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+          <div style="font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Negative / Loss</div>
+          <span style="font-family:var(--font-m);font-weight:600;font-size:20px;color:var(--neg);">&#9660; -3.2%</span>
+        </div>
+        <div style="padding:16px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+          <div style="font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Signal / Breaking</div>
+          <span style="font-family:var(--font-m);font-weight:600;font-size:20px;color:var(--signal);">&#9679; Breaking</span>
+        </div>
+        <div style="padding:16px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+          <div style="font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Info / Neutral</div>
+          <span style="font-family:var(--font-m);font-weight:600;font-size:20px;color:var(--info);">Updated 2m ago</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category badges -->
+    <div style="margin-top:40px;" class="rv">
+      <h3 style="font-size:17px;font-weight:700;margin-bottom:20px;">Category Taxonomy</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="badge b-mk">Markets</span>
+        <span class="badge b-co">Companies</span>
+        <span class="badge b-sc">Sectors</span>
+        <span class="badge b-in">Insights</span>
+        <span class="badge b-ai">AI Curated</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TYPOGRAPHY ===================== -->
+  <section class="sec-full" id="type" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease);">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+      <div class="rv">
+        <div class="sec-lbl">02 &mdash; Typography</div>
+        <h2 class="sec-title">Atlas Type System</h2>
+        <p class="sec-desc">Plus Jakarta Sans for display authority. DM Sans for body readability. JetBrains Mono for financial data.</p>
+      </div>
+
+      <div class="rv">
+        <div style="display:grid;gap:0;">
+          <div style="padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:160px 1fr;align-items:baseline;gap:24px;">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);line-height:1.8;"><strong style="display:block;color:var(--fg);font-family:var(--font-d);font-size:13px;">Hero</strong>Jakarta 800 &middot; 3.5rem</div>
+            <div style="font-family:var(--font-d);font-size:3.5rem;font-weight:800;letter-spacing:-0.035em;line-height:1.06;">Market Intelligence</div>
+          </div>
+          <div style="padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:160px 1fr;align-items:baseline;gap:24px;">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);line-height:1.8;"><strong style="display:block;color:var(--fg);font-family:var(--font-d);font-size:13px;">H1</strong>Jakarta 800 &middot; 2.75rem</div>
+            <div style="font-family:var(--font-d);font-size:2.75rem;font-weight:800;letter-spacing:-0.02em;line-height:1.12;">Mining Sector Posts Record Q1</div>
+          </div>
+          <div style="padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:160px 1fr;align-items:baseline;gap:24px;">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);line-height:1.8;"><strong style="display:block;color:var(--fg);font-family:var(--font-d);font-size:13px;">H2</strong>Jakarta 700 &middot; 2rem</div>
+            <div style="font-family:var(--font-d);font-size:2rem;font-weight:700;letter-spacing:-0.02em;">Company Financials Overview</div>
+          </div>
+          <div style="padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:160px 1fr;align-items:baseline;gap:24px;">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);line-height:1.8;"><strong style="display:block;color:var(--fg);font-family:var(--font-d);font-size:13px;">Body</strong>DM Sans 400 &middot; 15px</div>
+            <div style="font-family:var(--font-b);font-size:15px;line-height:1.7;max-width:640px;color:var(--fg-2);">The Mongolian Stock Exchange saw trading volumes increase by 23% in Q1 2026, driven primarily by institutional interest in mining and infrastructure sectors. Foreign portfolio investment reached &#8366;2.4 trillion.</div>
+          </div>
+          <div style="padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:160px 1fr;align-items:baseline;gap:24px;">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);line-height:1.8;"><strong style="display:block;color:var(--fg);font-family:var(--font-d);font-size:13px;">Data</strong>JetBrains Mono 500 &middot; 15px</div>
+            <div style="font-family:var(--font-m);font-size:15px;font-weight:500;">
+              <span style="color:var(--pos);">&#9650; 12.4%</span>&nbsp;&nbsp;
+              <span style="color:var(--neg);">&#9660; 3.2%</span>&nbsp;&nbsp;
+              <span>&#8366;847,200,000</span>&nbsp;&nbsp;
+              <span style="color:var(--fg-2);">VOL 1.2M</span>
+            </div>
+          </div>
+          <div style="padding:20px 0;display:grid;grid-template-columns:160px 1fr;align-items:baseline;gap:24px;">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--fg-2);line-height:1.8;"><strong style="display:block;color:var(--fg);font-family:var(--font-d);font-size:13px;">Label</strong>Jakarta 600 &middot; 11px</div>
+            <div style="font-family:var(--font-d);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-2);">Market Cap &middot; Revenue &middot; EBITDA &middot; P/E Ratio &middot; Dividend Yield</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COMPONENTS ===================== -->
+  <section class="sec" id="components">
+    <div class="rv">
+      <div class="sec-lbl">03 &mdash; Component Library</div>
+      <h2 class="sec-title">Production Components</h2>
+      <p class="sec-desc">Every component spec'd for the actual build. Hover everything.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="g2 rv">
+      <!-- Buttons -->
+      <div style="padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-2);margin-bottom:20px;">Buttons</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+          <button class="btn btn-p">Primary</button>
+          <button class="btn btn-s">Secondary</button>
+          <button class="btn btn-o">Outline</button>
+          <button class="btn btn-g">Ghost</button>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+          <button class="btn btn-sig">Signal CTA</button>
+          <button class="btn btn-dis" disabled>Disabled</button>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn btn-p btn-sm">Small</button>
+          <button class="btn btn-p">Default</button>
+          <button class="btn btn-p btn-lg">Large</button>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div style="padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-2);margin-bottom:20px;">Badges &amp; Tags</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          <span class="badge b-brand">Brand</span>
+          <span class="badge b-sig">Breaking</span>
+          <span class="badge b-pos">+12.4%</span>
+          <span class="badge b-neg">-3.2%</span>
+          <span class="badge b-info">Updated</span>
+        </div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Content Types</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          <span class="badge b-brand">Article</span>
+          <span class="badge b-in">Monthly Update</span>
+          <span class="badge b-co">Press Release</span>
+          <span class="badge b-sc">Comprehensive Guide</span>
+        </div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--fg-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Entity Types</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge b-mk">Public Company</span>
+          <span class="badge b-co">Private Company</span>
+          <span class="badge b-sc">Mining Project</span>
+          <span class="badge b-in">Service Provider</span>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div style="padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-2);margin-bottom:20px;">Form Elements</div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div><label class="inp-lbl">Search Companies</label><input class="inp" type="text" placeholder="e.g. Erdene Resource, APU JSC..."></div>
+          <div><label class="inp-lbl">Email (error state)</label><input class="inp err" type="email" value="invalid@"><div class="inp-err">Please enter a valid email address</div></div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-thumb"></div></div>
+            <span style="font-size:13px;font-weight:500;">Real-time alerts</span>
+          </div>
+          <div><label class="inp-lbl">Investment Ticket</label>
+            <select class="inp" style="cursor:pointer;">
+              <option>Select range...</option>
+              <option>&lt; $1M</option>
+              <option>$1M - $5M</option>
+              <option>$5M - $25M</option>
+              <option>$25M+</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div style="padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-2);margin-bottom:20px;">Card Variants</div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <!-- News card -->
+          <div class="card">
+            <div class="card-bar"></div>
+            <div class="card-body">
+              <div style="display:flex;gap:6px;margin-bottom:8px;"><span class="badge b-mk">Markets</span><span class="badge b-ai">AI Curated</span></div>
+              <h4>MSE Index Hits All-Time High on Mining Rally</h4>
+              <p>Top 20 index surged 4.2% as copper and gold miners reported strong quarterly earnings...</p>
+              <div class="card-meta"><span>Reuters &middot; 12 min ago</span><span style="font-family:var(--font-m);color:var(--pos);">&#9650; MSE20</span></div>
+            </div>
+          </div>
+          <!-- Entity card -->
+          <div class="card">
+            <div class="card-body">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <div style="width:36px;height:36px;border-radius:var(--r);background:var(--grad-brand);display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-d);font-weight:800;font-size:11px;">ER</div>
+                <div style="flex:1;"><div style="font-weight:700;font-size:13px;">Erdene Resource</div><div style="font-size:11px;color:var(--fg-2);">Mining &middot; TSX: ERD</div></div>
+                <div style="text-align:right;"><div style="font-family:var(--font-m);font-weight:600;font-size:13px;">&#8366;4,820</div><div style="font-family:var(--font-m);font-size:11px;color:var(--pos);">+2.8%</div></div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <div style="flex:1;padding:8px;background:var(--bg);border-radius:var(--r-xs);border:1px solid var(--border-s);"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">Mkt Cap</div><div style="font-size:13px;font-weight:600;font-family:var(--font-m);">&#8366;2.4T</div></div>
+                <div style="flex:1;padding:8px;background:var(--bg);border-radius:var(--r-xs);border:1px solid var(--border-s);"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">P/E</div><div style="font-size:13px;font-weight:600;font-family:var(--font-m);">18.4x</div></div>
+                <div style="flex:1;padding:8px;background:var(--bg);border-radius:var(--r-xs);border:1px solid var(--border-s);"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">Vol</div><div style="font-size:13px;font-weight:600;font-family:var(--font-m);">1.2M</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data table full width -->
+    <div style="margin-top:24px;padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);" class="rv">
+      <div style="font-family:var(--font-m);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-2);margin-bottom:20px;">Data Table &mdash; Market Overview</div>
+      <div style="overflow-x:auto;">
+        <table class="dtbl">
+          <thead><tr><th>Company</th><th>Ticker</th><th>Sector</th><th style="text-align:right;">Price (&#8366;)</th><th style="text-align:right;">Change</th><th style="text-align:right;">Volume</th><th style="text-align:right;">Mkt Cap</th></tr></thead>
+          <tbody>
+            <tr><td class="co">Erdene Resource</td><td class="mn">ERD</td><td><span class="badge b-sc">Mining</span></td><td class="mn" style="text-align:right;">4,820</td><td class="pos" style="text-align:right;">+2.8%</td><td class="mn" style="text-align:right;">1,247,800</td><td class="mn" style="text-align:right;">2.4T</td></tr>
+            <tr><td class="co">APU Joint Stock Co</td><td class="mn">APU</td><td><span class="badge b-in">Consumer</span></td><td class="mn" style="text-align:right;">1,156</td><td class="neg" style="text-align:right;">-1.2%</td><td class="mn" style="text-align:right;">892,400</td><td class="mn" style="text-align:right;">1.8T</td></tr>
+            <tr><td class="co">Mongolian Mining Corp</td><td class="mn">MMC</td><td><span class="badge b-sc">Mining</span></td><td class="mn" style="text-align:right;">3,240</td><td class="pos" style="text-align:right;">+5.1%</td><td class="mn" style="text-align:right;">2,104,600</td><td class="mn" style="text-align:right;">4.1T</td></tr>
+            <tr><td class="co">Khan Bank</td><td class="mn">KHAN</td><td><span class="badge b-co">Finance</span></td><td class="mn" style="text-align:right;">2,890</td><td class="pos" style="text-align:right;">+0.4%</td><td class="mn" style="text-align:right;">645,200</td><td class="mn" style="text-align:right;">3.2T</td></tr>
+            <tr><td class="co">Gobi Corp</td><td class="mn">GOV</td><td><span class="badge b-in">Textile</span></td><td class="mn" style="text-align:right;">3,580</td><td class="neg" style="text-align:right;">-0.6%</td><td class="mn" style="text-align:right;">412,100</td><td class="mn" style="text-align:right;">1.1T</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WIDGET SYSTEM ===================== -->
+  <section class="sec-full" id="widgets" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease);">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+      <div class="rv">
+        <div class="sec-lbl">04 &mdash; Widget System</div>
+        <h2 class="sec-title">Entity Profile Widgets</h2>
+        <p class="sec-desc">Dynamic widget renderer. Entity layout_config maps widget names to React components. Each entity type gets a different widget set.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="g2">
+        <!-- MarketDataWidget -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Market Data</div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-sm btn-p" style="padding:4px 10px;font-size:10px;">1M</button>
+              <button class="btn btn-sm btn-g" style="padding:4px 10px;font-size:10px;">3M</button>
+              <button class="btn btn-sm btn-g" style="padding:4px 10px;font-size:10px;">1Y</button>
+              <button class="btn btn-sm btn-g" style="padding:4px 10px;font-size:10px;">ALL</button>
+            </div>
+          </div>
+          <div class="widget-body">
+            <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;">
+              <span style="font-family:var(--font-d);font-size:2rem;font-weight:800;">&#8366;4,820</span>
+              <span style="font-family:var(--font-m);font-weight:600;color:var(--pos);">&#9650; +2.8% today</span>
+            </div>
+            <div class="mini-chart" style="height:80px;">
+              <div class="bar" style="height:40%;"></div><div class="bar" style="height:55%;"></div><div class="bar" style="height:45%;"></div><div class="bar" style="height:60%;"></div><div class="bar" style="height:50%;"></div><div class="bar" style="height:65%;"></div><div class="bar" style="height:70%;"></div><div class="bar" style="height:55%;"></div><div class="bar" style="height:75%;"></div><div class="bar" style="height:80%;"></div><div class="bar" style="height:72%;"></div><div class="bar" style="height:85%;"></div><div class="bar" style="height:78%;"></div><div class="bar" style="height:90%;"></div><div class="bar" style="height:82%;"></div><div class="bar" style="height:95%;"></div><div class="bar" style="height:88%;"></div><div class="bar" style="height:100%;background:var(--pos);opacity:0.5;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-m);font-size:10px;color:var(--fg-2);margin-top:8px;">
+              <span>Mar 3</span><span>Mar 17</span><span>Apr 3</span>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:16px;">
+              <div style="flex:1;padding:8px;background:var(--bg);border-radius:var(--r-xs);border:1px solid var(--border-s);text-align:center;"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">Volume</div><div style="font-family:var(--font-m);font-weight:600;font-size:13px;margin-top:2px;">1.2M</div></div>
+              <div style="flex:1;padding:8px;background:var(--bg);border-radius:var(--r-xs);border:1px solid var(--border-s);text-align:center;"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">52W High</div><div style="font-family:var(--font-m);font-weight:600;font-size:13px;margin-top:2px;">&#8366;5,240</div></div>
+              <div style="flex:1;padding:8px;background:var(--bg);border-radius:var(--r-xs);border:1px solid var(--border-s);text-align:center;"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">52W Low</div><div style="font-family:var(--font-m);font-weight:600;font-size:13px;margin-top:2px;">&#8366;2,180</div></div>
+            </div>
+          </div>
+          <div style="padding:0 20px 16px;"><div class="widget-meta">Last updated: Apr 3, 2026 15:30 MSE</div></div>
+        </div>
+
+        <!-- FinancialPerformanceWidget -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Financial Performance</div>
+            <span class="badge b-brand">Audited</span>
+          </div>
+          <div class="widget-body" style="padding:0;">
+            <table class="dtbl" style="font-size:12px;">
+              <thead><tr><th>Metric</th><th style="text-align:right;">2024</th><th style="text-align:right;">2025</th><th style="text-align:right;">YoY</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:600;">Revenue</td><td class="mn" style="text-align:right;">&#8366;284B</td><td class="mn" style="text-align:right;">&#8366;342B</td><td class="pos" style="text-align:right;">+20.4%</td></tr>
+                <tr><td style="font-weight:600;">EBITDA</td><td class="mn" style="text-align:right;">&#8366;98B</td><td class="mn" style="text-align:right;">&#8366;124B</td><td class="pos" style="text-align:right;">+26.5%</td></tr>
+                <tr><td style="font-weight:600;">Net Income</td><td class="mn" style="text-align:right;">&#8366;52B</td><td class="mn" style="text-align:right;">&#8366;68B</td><td class="pos" style="text-align:right;">+30.8%</td></tr>
+                <tr><td style="font-weight:600;">Total Assets</td><td class="mn" style="text-align:right;">&#8366;1.4T</td><td class="mn" style="text-align:right;">&#8366;1.7T</td><td class="pos" style="text-align:right;">+21.4%</td></tr>
+                <tr><td style="font-weight:600;">Total Debt</td><td class="mn" style="text-align:right;">&#8366;420B</td><td class="mn" style="text-align:right;">&#8366;380B</td><td class="pos" style="text-align:right;">-9.5%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:12px 20px;"><div class="widget-meta">Source: MSE Annual Report 2025</div></div>
+        </div>
+
+        <!-- DealActionWidget -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Active Fundraise</div>
+            <span class="badge b-sig">Actively Raising</span>
+          </div>
+          <div class="widget-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+              <div style="padding:12px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border-s);"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">Round</div><div style="font-family:var(--font-d);font-weight:700;font-size:15px;margin-top:4px;">Series B</div></div>
+              <div style="padding:12px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border-s);"><div style="font-size:10px;color:var(--fg-2);font-family:var(--font-m);text-transform:uppercase;">Seeking</div><div style="font-family:var(--font-d);font-weight:700;font-size:15px;margin-top:4px;">$15M</div></div>
+            </div>
+            <button class="btn btn-sig" style="width:100%;">Request Connection</button>
+          </div>
+        </div>
+
+        <!-- ProjectTechnicalWidget -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Technical Specifications</div>
+            <span class="badge b-sc">Mining</span>
+          </div>
+          <div class="widget-body" style="padding:0;">
+            <div style="display:flex;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border-s);font-size:12px;"><span style="color:var(--fg-2);font-family:var(--font-m);">Commodity</span><span style="font-weight:600;font-family:var(--font-m);">Gold / Copper</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border-s);font-size:12px;"><span style="color:var(--fg-2);font-family:var(--font-m);">Resource</span><span style="font-weight:600;font-family:var(--font-m);">Measured &amp; Indicated</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border-s);font-size:12px;"><span style="color:var(--fg-2);font-family:var(--font-m);">Reserves</span><span style="font-weight:600;font-family:var(--font-m);">2.4M oz Au</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border-s);font-size:12px;"><span style="color:var(--fg-2);font-family:var(--font-m);">Grade</span><span style="font-weight:600;font-family:var(--font-m);">1.8 g/t Au</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border-s);font-size:12px;"><span style="color:var(--fg-2);font-family:var(--font-m);">Life of Mine</span><span style="font-weight:600;font-family:var(--font-m);">14 years</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 20px;font-size:12px;"><span style="color:var(--fg-2);font-family:var(--font-m);">Stage</span><span class="badge b-sc" style="font-size:10px;">Feasibility Study</span></div>
+          </div>
+        </div>
+
+        <!-- KeyPersonnelWidget -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Key Personnel</div>
+          </div>
+          <div class="widget-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="display:flex;gap:12px;align-items:center;">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--brand-m);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:700;font-size:13px;color:var(--brand);flex-shrink:0;">BG</div>
+                <div><div style="font-weight:700;font-size:13px;">Bat-Erdene G.</div><div style="font-size:11px;color:var(--fg-2);">CEO</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--brand-m);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:700;font-size:13px;color:var(--brand);flex-shrink:0;">MT</div>
+                <div><div style="font-weight:700;font-size:13px;">Munkh-Tuya D.</div><div style="font-size:11px;color:var(--fg-2);">CFO</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--brand-m);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:700;font-size:13px;color:var(--brand);flex-shrink:0;">AB</div>
+                <div><div style="font-weight:700;font-size:13px;">Amarjargal B.</div><div style="font-size:11px;color:var(--fg-2);">VP Operations</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--brand-m);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:700;font-size:13px;color:var(--brand);flex-shrink:0;">TS</div>
+                <div><div style="font-weight:700;font-size:13px;">Tseren-Ochir S.</div><div style="font-size:11px;color:var(--fg-2);">Head of IR</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OwnershipListWidget -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Ownership Structure</div>
+          </div>
+          <div class="widget-body" style="padding:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border-s);">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:28px;height:28px;border-radius:var(--r-xs);background:var(--grad-brand);display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-d);font-weight:800;font-size:9px;">TT</div>
+                <div><div style="font-weight:600;font-size:13px;color:var(--brand);cursor:pointer;">Tavan Tolgoi JSC</div><div style="font-size:10px;color:var(--fg-2);">Sponsor</div></div>
+              </div>
+              <span style="font-family:var(--font-m);font-weight:600;font-size:13px;">34%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border-s);">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:28px;height:28px;border-radius:var(--r-xs);background:var(--grad-brand);display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-d);font-weight:800;font-size:9px;">MG</div>
+                <div><div style="font-weight:600;font-size:13px;color:var(--brand);cursor:pointer;">MoGov Fund</div><div style="font-size:10px;color:var(--fg-2);">Owner</div></div>
+              </div>
+              <span style="font-family:var(--font-m);font-weight:600;font-size:13px;">51%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:28px;height:28px;border-radius:var(--r-xs);background:var(--surface-up);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:800;font-size:9px;color:var(--fg-2);">PB</div>
+                <div><div style="font-weight:600;font-size:13px;">Public Float</div><div style="font-size:10px;color:var(--fg-2);">Free Float</div></div>
+              </div>
+              <span style="font-family:var(--font-m);font-weight:600;font-size:13px;">15%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PAGE LAYOUTS ===================== -->
+  <section class="sec" id="pages">
+    <div class="rv">
+      <div class="sec-lbl">05 &mdash; Page Layouts</div>
+      <h2 class="sec-title">Page Architecture</h2>
+      <p class="sec-desc">Wireframe-level page structures for all v1 routes. Every page shares the fixed header shell and footer.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="g2">
+      <!-- Landing -->
+      <div class="wireframe rv">
+        <div class="wf-label">Landing / (Story 6.7)</div>
+        <div class="wf-grid" style="grid-template-columns:1fr;">
+          <div class="wf-box filled" style="min-height:100px;">Hero: Headline + Live Data Card</div>
+          <div class="wf-row"><div class="wf-box" style="flex:1;">Creative</div><div class="wf-box" style="flex:1;">Sophisticated</div><div class="wf-box" style="flex:1;">Corporate</div></div>
+          <div class="wf-box" style="min-height:60px;">Featured Entities (3-col card grid)</div>
+          <div class="wf-box" style="min-height:60px;">Latest Insights (3-col)</div>
+          <div class="wf-box filled">CTA Banner: "Start Your Research"</div>
+        </div>
+      </div>
+
+      <!-- Directory Index -->
+      <div class="wireframe rv">
+        <div class="wf-label">Directory /directory (Story 2.1)</div>
+        <div class="wf-grid wf-sidebar-layout" style="grid-template-columns:180px 1fr;">
+          <div class="wf-grid" style="grid-row:1/3;">
+            <div class="wf-box" style="font-size:9px;">Entity Type Filter</div>
+            <div class="wf-box" style="font-size:9px;">Sector Filter</div>
+            <div class="wf-box" style="font-size:9px;">Deal Status Toggle</div>
+          </div>
+          <div class="wf-box filled" style="min-height:36px;">Search Bar</div>
+          <div class="wf-grid" style="grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;">
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Entity Card</div>
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Entity Card</div>
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Entity Card</div>
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Entity Card</div>
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Entity Card</div>
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Entity Card</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entity Profile -->
+      <div class="wireframe rv">
+        <div class="wf-label">Entity Profile /directory/[slug] (Story 2.2)</div>
+        <div class="wf-grid" style="grid-template-columns:1fr;">
+          <div class="wf-box filled" style="min-height:60px;">Entity Header: Logo + Name + Type Badge + Sector + Website</div>
+          <div class="wf-grid wf-sidebar-layout" style="grid-template-columns:1fr 260px;">
+            <div class="wf-grid">
+              <div class="wf-box" style="min-height:100px;">MarketDataWidget (stock chart)</div>
+              <div class="wf-box" style="min-height:80px;">FinancialPerformanceWidget</div>
+              <div class="wf-box" style="min-height:60px;">KeyPersonnelWidget</div>
+              <div class="wf-box" style="min-height:60px;">CMM Research (linked insights)</div>
+              <div class="wf-box" style="min-height:60px;">Market News (linked feed)</div>
+            </div>
+            <div class="wf-grid">
+              <div class="wf-box" style="font-size:9px;">Quick Stats</div>
+              <div class="wf-box" style="font-size:9px;">OwnershipList</div>
+              <div class="wf-box filled" style="font-size:9px;">Request Connection CTA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insights Index -->
+      <div class="wireframe rv">
+        <div class="wf-label">Insights /insights (Story 1.1)</div>
+        <div class="wf-grid wf-sidebar-layout" style="grid-template-columns:180px 1fr;">
+          <div class="wf-grid" style="grid-row:1/3;">
+            <div class="wf-box" style="font-size:9px;">Content Type Filter</div>
+            <div class="wf-box" style="font-size:9px;">Sector Filter</div>
+            <div class="wf-box" style="font-size:9px;">Date Range</div>
+          </div>
+          <div class="wf-flex"><div class="wf-box filled" style="flex:1;min-height:36px;">Search</div><div class="wf-box" style="font-size:9px;min-width:100px;">2 of 3 free</div></div>
+          <div class="wf-grid" style="grid-template-columns:1fr 1fr 1fr;">
+            <div class="wf-box" style="min-height:100px;font-size:9px;">Content Card (img + title + type badge + meta)</div>
+            <div class="wf-box" style="min-height:100px;font-size:9px;">Content Card</div>
+            <div class="wf-box" style="min-height:100px;font-size:9px;">Content Card</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Detail -->
+      <div class="wireframe rv">
+        <div class="wf-label">Content Detail /insights/[slug] (Story 1.2)</div>
+        <div class="wf-grid" style="grid-template-columns:1fr;">
+          <div class="wf-box filled" style="min-height:80px;">Cover Image + Title + Author + Date + Type Badge</div>
+          <div class="wf-grid wf-sidebar-layout" style="grid-template-columns:1fr 200px;">
+            <div class="wf-grid">
+              <div class="wf-box" style="min-height:200px;">Article Body (720px max-width)</div>
+              <div class="wf-box" style="min-height:40px;border-color:var(--neg);color:var(--neg);">Paywall Wall (gradient fade + registration card)</div>
+            </div>
+            <div class="wf-grid">
+              <div class="wf-box" style="font-size:9px;">Entity Chips</div>
+              <div class="wf-box" style="font-size:9px;">PDF Download</div>
+              <div class="wf-box" style="font-size:9px;">Related Content</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market Feed -->
+      <div class="wireframe rv">
+        <div class="wf-label">Market Feed /feed (Story 3.1)</div>
+        <div class="wf-grid" style="grid-template-columns:1fr;">
+          <div class="wf-box filled" style="font-size:9px;">Ticker Strip: APU +2.4% | TTL +0.6% | KHAN -1.2% | MMC +5.1%</div>
+          <div class="wf-flex">
+            <div class="wf-box" style="font-size:9px;">All</div>
+            <div class="wf-box filled" style="font-size:9px;">Mining</div>
+            <div class="wf-box" style="font-size:9px;">Finance</div>
+            <div class="wf-box" style="font-size:9px;">Energy</div>
+          </div>
+          <div class="wf-grid" style="max-width:700px;">
+            <div class="wf-box" style="min-height:60px;font-size:9px;">News Card: headline + source + date + entity chips + "Read Original"</div>
+            <div class="wf-box" style="min-height:60px;font-size:9px;">News Card</div>
+            <div class="wf-box" style="min-height:60px;font-size:9px;">News Card</div>
+            <div class="wf-box" style="min-height:60px;font-size:9px;">News Card</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Events -->
+      <div class="wireframe rv">
+        <div class="wf-label">Events /events (Story 4.1)</div>
+        <div class="wf-grid" style="grid-template-columns:1fr;">
+          <div class="wf-box filled" style="min-height:100px;">Featured Event Hero: MIF 2026 + Date + Location + Register CTA</div>
+          <div class="wf-grid" style="grid-template-columns:1fr 1fr;">
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Upcoming Event Card</div>
+            <div class="wf-box" style="min-height:80px;font-size:9px;">Upcoming Event Card</div>
+          </div>
+          <div class="wf-box" style="font-size:9px;">Past Events Archive (smaller cards, reverse chrono)</div>
+        </div>
+      </div>
+
+      <!-- Event Detail -->
+      <div class="wireframe rv">
+        <div class="wf-label">Event Detail /events/[slug] (Story 4.2)</div>
+        <div class="wf-grid" style="grid-template-columns:1fr;">
+          <div class="wf-box filled" style="min-height:60px;">Event Header: Name + Date + Location</div>
+          <div class="wf-grid wf-sidebar-layout" style="grid-template-columns:1fr 280px;">
+            <div class="wf-grid">
+              <div class="wf-box" style="min-height:100px;">Agenda / Schedule Timeline</div>
+              <div class="wf-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                <div class="wf-box" style="min-height:60px;font-size:9px;">Speaker Card</div>
+                <div class="wf-box" style="min-height:60px;font-size:9px;">Speaker Card</div>
+                <div class="wf-box" style="min-height:60px;font-size:9px;">Speaker Card</div>
+              </div>
+            </div>
+            <div class="wf-grid">
+              <div class="wf-box filled" style="min-height:200px;font-size:9px;">Registration Form: Name, Email, Company, Title, Country → Register</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== STATES ===================== -->
+  <section class="sec-full" id="states" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease);">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+      <div class="rv">
+        <div class="sec-lbl">06 &mdash; State Patterns</div>
+        <h2 class="sec-title">Loading, Error, Empty, Paywall</h2>
+        <p class="sec-desc">Every widget loads independently. Every error is recoverable. The paywall is a conversion tool, not a wall.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="g2">
+        <!-- Loading skeleton -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Loading State &mdash; Skeleton</div>
+          </div>
+          <div class="widget-body">
+            <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;">
+              <div class="skel skel-circle"></div>
+              <div style="flex:1;"><div class="skel skel-line w75"></div><div class="skel skel-line w50"></div></div>
+            </div>
+            <div class="skel skel-block"></div>
+            <div class="skel skel-line w100"></div>
+            <div class="skel skel-line w75"></div>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+              <div class="skel" style="width:60px;height:24px;border-radius:var(--r-xs);"></div>
+              <div class="skel" style="width:80px;height:24px;border-radius:var(--r-xs);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error state -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Error State</div>
+          </div>
+          <div class="widget-body">
+            <div class="widget-err">
+              <div class="widget-err-icon">!</div>
+              <div>
+                <div style="font-weight:600;margin-bottom:2px;">Failed to load market data</div>
+                <div style="font-size:11px;color:var(--fg-2);">MSE API timed out. Data may be stale.</div>
+              </div>
+              <a href="#">Retry</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Empty State &mdash; Search</div>
+          </div>
+          <div class="widget-body" style="text-align:center;padding:40px 20px;">
+            <div style="font-size:32px;margin-bottom:12px;opacity:0.3;">&#128269;</div>
+            <div style="font-family:var(--font-d);font-weight:700;font-size:15px;margin-bottom:8px;">No results for "Oyu Tolgoi"</div>
+            <div style="font-size:13px;color:var(--fg-2);margin-bottom:16px;">Try adjusting your filters or search for a different entity.</div>
+            <button class="btn btn-o btn-sm">Clear Filters</button>
+          </div>
+        </div>
+
+        <!-- Paywall -->
+        <div class="widget rv">
+          <div class="widget-hdr">
+            <div class="widget-title">Paywall &mdash; Metered Access</div>
+          </div>
+          <div class="widget-body" style="padding:0;">
+            <div style="padding:12px 20px;">
+              <div class="paywall-counter">&#9679; 2 of 3 free articles remaining</div>
+            </div>
+            <div class="paywall" style="padding:0 20px;">
+              <div style="font-size:13px;color:var(--fg-2);line-height:1.7;">
+                The Mongolian Stock Exchange saw trading volumes increase by 23% in Q1 2026, driven primarily by institutional interest in mining and infrastructure sectors. Foreign portfolio investment reached &#8366;2.4 trillion, marking the highest quarterly...
+              </div>
+              <div class="paywall-fade"></div>
+            </div>
+            <div class="paywall-card" style="margin:0 20px 20px;">
+              <h3>Continue reading with a free account</h3>
+              <p>Create a free account to access unlimited research and intelligence.</p>
+              <button class="btn btn-p">Create Free Account</button>
+              <div style="margin-top:12px;font-size:11px;color:var(--fg-2);">Already have an account? <a href="#" style="color:var(--brand);text-decoration:none;font-weight:600;">Sign in</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ANTI-PREFS ===================== -->
+  <section class="sec">
+    <div class="rv">
+      <div class="sec-lbl">07 &mdash; Anti-Preferences</div>
+      <h2 class="sec-title">Hard No Wall</h2>
+      <p class="sec-desc">If it smells like any of these, kill it. Run this check before shipping anything.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;" class="rv">
+      <div class="anti">
+        <div class="anti-label">Color</div>
+        <div style="font-size:13px;">Purple-to-orange gradients. Pastels. Neon. Corporate blue #0066FF.</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Typography</div>
+        <div style="font-size:13px;">Serif fonts. Handwriting. Text shadows. Outlined/stroke text.</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Layout</div>
+        <div style="font-size:13px;">Hero sliders. Masonry grids. Horizontal scroll. Desktop hamburger.</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Animation</div>
+        <div style="font-size:13px;">Bouncing elements. Confetti. Anything &gt;600ms. Slide-from-left spam.</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Imagery</div>
+        <div style="font-size:13px;">Stock handshakes. Corporate illustrations. AI art. Emoji as icons.</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Components</div>
+        <div style="font-size:13px;">Glassmorphism. Pill buttons. Modal on page load. Cookie walls.</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Content</div>
+        <div style="font-size:13px;">"Leverage", "synergy", "delve". "Submit" buttons. "Click here".</div>
+      </div>
+      <div class="anti">
+        <div class="anti-label">Vibe</div>
+        <div style="font-size:13px;">Floating mockups. Gradient mesh heroes. "AI-powered" badges. Template flow.</div>
+      </div>
+    </div>
+
+    <!-- Smells like test -->
+    <div style="margin-top:40px;padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);" class="rv">
+      <div style="font-family:var(--font-d);font-weight:700;font-size:15px;margin-bottom:16px;">"Smells Like" Test &mdash; run before shipping</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;" class="g2">
+        <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--pos);">&#9744;</span> Not a template</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--pos);">&#9744;</span> Not corporate</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--pos);">&#9744;</span> Not every other startup</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--pos);">&#9744;</span> Not seen 100 times</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--pos);">&#9744;</span> Would an investor trust this?</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--pos);">&#9744;</span> Data density feels right?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="padding:48px 24px;text-align:center;border-top:1px solid var(--border);transition:border-color var(--dur) var(--ease);">
+    <div style="font-size:13px;color:var(--fg-2);">MarketIQ v1 Production Design System &mdash; 910studio &times; CMM &mdash; April 2026</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;">
+      <span class="badge b-brand">CMM Light + Atlas</span>
+      <span class="badge b-sig">Motion Level 3</span>
+      <span class="badge b-info">Desktop-First</span>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn btn-o btn-sm" id="copyTokensBtn">Copy Tailwind Tokens</button>
+    </div>
+  </footer>
+
+  <script>
+    // Mode toggle
+    const togEl = document.getElementById('modeTog');
+    togEl.addEventListener('click', e => {
+      const btn = e.target.closest('.m-btn');
+      if (!btn) return;
+      const mode = btn.dataset.mode;
+      document.documentElement.setAttribute('data-mode', mode);
+      togEl.querySelectorAll('.m-btn').forEach(b => b.classList.remove('act'));
+      btn.classList.add('act');
+    });
+
+    // Copy swatch
+    function copySwatch(el) {
+      const hex = el.dataset.hex;
+      navigator.clipboard.writeText(hex).then(() => {
+        const info = el.querySelector('div:last-of-type > div:first-child');
+        const orig = info.textContent;
+        info.textContent = 'Copied!';
+        info.style.color = 'var(--pos)';
+        setTimeout(() => { info.textContent = orig; info.style.color = ''; }, 1000);
+      });
+    }
+
+    // Copy tokens
+    document.getElementById('copyTokensBtn').addEventListener('click', function() {
+      const tokens = `// tailwind.config.ts — MarketIQ v1
+const colors = {
+  background: { DEFAULT: '#FAFAFD', alt: '#F4F2FA' },
+  foreground: { DEFAULT: '#0C0A1D', secondary: '#44415A' },
+  surface: { DEFAULT: '#F0EEF7', elevated: '#EAE8F3', sunken: '#FCFBFE' },
+  border: { DEFAULT: '#DDDBE8', subtle: '#EDEBF5' },
+  brand: { DEFAULT: '#3E149C', hover: '#2E0F75', light: '#6B4CC0', lighter: '#9B7EDB', muted: 'rgba(62,20,156,0.07)', text: '#FFFFFF' },
+  signal: { DEFAULT: '#FCA311', hover: '#E89200', light: '#FFD166', muted: 'rgba(252,163,17,0.1)' },
+  positive: { DEFAULT: '#059669', text: '#065F46', muted: 'rgba(5,150,105,0.08)' },
+  negative: { DEFAULT: '#DC2626', text: '#991B1B', muted: 'rgba(220,38,38,0.08)' },
+  info: { DEFAULT: '#0891B2', muted: 'rgba(8,145,178,0.08)' },
+  cat: { markets: '#3E149C', companies: '#0891B2', sectors: '#059669', insights: '#D97706', ai: '#7C3AED' },
+};
+const fontFamily = {
+  display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+  body: ['DM Sans', 'system-ui', 'sans-serif'],
+  mono: ['JetBrains Mono', 'monospace'],
+};`;
+      navigator.clipboard.writeText(tokens).then(() => {
+        this.textContent = 'Copied!';
+        setTimeout(() => { this.textContent = 'Copy Tailwind Tokens'; }, 2000);
+      });
+    });
+
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+    // Active nav
+    const navLinks = document.querySelectorAll('.hdr-nav a[href^="#"]');
+    const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    window.addEventListener('scroll', () => {
+      let cur = '';
+      sections.forEach(s => { if (s.getBoundingClientRect().top <= 100) cur = s.id; });
+      navLinks.forEach(a => { a.classList.toggle('act', a.getAttribute('href') === '#' + cur); });
+    });
+  </script>
+</body>
+</html>

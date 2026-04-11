@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en" data-direction="atlas">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMM Market IQ — Component Showcase | 910studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fira+Code:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,700;8..60,800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+    /* === DIRECTION TOKENS (all 7) === */
+    [data-direction="atlas"]{--bg:#FFFFFF;--bg-s:#F8FAFC;--fg:#0F172A;--fg-s:#334155;--sf:#F8FAFC;--sf-e:#F1F5F9;--bd:#E2E8F0;--ac:#1E293B;--ac-h:#0F172A;--ac-sub:rgba(30,41,59,0.06);--ac-t:#FFF;--mu:#64748B;--mu-l:#94A3B8;--err:#DC2626;--err-sub:#FEF2F2;--ok:#16A34A;--ok-sub:#F0FDF4;--warn:#D97706;--warn-sub:rgba(217,119,6,0.08);--info:#2563EB;--info-sub:rgba(37,99,235,0.06);--fd:'Plus Jakarta Sans',system-ui,sans-serif;--fb:'DM Sans',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--r:6px;--rs:4px;--rl:10px;--bw:1px;--ss:0 1px 2px rgba(0,0,0,0.04);--sm:0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -2px rgba(0,0,0,0.04);--sl:0 10px 15px -3px rgba(0,0,0,0.06);--hb:rgba(255,255,255,0.92);--br:4px;--ls:-0.02em;--lhd:1.2;--lhb:1.6;--fs:0.9375rem;--fss:0.8125rem;}
+    [data-direction="ledger"]{--bg:#FFF;--bg-s:#FAFAFA;--fg:#171717;--fg-s:#404040;--sf:#FAFAFA;--sf-e:#F5F5F5;--bd:#E5E5E5;--ac:#171717;--ac-h:#000;--ac-sub:#F5F5F5;--ac-t:#FFF;--mu:#737373;--mu-l:#A3A3A3;--err:#DC2626;--err-sub:#FEF2F2;--ok:#16A34A;--ok-sub:#F0FDF4;--warn:#D97706;--warn-sub:rgba(217,119,6,0.08);--info:#2563EB;--info-sub:rgba(37,99,235,0.06);--fd:'Space Mono',monospace;--fb:'Space Grotesk',system-ui,sans-serif;--fm:'Space Mono',monospace;--r:4px;--rs:2px;--rl:6px;--bw:1px;--ss:none;--sm:none;--sl:none;--hb:rgba(255,255,255,0.95);--br:2px;--ls:0em;--lhd:1.35;--lhb:1.6;--fs:0.9375rem;--fss:0.8125rem;}
+    [data-direction="vault"]{--bg:#1C1917;--bg-s:#292524;--fg:#FAFAF9;--fg-s:#D6D3D1;--sf:#292524;--sf-e:#44403C;--bd:rgba(250,250,249,0.1);--ac:#EAB308;--ac-h:#CA8A04;--ac-sub:rgba(234,179,8,0.1);--ac-t:#1C1917;--mu:#A8A29E;--mu-l:#78716C;--err:#EF4444;--err-sub:rgba(239,68,68,0.1);--ok:#22C55E;--ok-sub:rgba(34,197,94,0.1);--warn:#F59E0B;--warn-sub:rgba(245,158,11,0.1);--info:#60A5FA;--info-sub:rgba(96,165,250,0.1);--fd:'Source Serif 4',Georgia,serif;--fb:'Inter',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--r:10px;--rs:6px;--rl:14px;--bw:1px;--ss:0 1px 3px rgba(0,0,0,0.3);--sm:0 4px 12px rgba(0,0,0,0.3);--sl:0 12px 32px rgba(0,0,0,0.4);--hb:rgba(28,25,23,0.9);--br:8px;--ls:-0.01em;--lhd:1.2;--lhb:1.65;--fs:0.9375rem;--fss:0.8125rem;}
+    [data-direction="blueprint"]{--bg:#FFF;--bg-s:#F8FAFC;--fg:#0F172A;--fg-s:#334155;--sf:#F8FAFC;--sf-e:#F1F5F9;--bd:#CBD5E1;--ac:#0891B2;--ac-h:#0E7490;--ac-sub:#ECFEFF;--ac-t:#FFF;--mu:#64748B;--mu-l:#94A3B8;--err:#DC2626;--err-sub:#FEF2F2;--ok:#059669;--ok-sub:#ECFDF5;--warn:#D97706;--warn-sub:rgba(217,119,6,0.08);--info:#0891B2;--info-sub:rgba(8,145,178,0.06);--fd:'IBM Plex Sans',system-ui,sans-serif;--fb:'IBM Plex Sans',system-ui,sans-serif;--fm:'IBM Plex Mono',monospace;--r:2px;--rs:1px;--rl:4px;--bw:1px;--ss:none;--sm:none;--sl:none;--hb:rgba(255,255,255,0.95);--br:2px;--ls:0em;--lhd:1.25;--lhb:1.6;--fs:0.875rem;--fss:0.75rem;}
+    [data-direction="keynote"]{--bg:#000;--bg-s:#1C1C1E;--fg:#F5F5F7;--fg-s:#A1A1A6;--sf:#1C1C1E;--sf-e:#2C2C2E;--bd:rgba(245,245,247,0.06);--ac:#F5F5F7;--ac-h:#FFF;--ac-sub:rgba(245,245,247,0.06);--ac-t:#000;--mu:#86868B;--mu-l:#636366;--err:#FF453A;--err-sub:rgba(255,69,58,0.1);--ok:#30D158;--ok-sub:rgba(48,209,88,0.1);--warn:#FFD60A;--warn-sub:rgba(255,214,10,0.08);--info:#007AFF;--info-sub:rgba(0,122,255,0.08);--fd:'Inter',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--r:12px;--rs:8px;--rl:16px;--bw:1px;--ss:0 1px 4px rgba(0,0,0,0.5);--sm:0 8px 24px rgba(0,0,0,0.4);--sl:0 16px 48px rgba(0,0,0,0.5);--hb:rgba(0,0,0,0.85);--br:8px;--ls:-0.03em;--lhd:1.1;--lhb:1.6;--fs:1rem;--fss:0.875rem;}
+    [data-direction="cmm-light"]{--bg:#F8F7FF;--bg-s:#EFEDF8;--fg:#090C02;--fg-s:#2A2D22;--sf:#EFEDF8;--sf-e:#E6E4EF;--bd:#D4D2DE;--ac:#3E149C;--ac-h:#2E0F75;--ac-sub:rgba(62,20,156,0.07);--ac-t:#FFF;--mu:#6B6A72;--mu-l:#9997A3;--err:#DC2626;--err-sub:#FEF2F2;--ok:#16A34A;--ok-sub:#F0FDF4;--warn:#FCA311;--warn-sub:rgba(252,163,17,0.08);--info:#3E149C;--info-sub:rgba(62,20,156,0.06);--fd:'Gilroy','Outfit',system-ui,sans-serif;--fb:'Gilroy','Outfit',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--r:8px;--rs:4px;--rl:12px;--bw:1px;--ss:0 1px 3px rgba(62,20,156,0.06);--sm:0 4px 12px rgba(62,20,156,0.08);--sl:0 12px 24px rgba(62,20,156,0.1);--hb:rgba(248,247,255,0.92);--br:6px;--ls:-0.02em;--lhd:1.2;--lhb:1.6;--fs:0.9375rem;--fss:0.8125rem;}
+    [data-direction="cmm-light-atlas"]{--bg:#F9FAFB;--bg-s:#F3F4F6;--fg:#111827;--fg-s:#374151;--sf:#F3F4F6;--sf-e:#E5E7EB;--bd:#D1D5DB;--ac:#3E149C;--ac-h:#2E0F75;--ac-sub:rgba(62,20,156,0.06);--ac-t:#FFF;--mu:#6B7280;--mu-l:#9CA3AF;--err:#DC2626;--err-sub:#FEF2F2;--ok:#16A34A;--ok-sub:#F0FDF4;--warn:#FCA311;--warn-sub:rgba(252,163,17,0.08);--info:#3E149C;--info-sub:rgba(62,20,156,0.06);--fd:'Plus Jakarta Sans',system-ui,sans-serif;--fb:'DM Sans',system-ui,sans-serif;--fm:'JetBrains Mono',monospace;--r:6px;--rs:4px;--rl:10px;--bw:1px;--ss:0 1px 2px rgba(0,0,0,0.04);--sm:0 4px 6px -1px rgba(0,0,0,0.06),0 2px 4px -2px rgba(0,0,0,0.04);--sl:0 10px 15px -3px rgba(0,0,0,0.08);--hb:rgba(249,250,251,0.92);--br:4px;--ls:-0.02em;--lhd:1.2;--lhb:1.6;--fs:0.9375rem;--fss:0.8125rem;}
+    [data-direction="cmm-dark"]{--bg:#0D0527;--bg-s:#140A36;--fg:#F8F7FF;--fg-s:#D4D0E8;--sf:#170D3A;--sf-e:#221548;--bd:rgba(248,247,255,0.1);--ac:#FCA311;--ac-h:#FFB840;--ac-sub:rgba(252,163,17,0.1);--ac-t:#0D0527;--mu:#9088A8;--mu-l:#6A6182;--err:#EF4444;--err-sub:rgba(239,68,68,0.1);--ok:#22C55E;--ok-sub:rgba(34,197,94,0.1);--warn:#FCA311;--warn-sub:rgba(252,163,17,0.1);--info:#C4B5FD;--info-sub:rgba(196,181,253,0.1);--fd:'Gilroy','Outfit',system-ui,sans-serif;--fb:'Gilroy','Outfit',system-ui,sans-serif;--fm:'Fira Code',monospace;--r:8px;--rs:4px;--rl:12px;--bw:1px;--ss:0 1px 3px rgba(13,5,39,0.4);--sm:0 4px 12px rgba(13,5,39,0.5);--sl:0 12px 32px rgba(13,5,39,0.5);--hb:rgba(13,5,39,0.9);--br:6px;--ls:-0.02em;--lhd:1.15;--lhb:1.6;--fs:0.9375rem;--fss:0.8125rem;}
+
+    /* === BASE === */
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--fg);font-family:var(--fb);font-size:var(--fs);line-height:var(--lhb);-webkit-font-smoothing:antialiased;transition:background .4s,color .4s;position:relative}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;display:none;opacity:0}
+    .t{transition:all .4s ease-out}
+    .container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+    /* === HEADER === */
+    .header{position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--hb);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:var(--bw) solid var(--bd);transition:background .4s,border-color .4s}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+    .header-brand{font-family:var(--fd);font-size:1.0625rem;font-weight:700;color:var(--fg);letter-spacing:var(--ls);transition:all .4s}
+    .header-tabs{display:flex;gap:4px;flex-wrap:wrap}
+    .tab{font-family:var(--fb);font-size:.8125rem;font-weight:500;padding:6px 14px;border-radius:var(--rs);border:var(--bw) solid transparent;background:0;color:var(--mu);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .tab:hover{color:var(--fg);background:var(--sf)}
+    .tab.active{color:var(--ac);background:var(--ac-sub);border-color:var(--ac)}
+
+    /* === SCROLL PROGRESS === */
+    .scroll-bar{position:fixed;top:56px;left:0;height:2px;background:var(--ac);z-index:9998;transition:background .4s;width:0}
+
+    /* === SECTIONS === */
+    .page{padding-top:80px;padding-bottom:80px}
+    .section{padding:56px 0;border-bottom:var(--bw) solid var(--bd);transition:border-color .4s}
+    .section:last-child{border-bottom:none}
+    .section-label{font-family:var(--fm);font-size:.6875rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mu);margin-bottom:8px;transition:color .4s}
+    .section-title{font-family:var(--fd);font-size:1.625rem;font-weight:700;color:var(--fg);letter-spacing:var(--ls);line-height:var(--lhd);margin-bottom:32px;transition:all .4s}
+    .subsection{margin-bottom:40px}
+    .subsection:last-child{margin-bottom:0}
+    .sub-label{font-family:var(--fb);font-size:var(--fss);font-weight:600;color:var(--fg);margin-bottom:14px;transition:color .4s}
+    .component-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .component-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .component-col{display:flex;flex-direction:column;gap:12px}
+    .demo-box{padding:24px;border-radius:var(--rl);background:var(--bg-s);border:var(--bw) solid var(--bd);transition:all .4s}
+
+    /* =============================================
+       BUTTONS
+       ============================================= */
+    .btn{font-family:var(--fb);font-size:.875rem;font-weight:600;padding:10px 20px;border-radius:var(--r);border:var(--bw) solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .2s;position:relative;overflow:hidden;white-space:nowrap}
+    .btn-primary{background:var(--ac);color:var(--ac-t);border-color:var(--ac)}
+    .btn-primary:hover{background:var(--ac-h);border-color:var(--ac-h);transform:translateY(-1px);box-shadow:var(--sm)}
+    .btn-primary:active{transform:translateY(0)}
+    .btn-outline{background:0;color:var(--fg);border-color:var(--bd)}
+    .btn-outline:hover{border-color:var(--ac);color:var(--ac);transform:translateY(-1px)}
+    .btn-ghost{background:0;color:var(--mu);border-color:transparent}
+    .btn-ghost:hover{color:var(--fg);background:var(--sf)}
+    .btn-danger{background:var(--err);color:#FFF;border-color:var(--err)}
+    .btn-danger:hover{opacity:.9;transform:translateY(-1px);box-shadow:var(--sm)}
+    .btn-disabled{background:var(--sf);color:var(--mu-l);border-color:var(--bd);cursor:not-allowed;opacity:.6}
+    .btn-sm{padding:6px 14px;font-size:.8125rem}
+    .btn-lg{padding:14px 28px;font-size:1rem}
+    .btn-icon{width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:var(--r);border:var(--bw) solid var(--bd);background:var(--bg);color:var(--mu);cursor:pointer;transition:all .2s}
+    .btn-icon:hover{border-color:var(--ac);color:var(--ac)}
+    .btn-loading .btn-text{opacity:0}
+    .btn-loading::after{content:'';position:absolute;left:50%;top:50%;margin-left:-8px;margin-top:-8px;width:16px;height:16px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .btn-group{display:flex;gap:0}
+    .btn-group .btn{border-radius:0}
+    .btn-group .btn:first-child{border-radius:var(--r) 0 0 var(--r)}
+    .btn-group .btn:last-child{border-radius:0 var(--r) var(--r) 0}
+    .btn-group .btn:not(:last-child){border-right:0}
+
+    /* =============================================
+       FORM ELEMENTS
+       ============================================= */
+    .form-field{display:flex;flex-direction:column;gap:6px}
+    .form-label{font-size:var(--fss);font-weight:600;color:var(--fg);transition:color .4s}
+    .form-hint{font-size:.75rem;color:var(--mu);transition:color .4s}
+    .form-error-msg{font-size:.75rem;color:var(--err);transition:color .4s}
+    .input{font-family:var(--fb);font-size:var(--fs);padding:10px 14px;border-radius:var(--r);border:var(--bw) solid var(--bd);background:var(--bg);color:var(--fg);outline:0;transition:all .2s;width:100%}
+    .input::placeholder{color:var(--mu-l)}
+    .input:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-sub)}
+    .input-error{border-color:var(--err)!important;box-shadow:0 0 0 3px var(--err-sub)!important}
+    .input-disabled{background:var(--sf);color:var(--mu-l);cursor:not-allowed}
+    .textarea{font-family:var(--fb);font-size:var(--fs);padding:10px 14px;border-radius:var(--r);border:var(--bw) solid var(--bd);background:var(--bg);color:var(--fg);outline:0;transition:all .2s;width:100%;resize:vertical;min-height:80px}
+    .textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-sub)}
+    .select{font-family:var(--fb);font-size:var(--fs);padding:10px 14px;border-radius:var(--r);border:var(--bw) solid var(--bd);background:var(--bg);color:var(--fg);outline:0;transition:all .2s;appearance:none;width:100%;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+    .select:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-sub)}
+
+    /* Checkbox */
+    .checkbox-row{display:flex;align-items:center;gap:10px;cursor:pointer}
+    .checkbox{width:18px;height:18px;border-radius:var(--rs);border:var(--bw) solid var(--bd);background:var(--bg);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;cursor:pointer}
+    .checkbox.checked{background:var(--ac);border-color:var(--ac)}
+    .checkbox.checked::after{content:'✓';color:var(--ac-t);font-size:.7rem;font-weight:700}
+    .checkbox-label{font-size:var(--fss);color:var(--fg);transition:color .4s;user-select:none}
+
+    /* Radio */
+    .radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--bd);background:var(--bg);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;cursor:pointer}
+    .radio.checked{border-color:var(--ac)}
+    .radio.checked::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--ac)}
+
+    /* Toggle */
+    .toggle{width:44px;height:24px;border-radius:12px;background:var(--sf-e);border:none;cursor:pointer;position:relative;transition:background .2s}
+    .toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#FFF;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+    .toggle.active{background:var(--ac)}
+    .toggle.active::after{transform:translateX(20px)}
+
+    /* Search */
+    .search-bar{display:flex;align-items:center;border-radius:var(--rl);border:var(--bw) solid var(--bd);background:var(--bg);overflow:hidden;transition:all .2s;box-shadow:var(--ss)}
+    .search-bar:focus-within{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-sub)}
+    .search-icon{padding:0 0 0 16px;color:var(--mu);font-size:1.125rem;transition:color .4s;display:flex;align-items:center}
+    .search-input{flex:1;font-family:var(--fb);font-size:var(--fs);padding:12px 16px;border:none;background:0;color:var(--fg);outline:0}
+    .search-input::placeholder{color:var(--mu-l)}
+    .search-kbd{font-family:var(--fm);font-size:.625rem;padding:4px 8px;border-radius:var(--rs);border:var(--bw) solid var(--bd);color:var(--mu);background:var(--sf);margin-right:12px;transition:all .4s}
+
+    /* File Upload */
+    .file-upload{border:2px dashed var(--bd);border-radius:var(--rl);padding:32px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .2s}
+    .file-upload:hover{border-color:var(--ac);background:var(--ac-sub)}
+    .file-upload-icon{font-size:1.5rem;color:var(--mu);transition:color .4s}
+    .file-upload-text{font-size:var(--fss);color:var(--mu);transition:color .4s}
+    .file-upload-text strong{color:var(--ac)}
+
+    /* Range */
+    .range{width:100%;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--bd);outline:none;transition:background .4s}
+    .range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--ac);cursor:pointer;border:2px solid var(--bg);box-shadow:var(--ss)}
+
+    /* =============================================
+       BADGES & TAGS
+       ============================================= */
+    .badge{font-size:.625rem;font-weight:600;padding:3px 10px;border-radius:var(--br);font-family:var(--fb);transition:all .4s;display:inline-flex;align-items:center;gap:4px}
+    .badge-default{background:var(--ac-sub);color:var(--ac)}
+    .badge-success{background:var(--ok-sub);color:var(--ok)}
+    .badge-error{background:var(--err-sub);color:var(--err)}
+    .badge-warning{background:var(--warn-sub);color:var(--warn)}
+    .badge-info{background:var(--info-sub);color:var(--info)}
+    .badge-outline{background:0;border:var(--bw) solid var(--bd);color:var(--mu)}
+    .badge-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+
+    /* =============================================
+       AVATARS
+       ============================================= */
+    .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0;transition:all .4s}
+    .avatar-sm{width:28px;height:28px;font-size:.625rem}
+    .avatar-md{width:36px;height:36px;font-size:.75rem}
+    .avatar-lg{width:48px;height:48px;font-size:1rem}
+    .avatar-xl{width:64px;height:64px;font-size:1.25rem}
+    .avatar-a{background:var(--ac-sub);color:var(--ac)}
+    .avatar-b{background:var(--ok-sub);color:var(--ok)}
+    .avatar-c{background:var(--err-sub);color:var(--err)}
+    .avatar-d{background:var(--warn-sub);color:var(--warn)}
+    .avatar-group{display:flex}
+    .avatar-group .avatar{margin-left:-8px;border:2px solid var(--bg)}
+    .avatar-group .avatar:first-child{margin-left:0}
+
+    /* =============================================
+       PROGRESS
+       ============================================= */
+    .progress-bar{height:6px;border-radius:3px;background:var(--sf-e);overflow:hidden;transition:background .4s}
+    .progress-fill{height:100%;border-radius:3px;transition:width .6s ease-out,background .4s}
+    .progress-default .progress-fill{background:var(--ac)}
+    .progress-success .progress-fill{background:var(--ok)}
+    .progress-error .progress-fill{background:var(--err)}
+
+    /* =============================================
+       ALERTS
+       ============================================= */
+    .alert{padding:14px 16px;border-radius:var(--r);border:var(--bw) solid transparent;display:flex;align-items:flex-start;gap:10px;transition:all .3s}
+    .alert-success{background:var(--ok-sub);border-color:var(--ok);color:var(--ok)}
+    .alert-error{background:var(--err-sub);border-color:var(--err);color:var(--err)}
+    .alert-warning{background:var(--warn-sub);border-color:var(--warn);color:var(--warn)}
+    .alert-info{background:var(--info-sub);border-color:var(--info);color:var(--info)}
+    .alert-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+    .alert-text{font-family:var(--fb);font-size:var(--fss);line-height:1.5;flex:1}
+    .alert-dismiss{margin-left:auto;background:0;border:0;color:inherit;cursor:pointer;opacity:.6;font-size:1rem;transition:opacity .15s,transform .2s;flex-shrink:0}
+    .alert-dismiss:hover{opacity:1;transform:rotate(90deg)}
+
+    /* =============================================
+       TOAST
+       ============================================= */
+    .toast-container{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:99999}
+    .toast{padding:12px 16px;border-radius:var(--r);background:var(--fg);color:var(--bg);font-family:var(--fb);font-size:var(--fss);display:flex;align-items:center;gap:10px;box-shadow:var(--sl);animation:toastIn .3s ease-out;min-width:280px;transition:all .4s}
+    .toast-success{border-left:3px solid var(--ok)}
+    .toast-error{border-left:3px solid var(--err)}
+    @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .toast.dismissing{opacity:0;transform:translateY(12px);transition:all .3s}
+
+    /* =============================================
+       MODAL
+       ============================================= */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99998;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+    .modal-overlay.visible{display:flex}
+    .modal{background:var(--bg);border-radius:var(--rl);border:var(--bw) solid var(--bd);width:480px;max-width:90vw;box-shadow:var(--sl);transition:all .4s;animation:modalIn .25s ease-out}
+    @keyframes modalIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+    .modal-header{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    .modal-title{font-family:var(--fd);font-size:1.125rem;font-weight:700;color:var(--fg);transition:all .4s}
+    .modal-close{background:0;border:0;color:var(--mu);font-size:1.25rem;cursor:pointer;transition:all .15s;padding:4px}
+    .modal-close:hover{color:var(--fg);transform:rotate(90deg)}
+    .modal-body{padding:16px 24px}
+    .modal-body p{font-size:var(--fss);color:var(--fg-s);line-height:1.6;transition:color .4s}
+    .modal-footer{padding:16px 24px 20px;display:flex;gap:8px;justify-content:flex-end}
+
+    /* =============================================
+       SKELETON
+       ============================================= */
+    .skeleton{border-radius:var(--rs);background:var(--sf-e);position:relative;overflow:hidden;transition:background .4s}
+    .skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);animation:shimmer 1.5s infinite}
+    @keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+    /* =============================================
+       SPINNER
+       ============================================= */
+    .spinner{border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .6s linear infinite;transition:border-color .4s}
+    .spinner-sm{width:16px;height:16px}
+    .spinner-md{width:24px;height:24px}
+    .spinner-lg{width:36px;height:36px}
+
+    /* =============================================
+       TABS
+       ============================================= */
+    .tabs{display:flex;gap:0;border-bottom:var(--bw) solid var(--bd);transition:border-color .4s}
+    .tab-item{font-family:var(--fb);font-size:.8125rem;font-weight:500;padding:12px 16px;color:var(--mu);border:none;background:0;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+    .tab-item:hover{color:var(--fg)}
+    .tab-item.active{color:var(--ac);border-bottom-color:var(--ac)}
+
+    /* =============================================
+       BREADCRUMB
+       ============================================= */
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:var(--fss);color:var(--mu);transition:color .4s}
+    .breadcrumb a{color:var(--mu);text-decoration:none;transition:color .15s}
+    .breadcrumb a:hover{color:var(--ac)}
+    .breadcrumb .sep{opacity:.4}
+    .breadcrumb .current{color:var(--fg);font-weight:500}
+
+    /* =============================================
+       PAGINATION
+       ============================================= */
+    .pagination{display:flex;align-items:center;gap:2px}
+    .page-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:none;background:0;color:var(--mu);font-family:var(--fb);font-size:.8125rem;cursor:pointer;transition:all .15s}
+    .page-btn:hover{background:var(--sf);color:var(--fg)}
+    .page-btn.active{background:var(--ac);color:var(--ac-t)}
+    .page-btn.disabled{opacity:.3;cursor:not-allowed}
+
+    /* =============================================
+       TABLE
+       ============================================= */
+    .table-wrap{border-radius:var(--rl);border:var(--bw) solid var(--bd);overflow:hidden;background:var(--bg);transition:all .4s}
+    .table{width:100%;border-collapse:collapse;font-size:var(--fss)}
+    .table th{padding:10px 16px;text-align:left;font-weight:600;color:var(--mu);font-size:.6875rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:var(--bw) solid var(--bd);background:var(--sf);transition:all .4s;white-space:nowrap}
+    .table td{padding:12px 16px;border-bottom:var(--bw) solid var(--bd);color:var(--fg);transition:all .4s}
+    .table tbody tr{transition:background .1s}
+    .table tbody tr:hover{background:var(--sf)}
+    .table tbody tr:last-child td{border-bottom:none}
+    .table .mono{font-family:var(--fm);font-variant-numeric:tabular-nums}
+
+    /* =============================================
+       CARDS
+       ============================================= */
+    .card{border-radius:var(--rl);border:var(--bw) solid var(--bd);overflow:hidden;background:var(--bg);transition:all .25s}
+    .card:hover{box-shadow:var(--sm)}
+    .card-img{height:140px;background:linear-gradient(135deg,var(--sf),var(--sf-e));transition:background .4s}
+    .card-body{padding:16px}
+    .card-title{font-family:var(--fd);font-size:1.0625rem;font-weight:700;color:var(--fg);letter-spacing:var(--ls);transition:all .4s;margin-bottom:6px}
+    .card-desc{font-size:var(--fss);color:var(--mu);line-height:1.5;transition:color .4s}
+
+    .card-horizontal{display:flex}
+    .card-horizontal .card-img{width:160px;height:auto;min-height:120px;flex-shrink:0}
+    .card-horizontal .card-body{flex:1}
+
+    /* =============================================
+       ACCORDION
+       ============================================= */
+    .accordion{border:var(--bw) solid var(--bd);border-radius:var(--rl);overflow:hidden;transition:border-color .4s}
+    .accordion-item{border-bottom:var(--bw) solid var(--bd);transition:border-color .4s}
+    .accordion-item:last-child{border-bottom:none}
+    .accordion-trigger{width:100%;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;background:0;border:0;color:var(--fg);font-family:var(--fb);font-size:var(--fss);font-weight:600;cursor:pointer;transition:all .15s;text-align:left}
+    .accordion-trigger:hover{background:var(--sf)}
+    .accordion-arrow{transition:transform .2s;color:var(--mu);font-size:.75rem}
+    .accordion-item.open .accordion-arrow{transform:rotate(180deg)}
+    .accordion-content{max-height:0;overflow:hidden;transition:max-height .3s ease-out}
+    .accordion-content-inner{padding:0 16px 14px;font-size:var(--fss);color:var(--fg-s);line-height:1.6;transition:color .4s}
+
+    /* =============================================
+       TOOLTIP
+       ============================================= */
+    .tooltip-demo{position:relative;display:inline-block}
+    .tooltip-popup{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);padding:6px 10px;border-radius:var(--rs);background:var(--fg);color:var(--bg);font-family:var(--fm);font-size:.6875rem;white-space:nowrap;pointer-events:none;opacity:0;transition:all .15s;z-index:100}
+    .tooltip-demo:hover .tooltip-popup{opacity:1;transform:translateX(-50%) translateY(-2px)}
+
+    /* =============================================
+       DROPDOWN MENU
+       ============================================= */
+    .dropdown{position:relative;display:inline-block}
+    .dropdown-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:200px;background:var(--bg);border:var(--bw) solid var(--bd);border-radius:var(--r);box-shadow:var(--sl);padding:4px;z-index:100;display:none;transition:all .4s}
+    .dropdown.open .dropdown-menu{display:block;animation:modalIn .15s ease-out}
+    .dropdown-item{font-family:var(--fb);font-size:var(--fss);padding:8px 12px;border-radius:var(--rs);color:var(--fg);cursor:pointer;transition:all .1s;display:flex;align-items:center;gap:8px;border:none;background:none;width:100%;text-align:left}
+    .dropdown-item:hover{background:var(--sf)}
+    .dropdown-divider{height:1px;background:var(--bd);margin:4px 0;transition:background .4s}
+    .dropdown-item-danger{color:var(--err)}
+    .dropdown-item-danger:hover{background:var(--err-sub)}
+
+    /* =============================================
+       EMPTY STATE
+       ============================================= */
+    .empty-state{padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+    .empty-icon{font-size:2rem;color:var(--mu-l);transition:color .4s}
+    .empty-title{font-family:var(--fd);font-size:1.0625rem;font-weight:700;color:var(--fg);transition:all .4s}
+    .empty-desc{font-size:var(--fss);color:var(--mu);max-width:360px;transition:color .4s}
+
+    /* =============================================
+       STAT CARDS
+       ============================================= */
+    .stat-card{padding:20px;border-radius:var(--rl);border:var(--bw) solid var(--bd);background:var(--bg);transition:all .2s}
+    .stat-card:hover{border-color:var(--ac)}
+    .stat-label{font-size:.6875rem;font-weight:500;color:var(--mu);margin-bottom:10px;transition:color .4s}
+    .stat-value{font-family:var(--fd);font-size:1.75rem;font-weight:700;color:var(--fg);letter-spacing:var(--ls);line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums;transition:all .4s}
+    .stat-change{font-family:var(--fm);font-size:.6875rem;display:inline-flex;align-items:center;gap:3px}
+    .stat-change.up{color:var(--ok)}
+    .stat-change.down{color:var(--err)}
+    .stat-spark{margin-top:14px;height:32px;display:flex;align-items:flex-end;gap:3px}
+    .spark-bar{flex:1;border-radius:2px;background:var(--sf-e);transition:background .4s;min-height:3px}
+    .spark-bar:last-child{background:var(--ac)}
+
+    /* =============================================
+       LIST
+       ============================================= */
+    .list{border:var(--bw) solid var(--bd);border-radius:var(--rl);overflow:hidden;transition:border-color .4s}
+    .list-item{padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:var(--bw) solid var(--bd);transition:all .1s;cursor:pointer}
+    .list-item:last-child{border-bottom:none}
+    .list-item:hover{background:var(--sf)}
+    .list-item-content{flex:1;min-width:0}
+    .list-item-title{font-size:var(--fss);font-weight:600;color:var(--fg);transition:color .4s}
+    .list-item-desc{font-size:.75rem;color:var(--mu);transition:color .4s}
+    .list-item-action{color:var(--mu);font-size:.875rem;transition:color .15s}
+    .list-item:hover .list-item-action{color:var(--ac)}
+
+    /* =============================================
+       DIVIDER
+       ============================================= */
+    .divider{height:1px;background:var(--bd);transition:background .4s}
+    .divider-label{display:flex;align-items:center;gap:12px;font-size:.75rem;color:var(--mu);transition:color .4s}
+    .divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:var(--bd);transition:background .4s}
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media(max-width:768px){
+      .component-grid{grid-template-columns:1fr}
+      .header-inner{flex-direction:column;height:auto;padding:12px 16px;gap:8px}
+      .card-horizontal{flex-direction:column}
+      .card-horizontal .card-img{width:100%;height:120px}
+      .section-title{font-size:1.25rem}
+    }
+
+    /* === KEYNOTE OVERRIDES === */
+    [data-direction="keynote"] .btn-primary{background:#F5F5F7;color:#000;border-color:#F5F5F7}
+    [data-direction="keynote"] .btn-primary:hover{background:#FFF;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    [data-direction="keynote"] .btn-outline:hover{border-color:#007AFF;color:#007AFF}
+    [data-direction="keynote"] .tab-item.active{color:#007AFF;border-bottom-color:#007AFF}
+    [data-direction="keynote"] .badge-default{background:rgba(0,122,255,.08);color:#007AFF}
+    [data-direction="keynote"] .card,[data-direction="keynote"] .table-wrap,[data-direction="keynote"] .accordion,[data-direction="keynote"] .list,[data-direction="keynote"] .demo-box,[data-direction="keynote"] .stat-card{background:#1C1C1E}
+    [data-direction="keynote"] .toggle.active{background:#007AFF}
+    [data-direction="keynote"] .page-btn.active{background:#007AFF;color:#000}
+    [data-direction="keynote"] .stat-card{background:#1C1C1E}
+
+    /* === CMM DARK OVERRIDES === */
+    [data-direction="cmm-dark"] .card,[data-direction="cmm-dark"] .table-wrap,[data-direction="cmm-dark"] .accordion,[data-direction="cmm-dark"] .list,[data-direction="cmm-dark"] .demo-box,[data-direction="cmm-dark"] .stat-card{background:#140A36}
+    [data-direction="cmm-dark"] .btn-primary{background:#FCA311;color:#0D0527;border-color:#FCA311}
+    [data-direction="cmm-dark"] .btn-primary:hover{background:#FFB840}
+    [data-direction="cmm-dark"] .toggle.active{background:#FCA311}
+    [data-direction="cmm-dark"] .toggle.active::after{background:#0D0527}
+
+    /* === CMM LIGHT OVERRIDES === */
+    [data-direction="cmm-light"] .btn-primary{background:linear-gradient(135deg,#3E149C,#5A2DB8);border-color:#3E149C}
+    [data-direction="cmm-light"] .btn-primary:hover{background:linear-gradient(135deg,#2E0F75,#4A1FA0)}
+
+    /* === CMM LIGHT ATLAS TYPE OVERRIDES === */
+    [data-direction="cmm-light-atlas"] .btn-primary{background:linear-gradient(135deg,#3E149C,#5A2DB8);border-color:#3E149C}
+    [data-direction="cmm-light-atlas"] .btn-primary:hover{background:linear-gradient(135deg,#2E0F75,#4A1FA0);box-shadow:var(--sm)}
+    [data-direction="cmm-light-atlas"] .card{border-radius:10px}
+
+    /* === BLUEPRINT OVERRIDES === */
+    [data-direction="blueprint"] .card,[data-direction="blueprint"] .table-wrap,[data-direction="blueprint"] .accordion,[data-direction="blueprint"] .list{border-style:dashed}
+    [data-direction="blueprint"] .btn{border-radius:2px}
+    [data-direction="blueprint"] .badge{border-radius:2px}
+    [data-direction="blueprint"] body::after{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;display:block;opacity:1;
+      background-image:linear-gradient(rgba(8,145,178,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(8,145,178,0.05) 1px,transparent 1px);
+      background-size:20px 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- SCROLL BAR -->
+  <div class="scroll-bar" id="scroll-bar"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-brand t">CMM Components</div>
+      <div class="header-tabs">
+        <button class="tab active" data-tab="atlas" onclick="sd('atlas')">Atlas</button>
+        <button class="tab" data-tab="ledger" onclick="sd('ledger')">Ledger</button>
+        <button class="tab" data-tab="blueprint" onclick="sd('blueprint')">Blueprint</button>
+        <button class="tab" data-tab="cmm-light" onclick="sd('cmm-light')">CMM Light</button>
+        <button class="tab" data-tab="cmm-light-atlas" onclick="sd('cmm-light-atlas')">Atlas Type</button>
+        <span style="width:1px;height:20px;background:var(--bd);margin:0 4px;flex-shrink:0;transition:background .4s"></span>
+        <button class="tab" data-tab="vault" onclick="sd('vault')">Vault</button>
+        <button class="tab" data-tab="keynote" onclick="sd('keynote')">Keynote</button>
+        <button class="tab" data-tab="cmm-dark" onclick="sd('cmm-dark')">CMM Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+    <div class="container">
+
+      <!-- ============ 01 BUTTONS ============ -->
+      <section class="section">
+        <div class="section-label t">01 / Buttons</div>
+        <div class="section-title t">Buttons & Actions</div>
+
+        <div class="subsection">
+          <div class="sub-label t">Variants</div>
+          <div class="component-row">
+            <button class="btn btn-primary t">Primary</button>
+            <button class="btn btn-outline t">Outline</button>
+            <button class="btn btn-ghost t">Ghost</button>
+            <button class="btn btn-danger t">Danger</button>
+            <button class="btn btn-disabled t" disabled>Disabled</button>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Sizes</div>
+          <div class="component-row">
+            <button class="btn btn-primary btn-sm t">Small</button>
+            <button class="btn btn-primary t">Default</button>
+            <button class="btn btn-primary btn-lg t">Large</button>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">With Icons & Loading</div>
+          <div class="component-row">
+            <button class="btn btn-primary t"><i class="hgi-stroke hgi-flash"></i> AI Summary</button>
+            <button class="btn btn-outline t"><i class="hgi-stroke hgi-arrow-up-right-01"></i> Export</button>
+            <button class="btn btn-primary btn-loading t"><span class="btn-text">Loading</span></button>
+            <button class="btn-icon t"><i class="hgi-stroke hgi-bookmark-02"></i></button>
+            <button class="btn-icon t"><i class="hgi-stroke hgi-arrow-up-right-01"></i></button>
+            <button class="btn-icon t"><i class="hgi-stroke hgi-more-vertical"></i></button>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Button Group</div>
+          <div class="btn-group">
+            <button class="btn btn-outline t" style="border-right:var(--bw) solid var(--bd)">1D</button>
+            <button class="btn btn-outline t" style="border-right:var(--bw) solid var(--bd)">1W</button>
+            <button class="btn btn-primary t">1M</button>
+            <button class="btn btn-outline t">1Y</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 02 FORM ELEMENTS ============ -->
+      <section class="section">
+        <div class="section-label t">02 / Forms</div>
+        <div class="section-title t">Form Elements</div>
+
+        <div class="component-grid">
+          <div class="component-col">
+            <div class="form-field">
+              <label class="form-label t">Company Name</label>
+              <input class="input t" type="text" placeholder="Enter company name">
+              <span class="form-hint t">As registered with MSE</span>
+            </div>
+            <div class="form-field">
+              <label class="form-label t">Sector</label>
+              <select class="select t">
+                <option>Mining & Resources</option>
+                <option>Financial Services</option>
+                <option>Infrastructure</option>
+                <option>Technology</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label t">Ticker Symbol (Error)</label>
+              <input class="input input-error t" type="text" value="INVALID!!">
+              <span class="form-error-msg t">Ticker must be 2-5 uppercase letters</span>
+            </div>
+            <div class="form-field">
+              <label class="form-label t">Company ID (Disabled)</label>
+              <input class="input input-disabled t" type="text" value="CMM-00452" disabled>
+            </div>
+          </div>
+
+          <div class="component-col">
+            <div class="form-field">
+              <label class="form-label t">Description</label>
+              <textarea class="textarea t" placeholder="Company description..."></textarea>
+            </div>
+            <div class="form-field">
+              <label class="form-label t">Search</label>
+              <div class="search-bar t">
+                <span class="search-icon t"><i class="hgi-stroke hgi-search-01"></i></span>
+                <input class="search-input" type="text" placeholder="Search entities, reports, sectors...">
+                <span class="search-kbd t">&#8984;K</span>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label t">Investment Range</label>
+              <input class="range t" type="range" min="0" max="100" value="65">
+              <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--mu);transition:color .4s">
+                <span>$0</span><span>$50M+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" style="margin-top:32px">
+          <div class="sub-label t">Checkboxes, Radios & Toggles</div>
+          <div style="display:flex;gap:40px;flex-wrap:wrap">
+            <div class="component-col" style="gap:10px">
+              <div class="checkbox-row" onclick="this.querySelector('.checkbox').classList.toggle('checked')">
+                <div class="checkbox checked t"></div>
+                <span class="checkbox-label t">Mining & Resources</span>
+              </div>
+              <div class="checkbox-row" onclick="this.querySelector('.checkbox').classList.toggle('checked')">
+                <div class="checkbox checked t"></div>
+                <span class="checkbox-label t">Financial Services</span>
+              </div>
+              <div class="checkbox-row" onclick="this.querySelector('.checkbox').classList.toggle('checked')">
+                <div class="checkbox t"></div>
+                <span class="checkbox-label t">Infrastructure</span>
+              </div>
+            </div>
+            <div class="component-col" style="gap:10px">
+              <div class="checkbox-row" onclick="this.parentElement.querySelectorAll('.radio').forEach(r=>r.classList.remove('checked'));this.querySelector('.radio').classList.add('checked')">
+                <div class="radio checked t"></div>
+                <span class="checkbox-label t">All entities</span>
+              </div>
+              <div class="checkbox-row" onclick="this.parentElement.querySelectorAll('.radio').forEach(r=>r.classList.remove('checked'));this.querySelector('.radio').classList.add('checked')">
+                <div class="radio t"></div>
+                <span class="checkbox-label t">CMM Verified only</span>
+              </div>
+              <div class="checkbox-row" onclick="this.parentElement.querySelectorAll('.radio').forEach(r=>r.classList.remove('checked'));this.querySelector('.radio').classList.add('checked')">
+                <div class="radio t"></div>
+                <span class="checkbox-label t">Currently Raising</span>
+              </div>
+            </div>
+            <div class="component-col" style="gap:14px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <button class="toggle active t" onclick="this.classList.toggle('active')"></button>
+                <span class="checkbox-label t">Email notifications</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button class="toggle t" onclick="this.classList.toggle('active')"></button>
+                <span class="checkbox-label t">Weekly digest</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button class="toggle active t" onclick="this.classList.toggle('active')"></button>
+                <span class="checkbox-label t">Deal alerts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" style="margin-top:32px">
+          <div class="sub-label t">File Upload</div>
+          <div class="file-upload t" style="max-width:480px">
+            <div class="file-upload-icon"><i class="hgi-stroke hgi-upload-04"></i></div>
+            <div class="file-upload-text t"><strong>Click to upload</strong> or drag and drop</div>
+            <div style="font-size:.75rem;color:var(--mu);transition:color .4s">PDF, CSV, XLSX up to 10MB</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 03 DATA DISPLAY ============ -->
+      <section class="section">
+        <div class="section-label t">03 / Data Display</div>
+        <div class="section-title t">Badges, Avatars, Stats & Progress</div>
+
+        <div class="subsection">
+          <div class="sub-label t">Badges</div>
+          <div class="component-row">
+            <span class="badge badge-default t">Default</span>
+            <span class="badge badge-success t">Verified</span>
+            <span class="badge badge-error t">Declined</span>
+            <span class="badge badge-warning t">AI Generated</span>
+            <span class="badge badge-info t">Premium</span>
+            <span class="badge badge-outline t">Draft</span>
+            <span class="badge badge-success badge-dot t">Active</span>
+            <span class="badge badge-error badge-dot t">Offline</span>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Avatars</div>
+          <div class="component-row" style="gap:16px">
+            <div class="avatar avatar-sm avatar-a t">BT</div>
+            <div class="avatar avatar-md avatar-b t">OE</div>
+            <div class="avatar avatar-lg avatar-c t">DM</div>
+            <div class="avatar avatar-xl avatar-d t">GA</div>
+            <div class="avatar-group" style="margin-left:16px">
+              <div class="avatar avatar-md avatar-a t">BT</div>
+              <div class="avatar avatar-md avatar-b t">OE</div>
+              <div class="avatar avatar-md avatar-c t">DM</div>
+              <div class="avatar avatar-md avatar-d t">+3</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Stat Cards</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+            <div class="stat-card t">
+              <div class="stat-label t">Total Entities</div>
+              <div class="stat-value t">542</div>
+              <div class="stat-change up">&#9650; +28 this month</div>
+              <div class="stat-spark" id="spark-1"></div>
+            </div>
+            <div class="stat-card t">
+              <div class="stat-label t">AI Queries (30d)</div>
+              <div class="stat-value t">12,847</div>
+              <div class="stat-change up">&#9650; +34.2%</div>
+              <div class="stat-spark" id="spark-2"></div>
+            </div>
+            <div class="stat-card t">
+              <div class="stat-label t">Subscribers</div>
+              <div class="stat-value t">89</div>
+              <div class="stat-change up">&#9650; +12</div>
+              <div class="stat-spark" id="spark-3"></div>
+            </div>
+            <div class="stat-card t">
+              <div class="stat-label t">Churn Rate</div>
+              <div class="stat-value t">2.1%</div>
+              <div class="stat-change down">&#9660; -0.4%</div>
+              <div class="stat-spark" id="spark-4"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Progress Bars</div>
+          <div class="component-col" style="gap:16px;max-width:480px">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.75rem">
+                <span style="color:var(--fg);font-weight:600;transition:color .4s">Profile Completion</span>
+                <span style="color:var(--mu);font-family:var(--fm);transition:color .4s">72%</span>
+              </div>
+              <div class="progress-bar progress-default t"><div class="progress-fill" style="width:72%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.75rem">
+                <span style="color:var(--fg);font-weight:600;transition:color .4s">AI Query Limit</span>
+                <span style="color:var(--mu);font-family:var(--fm);transition:color .4s">45/50</span>
+              </div>
+              <div class="progress-bar progress-error t"><div class="progress-fill" style="width:90%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.75rem">
+                <span style="color:var(--fg);font-weight:600;transition:color .4s">Upload Progress</span>
+                <span style="color:var(--mu);font-family:var(--fm);transition:color .4s">100%</span>
+              </div>
+              <div class="progress-bar progress-success t"><div class="progress-fill" style="width:100%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Spinners</div>
+          <div class="component-row" style="gap:20px">
+            <div class="spinner spinner-sm t"></div>
+            <div class="spinner spinner-md t"></div>
+            <div class="spinner spinner-lg t"></div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Tooltips</div>
+          <div class="component-row" style="gap:16px">
+            <div class="tooltip-demo">
+              <button class="btn btn-outline btn-sm t">Hover me</button>
+              <div class="tooltip-popup t">Market cap in MNT</div>
+            </div>
+            <div class="tooltip-demo">
+              <span class="badge badge-warning t" style="cursor:help">AI Generated</span>
+              <div class="tooltip-popup t">Profile auto-generated by AI</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 04 TABLE ============ -->
+      <section class="section">
+        <div class="section-label t">04 / Tables</div>
+        <div class="section-title t">Data Table</div>
+
+        <div class="table-wrap t">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="transition:all .4s">Entity</th>
+                <th style="transition:all .4s">Sector</th>
+                <th style="transition:all .4s">Tier</th>
+                <th style="transition:all .4s;text-align:right">Market Cap</th>
+                <th style="transition:all .4s;text-align:right">Revenue</th>
+                <th style="transition:all .4s;text-align:right">Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span style="font-weight:600;color:var(--ac);cursor:pointer;transition:color .15s">Nomad Copper Corp</span></td>
+                <td>Mining</td>
+                <td><span class="badge badge-success t">Verified</span></td>
+                <td class="mono" style="text-align:right">$42.2M</td>
+                <td class="mono" style="text-align:right">$14.1M</td>
+                <td class="mono" style="text-align:right;color:var(--ok)">+24.4%</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight:600;color:var(--ac);cursor:pointer;transition:color .15s">Khan Bank</span></td>
+                <td>Financial</td>
+                <td><span class="badge badge-success t">Verified</span></td>
+                <td class="mono" style="text-align:right">$892.0M</td>
+                <td class="mono" style="text-align:right">$310.5M</td>
+                <td class="mono" style="text-align:right;color:var(--ok)">+8.2%</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight:600;color:var(--ac);cursor:pointer;transition:color .15s">Gobi Solar LLC</span></td>
+                <td>Energy</td>
+                <td><span class="badge badge-warning t">AI Generated</span></td>
+                <td class="mono" style="text-align:right">—</td>
+                <td class="mono" style="text-align:right">$5.8M</td>
+                <td class="mono" style="text-align:right;color:var(--ok)">+112%</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight:600;color:var(--ac);cursor:pointer;transition:color .15s">Steppe Logistics</span></td>
+                <td>Infrastructure</td>
+                <td><span class="badge badge-success t">Verified</span></td>
+                <td class="mono" style="text-align:right">$28.4M</td>
+                <td class="mono" style="text-align:right">$19.2M</td>
+                <td class="mono" style="text-align:right;color:var(--err)">-3.1%</td>
+              </tr>
+              <tr>
+                <td><span style="font-weight:600;color:var(--ac);cursor:pointer;transition:color .15s">Mongol Fintech</span></td>
+                <td>Technology</td>
+                <td><span class="badge badge-warning t">AI Generated</span></td>
+                <td class="mono" style="text-align:right">—</td>
+                <td class="mono" style="text-align:right">$2.1M</td>
+                <td class="mono" style="text-align:right;color:var(--ok)">+67%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+          <span style="font-size:.75rem;color:var(--mu);transition:color .4s">Showing 1-5 of 542 entities</span>
+          <div class="pagination">
+            <button class="page-btn disabled t"><i class="hgi-stroke hgi-arrow-left-01"></i></button>
+            <button class="page-btn active t">1</button>
+            <button class="page-btn t">2</button>
+            <button class="page-btn t">3</button>
+            <button class="page-btn t">...</button>
+            <button class="page-btn t">109</button>
+            <button class="page-btn t"><i class="hgi-stroke hgi-arrow-right-01"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 05 NAVIGATION ============ -->
+      <section class="section">
+        <div class="section-label t">05 / Navigation</div>
+        <div class="section-title t">Tabs, Breadcrumb, Dropdown</div>
+
+        <div class="subsection">
+          <div class="sub-label t">Tabs</div>
+          <div class="tabs t">
+            <button class="tab-item active t" onclick="setTab(this)">Overview</button>
+            <button class="tab-item t" onclick="setTab(this)">Financials</button>
+            <button class="tab-item t" onclick="setTab(this)">Documents</button>
+            <button class="tab-item t" onclick="setTab(this)">Team</button>
+            <button class="tab-item t" onclick="setTab(this)">AI Insights</button>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Breadcrumb</div>
+          <nav class="breadcrumb t">
+            <a href="#">Home</a><span class="sep">/</span>
+            <a href="#">Directory</a><span class="sep">/</span>
+            <a href="#">Mining & Resources</a><span class="sep">/</span>
+            <span class="current">Nomad Copper Corp</span>
+          </nav>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Dropdown Menu</div>
+          <div class="dropdown" id="demo-dropdown">
+            <button class="btn btn-outline t" onclick="document.getElementById('demo-dropdown').classList.toggle('open')">&#8942; Actions</button>
+            <div class="dropdown-menu t">
+              <button class="dropdown-item t"><i class="hgi-stroke hgi-flash"></i> AI Summary</button>
+              <button class="dropdown-item t"><i class="hgi-stroke hgi-bookmark-02"></i> Add to Watchlist</button>
+              <button class="dropdown-item t"><i class="hgi-stroke hgi-arrow-up-right-01"></i> Export PDF</button>
+              <button class="dropdown-item t"><i class="hgi-stroke hgi-link-01"></i> Copy Link</button>
+              <div class="dropdown-divider t"></div>
+              <button class="dropdown-item dropdown-item-danger t"><i class="hgi-stroke hgi-delete-02"></i> Remove</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 06 FEEDBACK ============ -->
+      <section class="section">
+        <div class="section-label t">06 / Feedback</div>
+        <div class="section-title t">Alerts, Toasts & Modal</div>
+
+        <div class="subsection">
+          <div class="sub-label t">Alerts</div>
+          <div class="component-col" style="gap:12px">
+            <div class="alert alert-success t">
+              <span class="alert-icon"><i class="hgi-stroke hgi-tick-02"></i></span>
+              <span class="alert-text">Entity profile successfully updated. Changes are now live.</span>
+              <button class="alert-dismiss" onclick="this.parentElement.style.display='none'"><i class="hgi-stroke hgi-cancel-01"></i></button>
+            </div>
+            <div class="alert alert-error t">
+              <span class="alert-icon"><i class="hgi-stroke hgi-cancel-01"></i></span>
+              <span class="alert-text">Failed to process payment. Please check your card details and try again.</span>
+              <button class="alert-dismiss" onclick="this.parentElement.style.display='none'"><i class="hgi-stroke hgi-cancel-01"></i></button>
+            </div>
+            <div class="alert alert-warning t">
+              <span class="alert-icon"><i class="hgi-stroke hgi-alert-02"></i></span>
+              <span class="alert-text">This profile was auto-generated by AI and may contain inaccuracies. CMM has not independently verified this information.</span>
+              <button class="alert-dismiss" onclick="this.parentElement.style.display='none'"><i class="hgi-stroke hgi-cancel-01"></i></button>
+            </div>
+            <div class="alert alert-info t">
+              <span class="alert-icon"><i class="hgi-stroke hgi-information-circle"></i></span>
+              <span class="alert-text">You have 5 AI queries remaining this month. <a href="#" style="font-weight:600">Upgrade for unlimited</a>.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Toast Notifications</div>
+          <div class="component-row">
+            <button class="btn btn-primary btn-sm t" onclick="showToast('success','Entity added to watchlist')">Success Toast</button>
+            <button class="btn btn-danger btn-sm t" onclick="showToast('error','Failed to export. Try again.')">Error Toast</button>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Modal</div>
+          <button class="btn btn-outline t" onclick="document.getElementById('demo-modal').classList.add('visible')">Open Modal</button>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Skeleton Loader</div>
+          <div class="demo-box t" style="max-width:400px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="skeleton t" style="width:40px;height:40px;border-radius:50%"></div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+                <div class="skeleton t" style="height:14px;width:60%"></div>
+                <div class="skeleton t" style="height:10px;width:40%"></div>
+              </div>
+            </div>
+            <div class="skeleton t" style="height:12px;width:100%"></div>
+            <div class="skeleton t" style="height:12px;width:90%"></div>
+            <div class="skeleton t" style="height:12px;width:75%"></div>
+            <div class="skeleton t" style="height:32px;width:120px;border-radius:var(--r);margin-top:4px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 07 CARDS ============ -->
+      <section class="section">
+        <div class="section-label t">07 / Cards</div>
+        <div class="section-title t">Card Variants</div>
+
+        <div class="subsection">
+          <div class="sub-label t">Default Cards</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+            <div class="card t">
+              <div class="card-img t" style="display:flex;align-items:flex-end;padding:12px">
+                <span class="badge badge-success t">Verified</span>
+              </div>
+              <div class="card-body">
+                <div class="card-title t">Nomad Copper Corp</div>
+                <div class="card-desc t">Copper-gold exploration in the South Gobi with Rio Tinto processing partnership.</div>
+              </div>
+            </div>
+            <div class="card t">
+              <div class="card-img t" style="display:flex;align-items:flex-end;padding:12px">
+                <span class="badge badge-warning t">AI Generated</span>
+              </div>
+              <div class="card-body">
+                <div class="card-title t">Gobi Solar LLC</div>
+                <div class="card-desc t">Renewable energy developer focused on utility-scale solar projects across the Gobi desert.</div>
+              </div>
+            </div>
+            <div class="card t">
+              <div class="card-img t" style="display:flex;align-items:flex-end;padding:12px">
+                <span class="badge badge-success t">Verified</span>
+              </div>
+              <div class="card-body">
+                <div class="card-title t">Steppe Logistics</div>
+                <div class="card-desc t">Mongolia's leading cold-chain logistics network serving mining and agriculture sectors.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Horizontal Card</div>
+          <div class="card card-horizontal t" style="max-width:560px">
+            <div class="card-img t"></div>
+            <div class="card-body" style="display:flex;flex-direction:column;justify-content:center">
+              <div class="card-title t">Mongolia Copper Sector: 2026 Outlook</div>
+              <div class="card-desc t">Comprehensive analysis of production forecasts, capex pipelines, and valuation comps across 12 copper assets.</div>
+              <div style="margin-top:12px;display:flex;gap:8px">
+                <span class="badge badge-default t">Report</span>
+                <span style="font-size:.75rem;color:var(--mu);transition:color .4s">Mar 12, 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 08 LISTS & ACCORDION ============ -->
+      <section class="section">
+        <div class="section-label t">08 / Lists & Accordion</div>
+        <div class="section-title t">Structured Content</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div>
+            <div class="sub-label t">List</div>
+            <div class="list t">
+              <div class="list-item t">
+                <div class="avatar avatar-sm avatar-a t">NC</div>
+                <div class="list-item-content">
+                  <div class="list-item-title t">Nomad Copper Corp</div>
+                  <div class="list-item-desc t">Mining & Resources · MSE: NCC</div>
+                </div>
+                <span class="list-item-action"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+              </div>
+              <div class="list-item t">
+                <div class="avatar avatar-sm avatar-b t">KB</div>
+                <div class="list-item-content">
+                  <div class="list-item-title t">Khan Bank</div>
+                  <div class="list-item-desc t">Financial Services · MSE: KHAN</div>
+                </div>
+                <span class="list-item-action"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+              </div>
+              <div class="list-item t">
+                <div class="avatar avatar-sm avatar-c t">GS</div>
+                <div class="list-item-content">
+                  <div class="list-item-title t">Gobi Solar LLC</div>
+                  <div class="list-item-desc t">Energy · Private</div>
+                </div>
+                <span class="list-item-action"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+              </div>
+              <div class="list-item t">
+                <div class="avatar avatar-sm avatar-d t">SL</div>
+                <div class="list-item-content">
+                  <div class="list-item-title t">Steppe Logistics</div>
+                  <div class="list-item-desc t">Infrastructure · MSE: STPL</div>
+                </div>
+                <span class="list-item-action"><i class="hgi-stroke hgi-arrow-right-01"></i></span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sub-label t">Accordion</div>
+            <div class="accordion t">
+              <div class="accordion-item open" onclick="toggleAccordion(this)">
+                <button class="accordion-trigger t">
+                  <span>What is CMM Market IQ?</span>
+                  <span class="accordion-arrow"><i class="hgi-stroke hgi-arrow-down-01"></i></span>
+                </button>
+                <div class="accordion-content" style="max-height:200px">
+                  <div class="accordion-content-inner t">
+                    CMM Market IQ is an AI-native intelligence platform for investment bankers and institutional desks seeking vetted exposure to Mongolian capital markets.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item" onclick="toggleAccordion(this)">
+                <button class="accordion-trigger t">
+                  <span>How are entity profiles generated?</span>
+                  <span class="accordion-arrow"><i class="hgi-stroke hgi-arrow-down-01"></i></span>
+                </button>
+                <div class="accordion-content">
+                  <div class="accordion-content-inner t">
+                    500+ baseline profiles are AI-generated from public sources. CMM analysts verify and upgrade profiles to Premium and Enterprise tiers with proprietary data and insights.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item" onclick="toggleAccordion(this)">
+                <button class="accordion-trigger t">
+                  <span>What AI models power the platform?</span>
+                  <span class="accordion-arrow"><i class="hgi-stroke hgi-arrow-down-01"></i></span>
+                </button>
+                <div class="accordion-content">
+                  <div class="accordion-content-inner t">
+                    Claude by Anthropic — Haiku for free-tier queries, Sonnet for subscribers, and Opus for enterprise accounts. All grounded in CMM's proprietary knowledge base via RAG.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" style="margin-top:32px">
+          <div class="sub-label t">Dividers</div>
+          <div class="component-col" style="gap:16px;max-width:480px">
+            <div class="divider t"></div>
+            <div class="divider-label t">or continue with</div>
+          </div>
+        </div>
+
+        <div class="subsection" style="margin-top:32px">
+          <div class="sub-label t">Empty State</div>
+          <div class="demo-box t">
+            <div class="empty-state">
+              <div class="empty-icon"><i class="hgi-stroke hgi-search-01"></i></div>
+              <div class="empty-title t">No results found</div>
+              <div class="empty-desc t">Try adjusting your search terms or filters. You can also browse the full directory.</div>
+              <button class="btn btn-outline btn-sm t" style="margin-top:8px">Browse Directory</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 09 ICONS ============ -->
+      <section class="section">
+        <div class="section-label t">09 / Icons</div>
+        <div class="section-title t">HugeIcons — Stroke Rounded</div>
+
+        <div class="subsection">
+          <div class="sub-label t">Navigation & Actions</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-search-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">search-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-filter" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">filter</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-bookmark-02" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">bookmark-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-star" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">star</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-share-08" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">share-08</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-link-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">link-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-more-vertical" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">more-vertical</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-settings-02" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">settings-02</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Arrows & Directions</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-arrow-up-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">arrow-up-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-arrow-down-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">arrow-down-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-arrow-left-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">arrow-left-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-arrow-right-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">arrow-right-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-arrow-up-right-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">arrow-up-right-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-download-04" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">download-04</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-upload-04" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">upload-04</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-view" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">view</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Status & Feedback</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-tick-02" style="font-size:1.25rem;color:var(--ok);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">tick-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-cancel-01" style="font-size:1.25rem;color:var(--err);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">cancel-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-alert-02" style="font-size:1.25rem;color:var(--warn);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">alert-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-information-circle" style="font-size:1.25rem;color:var(--info);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">information-circle</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-notification-02" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">notification-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-square-lock-02" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">square-lock-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-flash" style="font-size:1.25rem;color:var(--ac);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">flash</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-delete-02" style="font-size:1.25rem;color:var(--err);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">delete-02</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Domain — Finance & Business</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-chart-line-data-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">chart-line-data-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-building-02" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">building-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-globe-02" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">globe-02</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-user" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">user</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-mail-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">mail-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-call" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">call</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-calendar-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">calendar-01</span>
+            </div>
+            <div class="demo-box t" style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <i class="hgi-stroke hgi-dashboard-square-01" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu);transition:color .4s">dashboard-square-01</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="sub-label t">Sizes</div>
+          <div class="component-row" style="gap:24px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <i class="hgi-stroke hgi-flash" style="font-size:0.875rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu)">14px</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <i class="hgi-stroke hgi-flash" style="font-size:1rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu)">16px</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <i class="hgi-stroke hgi-flash" style="font-size:1.25rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu)">20px</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <i class="hgi-stroke hgi-flash" style="font-size:1.5rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu)">24px</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <i class="hgi-stroke hgi-flash" style="font-size:2rem;color:var(--fg);transition:color .4s"></i>
+              <span style="font-family:var(--fm);font-size:.5625rem;color:var(--mu)">32px</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="demo-modal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="modal t">
+      <div class="modal-header">
+        <div class="modal-title t">Request Introduction</div>
+        <button class="modal-close" onclick="document.getElementById('demo-modal').classList.remove('visible')"><i class="hgi-stroke hgi-cancel-01"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>You're requesting an introduction to <strong>Nomad Copper Corp</strong> through CMM's concierge service. A CMM analyst will review your request within 2 business days.</p>
+        <div class="form-field" style="margin-top:16px">
+          <label class="form-label t">Investment Ticket Size</label>
+          <select class="select t">
+            <option>Select range...</option>
+            <option>&lt; $1M</option>
+            <option>$1M — $5M</option>
+            <option>$5M — $25M</option>
+            <option>$25M+</option>
+          </select>
+        </div>
+        <div class="form-field" style="margin-top:12px">
+          <label class="form-label t">Message (optional)</label>
+          <textarea class="textarea t" rows="3" placeholder="Add context about your interest..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm t" onclick="document.getElementById('demo-modal').classList.remove('visible')">Cancel</button>
+        <button class="btn btn-primary btn-sm t" onclick="document.getElementById('demo-modal').classList.remove('visible');showToast('success','Introduction request sent')">Send Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // Direction switcher
+    function sd(dir) {
+      document.documentElement.setAttribute('data-direction', dir);
+      document.querySelectorAll('.header-tabs .tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${dir}"]`).classList.add('active');
+      history.replaceState(null, '', '#' + dir);
+    }
+
+    // Tabs
+    function setTab(el) {
+      el.parentElement.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // Accordion
+    function toggleAccordion(item) {
+      const wasOpen = item.classList.contains('open');
+      item.parentElement.querySelectorAll('.accordion-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.accordion-content').style.maxHeight = '0';
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        const content = item.querySelector('.accordion-content');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    }
+
+    // Toast
+    function showToast(type, message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${type === 'success' ? '<i class="hgi-stroke hgi-tick-02"></i>' : '<i class="hgi-stroke hgi-cancel-01"></i>'}</span><span style="flex:1">${message}</span><button style="background:0;border:0;color:inherit;cursor:pointer;opacity:.6;font-size:.875rem" onclick="dismissToast(this.parentElement)"><i class="hgi-stroke hgi-cancel-01"></i></button>`;
+      container.appendChild(toast);
+      setTimeout(() => dismissToast(toast), 3000);
+    }
+    function dismissToast(toast) {
+      if (!toast.parentElement) return;
+      toast.classList.add('dismissing');
+      setTimeout(() => toast.remove(), 300);
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+      }
+    });
+
+    // Sparkline bars
+    ['spark-1','spark-2','spark-3','spark-4'].forEach(id => {
+      const el = document.getElementById(id);
+      for (let i = 0; i < 12; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'spark-bar t';
+        bar.style.height = (4 + Math.random() * 28) + 'px';
+        el.appendChild(bar);
+      }
+    });
+
+    // Scroll progress
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('scroll-bar').style.width = (window.scrollY / total * 100) + '%';
+    }, { passive: true });
+
+    // Init
+    const hash = location.hash.replace('#', '');
+    if (['atlas','ledger','vault','blueprint','keynote','cmm-light','cmm-light-atlas','cmm-dark'].includes(hash)) {
+      sd(hash);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" data-dir="polished">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erdene Resource Development — MarketIQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #FAFAFD; --bg-alt: #F4F2FA; --white: #FFFFFF;
+  --fg: #0C0A1D; --fg-2: #44415A; --fg-3: #7A7793;
+  --surface: #F0EEF7; --surface-el: #EAE8F3;
+  --border: #DDDBE8; --border-s: #EDEBF5;
+  --brand: #3E149C; --brand-h: #2E0F75; --brand-l: #6B4CC0; --brand-m: rgba(62,20,156,0.07);
+  --signal: #FCA311; --pos: #059669; --neg: #DC2626; --info: #0891B2;
+  --cat-markets: #3E149C; --cat-companies: #0891B2; --cat-sectors: #059669; --cat-insights: #D97706;
+  --shadow-xs: 0 1px 2px rgba(62,20,156,0.04); --shadow-sm: 0 2px 4px rgba(62,20,156,0.06);
+  --shadow-md: 0 4px 12px rgba(62,20,156,0.08); --shadow-lg: 0 8px 24px rgba(62,20,156,0.1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-d: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-b: 'DM Sans', system-ui, sans-serif;
+  --font-m: 'JetBrains Mono', monospace;
+}
+
+/* ── DIRECTION: Editorial ── */
+[data-dir="editorial"] {
+  --d-card-r: 2px; --d-card-bg: transparent; --d-card-bd: none; --d-card-p: 0;
+  --d-card-shadow: none; --d-card-img-r: 2px;
+  --d-card-hover-y: 0px; --d-card-hover-shadow: none; --d-card-hover-bd: none;
+  --d-card-title-s: 1.375rem; --d-card-sep: 1px solid var(--border-s);
+  --d-badge-r: 0; --d-badge-px: 0; --d-badge-py: 0; --d-badge-w: 600;
+  --d-badge-tt: uppercase; --d-badge-ls: 0.1em; --d-badge-s: 0.6875rem; --d-badge-dot: inline-block;
+  --d-btn-r: 2px; --d-btn-h: 44px; --d-grid-gap: 40px; --d-grid-cols: 2;
+  --d-img-aspect: 56.25%; --d-sect-gap: 48px;
+  --d-nav-active-bd: 2px solid var(--brand); --d-nav-active-bg: transparent;
+  --d-featured-accent: none; --d-featured-bd: 4px solid var(--brand);
+  /* Widget */
+  --d-w-bg: transparent; --d-w-bd: none; --d-w-r: 0; --d-w-p: 0;
+  --d-w-sep: 1px solid var(--border-s); --d-w-shadow: none;
+  --d-w-head-bg: transparent; --d-w-head-bd: none; --d-w-head-p: 0 0 12px 0;
+  /* Table */
+  --d-t-head-bg: transparent; --d-t-head-bd: 2px solid var(--fg); --d-t-row-h: 52px; --d-t-hover: transparent;
+  /* Chart tabs */
+  --d-tab-r: 2px;
+}
+
+/* ── DIRECTION: Dense ── */
+[data-dir="dense"] {
+  --d-card-r: 4px; --d-card-bg: var(--white); --d-card-bd: 1px solid var(--border); --d-card-p: 14px;
+  --d-card-shadow: var(--shadow-xs); --d-card-img-r: 2px;
+  --d-card-hover-y: 0px; --d-card-hover-shadow: var(--shadow-sm); --d-card-hover-bd: 1px solid var(--brand-l);
+  --d-card-title-s: 0.9375rem; --d-card-sep: none;
+  --d-badge-r: 2px; --d-badge-px: 6px; --d-badge-py: 2px; --d-badge-w: 700;
+  --d-badge-tt: uppercase; --d-badge-ls: 0.06em; --d-badge-s: 0.5625rem; --d-badge-dot: none;
+  --d-btn-r: 4px; --d-btn-h: 34px; --d-grid-gap: 12px; --d-grid-cols: 4;
+  --d-img-aspect: 50%; --d-sect-gap: 32px;
+  --d-nav-active-bd: none; --d-nav-active-bg: var(--surface);
+  --d-featured-accent: none; --d-featured-bd: none;
+  /* Widget */
+  --d-w-bg: var(--white); --d-w-bd: 1px solid var(--border); --d-w-r: 4px; --d-w-p: 14px;
+  --d-w-sep: none; --d-w-shadow: var(--shadow-xs);
+  --d-w-head-bg: var(--bg-alt); --d-w-head-bd: 1px solid var(--border-s); --d-w-head-p: 10px 14px;
+  /* Table */
+  --d-t-head-bg: var(--bg-alt); --d-t-head-bd: 1px solid var(--border); --d-t-row-h: 38px; --d-t-hover: var(--brand-m);
+  /* Chart tabs */
+  --d-tab-r: 4px;
+}
+
+/* ── DIRECTION: Polished ── */
+[data-dir="polished"] {
+  --d-card-r: 12px; --d-card-bg: var(--white); --d-card-bd: 1px solid var(--border); --d-card-p: 20px;
+  --d-card-shadow: var(--shadow-xs); --d-card-img-r: 8px;
+  --d-card-hover-y: -3px; --d-card-hover-shadow: var(--shadow-lg); --d-card-hover-bd: 1px solid rgba(107,76,192,0.3);
+  --d-card-title-s: 1.125rem; --d-card-sep: none;
+  --d-badge-r: 4px; --d-badge-px: 10px; --d-badge-py: 4px; --d-badge-w: 600;
+  --d-badge-tt: none; --d-badge-ls: 0.02em; --d-badge-s: 0.6875rem; --d-badge-dot: none;
+  --d-btn-r: 8px; --d-btn-h: 44px; --d-grid-gap: 24px; --d-grid-cols: 3;
+  --d-img-aspect: 52%; --d-sect-gap: 40px;
+  --d-nav-active-bd: 2px solid var(--brand); --d-nav-active-bg: transparent;
+  --d-featured-accent: 3px solid var(--brand); --d-featured-bd: none;
+  /* Widget */
+  --d-w-bg: var(--white); --d-w-bd: 1px solid var(--border); --d-w-r: 12px; --d-w-p: 24px;
+  --d-w-sep: none; --d-w-shadow: var(--shadow-xs);
+  --d-w-head-bg: transparent; --d-w-head-bd: 1px solid var(--border-s); --d-w-head-p: 0 0 16px 0;
+  /* Table */
+  --d-t-head-bg: transparent; --d-t-head-bd: 2px solid var(--border); --d-t-row-h: 48px; --d-t-hover: var(--brand-m);
+  /* Chart tabs */
+  --d-tab-r: 8px;
+}
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-b); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+/* ── NAV ── */
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,253,0.88); backdrop-filter: blur(20px) saturate(1.4); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.nav-logo { font-family: var(--font-d); font-weight: 800; font-size: 1.125rem; color: var(--brand); cursor: pointer; }
+.nav-links { display: flex; align-items: center; }
+.nav-link { font-family: var(--font-b); font-weight: 500; font-size: 0.875rem; color: var(--fg-2); padding: 16px 16px; cursor: pointer; transition: color 200ms; text-decoration: none; }
+a { text-decoration: none; color: inherit; }
+.nav-link:hover { color: var(--fg); }
+.nav-link.on { color: var(--fg); border-bottom: var(--d-nav-active-bd); background: var(--d-nav-active-bg); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-search { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); display: grid; place-items: center; background: none; cursor: pointer; color: var(--fg-3); transition: all 200ms; }
+.nav-search:hover { border-color: var(--brand-l); color: var(--brand); }
+.nav-btn { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; padding: 8px 18px; border-radius: var(--d-btn-r); border: none; background: var(--brand); color: white; cursor: pointer; transition: all 200ms; }
+.nav-btn:hover { background: var(--brand-h); }
+
+/* ── DIRECTION SWITCHER ── */
+.dir-sw { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; gap: 3px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 4px; box-shadow: var(--shadow-lg); }
+.dir-btn { padding: 8px 20px; border-radius: 9px; border: none; cursor: pointer; font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg-2); background: transparent; transition: all 200ms var(--ease); }
+.dir-btn:hover { color: var(--fg); }
+.dir-btn.on { background: var(--brand); color: white; box-shadow: 0 2px 8px rgba(62,20,156,0.25); }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 500ms var(--ease), transform 500ms var(--ease); }
+.reveal.v { opacity: 1; transform: translateY(0); }
+.rd1 { transition-delay: 60ms; } .rd2 { transition-delay: 120ms; } .rd3 { transition-delay: 180ms; }
+.rd4 { transition-delay: 240ms; } .rd5 { transition-delay: 300ms; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--fg-3); padding: var(--d-sect-gap) 0 20px; transition: padding 400ms var(--ease); }
+.breadcrumb a { color: var(--fg-3); text-decoration: none; transition: color 200ms; }
+.breadcrumb a:hover { color: var(--brand); }
+.breadcrumb .sep { font-size: 0.6875rem; opacity: 0.5; }
+
+/* ── PROFILE HEADER ── */
+.profile-header { display: flex; align-items: flex-start; gap: 20px; padding-bottom: 32px; border-bottom: 1px solid var(--border-s); margin-bottom: 32px; }
+.profile-logo { width: 56px; height: 56px; min-width: 56px; border-radius: 12px; background: linear-gradient(135deg, var(--brand-m), var(--surface-el)); display: grid; place-items: center; font-family: var(--font-d); font-weight: 800; font-size: 1.125rem; color: var(--brand-l); }
+.profile-info { flex: 1; }
+.profile-name { font-family: var(--font-d); font-weight: 800; font-size: 1.75rem; letter-spacing: -0.025em; color: var(--fg); line-height: 1.2; margin-bottom: 6px; }
+.ticker-line { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.ticker-code { font-family: var(--font-m); font-weight: 500; font-size: 0.8125rem; color: var(--fg-2); letter-spacing: 0.02em; }
+.ticker-price { font-family: var(--font-m); font-weight: 600; font-size: 0.9375rem; color: var(--fg); }
+.ticker-change { font-family: var(--font-m); font-weight: 600; font-size: 0.8125rem; color: var(--pos); }
+.ticker-sep { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+.profile-tags { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.tag { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-d); font-weight: var(--d-badge-w); font-size: var(--d-badge-s); text-transform: var(--d-badge-tt); letter-spacing: var(--d-badge-ls); line-height: 1; border-radius: var(--d-badge-r); padding: var(--d-badge-py) var(--d-badge-px); transition: all 400ms var(--ease); white-space: nowrap; }
+.tag-co { background: var(--brand-m); color: var(--brand); }
+.tag-sector { background: rgba(5,150,105,0.08); color: var(--cat-sectors); }
+[data-dir="editorial"] .tag-co { background: transparent; color: var(--brand); }
+[data-dir="editorial"] .tag-sector { background: transparent; color: var(--cat-sectors); }
+[data-dir="dense"] .tag-co { background: var(--brand); color: white; }
+[data-dir="dense"] .tag-sector { background: var(--cat-sectors); color: white; }
+
+.profile-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.btn-primary { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; padding: 9px 20px; border-radius: var(--d-btn-r); border: none; background: var(--brand); color: white; cursor: pointer; transition: all 200ms var(--ease); }
+.btn-primary:hover { background: var(--brand-h); }
+.btn-secondary { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; padding: 9px 20px; border-radius: var(--d-btn-r); border: 1px solid var(--border); background: var(--white); color: var(--fg-2); cursor: pointer; transition: all 200ms var(--ease); }
+.btn-secondary:hover { border-color: var(--brand-l); color: var(--brand); }
+.profile-desc { font-size: 0.875rem; color: var(--fg-2); line-height: 1.7; max-width: 640px; }
+
+/* ── TWO-COLUMN LAYOUT ── */
+.two-col { display: grid; grid-template-columns: 1fr 340px; gap: 28px; padding-bottom: 80px; align-items: start; }
+.sidebar { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; scrollbar-width: none; }
+.sidebar::-webkit-scrollbar { display: none; }
+
+/* ── WIDGET ── */
+.widget { background: var(--d-w-bg); border: var(--d-w-bd); border-radius: var(--d-w-r); padding: var(--d-w-p); box-shadow: var(--d-w-shadow); margin-bottom: 20px; transition: all 400ms var(--ease); }
+[data-dir="editorial"] .widget { border-bottom: var(--d-w-sep); padding-bottom: 28px; margin-bottom: 28px; }
+.w-head { display: flex; align-items: center; justify-content: space-between; background: var(--d-w-head-bg); border-bottom: var(--d-w-head-bd); padding: var(--d-w-head-p); margin-bottom: 16px; transition: all 400ms var(--ease); border-radius: var(--d-w-r) var(--d-w-r) 0 0; }
+[data-dir="dense"] .w-head { margin: calc(var(--d-w-p) * -1); margin-bottom: 14px; padding: var(--d-w-head-p); border-radius: var(--d-w-r) var(--d-w-r) 0 0; }
+.w-title { font-family: var(--font-d); font-weight: 700; font-size: 0.9375rem; color: var(--fg); }
+.w-action { font-family: var(--font-d); font-weight: 600; font-size: 0.75rem; color: var(--brand-l); cursor: pointer; transition: color 200ms; text-decoration: none; }
+.w-action:hover { color: var(--brand); }
+
+/* ── STATS ROW ── */
+.stats-row { display: flex; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-item { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { font-size: 0.6875rem; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+.stat-val { font-family: var(--font-m); font-weight: 600; font-size: 0.9375rem; color: var(--fg); }
+.stat-val .up { color: var(--pos); font-size: 0.75rem; margin-left: 4px; }
+.stat-val .dn { color: var(--neg); font-size: 0.75rem; margin-left: 4px; }
+.stat-range { font-family: var(--font-m); font-size: 0.8125rem; color: var(--fg-2); }
+
+/* ── CHART TABS ── */
+.chart-tabs { display: flex; gap: 2px; margin-bottom: 16px; background: var(--surface); border-radius: var(--d-tab-r); padding: 3px; width: fit-content; transition: border-radius 400ms var(--ease); }
+.chart-tab { padding: 5px 14px; border-radius: calc(var(--d-tab-r) - 1px); border: none; cursor: pointer; font-family: var(--font-d); font-weight: 600; font-size: 0.6875rem; color: var(--fg-3); background: transparent; transition: all 200ms var(--ease); letter-spacing: 0.02em; }
+.chart-tab:hover { color: var(--fg); }
+.chart-tab.on { background: var(--white); color: var(--fg); box-shadow: var(--shadow-xs); }
+
+/* ── CHART ── */
+.chart-wrap { width: 100%; height: 200px; position: relative; margin-bottom: 8px; }
+.chart-wrap svg { width: 100%; height: 100%; }
+.chart-source { font-size: 0.6875rem; color: var(--fg-3); }
+
+/* ── TABLE ── */
+.fin-tabs { display: flex; gap: 2px; margin-bottom: 16px; }
+.fin-tab { font-family: var(--font-d); font-weight: 500; font-size: 0.75rem; color: var(--fg-3); padding: 4px 12px; cursor: pointer; border-radius: var(--d-tab-r); transition: all 200ms; background: transparent; border: none; }
+.fin-tab:hover { color: var(--fg); }
+.fin-tab.on { background: var(--brand-m); color: var(--brand); font-weight: 600; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table thead th { font-family: var(--font-d); font-weight: 600; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-3); background: var(--d-t-head-bg); border-bottom: var(--d-t-head-bd); padding: 10px 12px; text-align: right; height: var(--d-t-row-h); transition: all 400ms var(--ease); }
+.data-table thead th:first-child { text-align: left; }
+.data-table tbody td { font-family: var(--font-m); font-weight: 400; font-size: 0.8125rem; color: var(--fg-2); padding: 0 12px; text-align: right; height: var(--d-t-row-h); border-bottom: 1px solid var(--border-s); font-variant-numeric: tabular-nums; transition: all 400ms var(--ease); }
+.data-table tbody td:first-child { font-family: var(--font-b); font-weight: 500; text-align: left; color: var(--fg); }
+.data-table tbody tr:hover td { background: var(--d-t-hover); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.neg-val { color: var(--neg) !important; }
+.table-source { font-size: 0.6875rem; color: var(--fg-3); margin-top: 10px; }
+
+/* ── KEY PERSONNEL ── */
+.people-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.person { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 16px 8px; border-radius: var(--d-w-r); transition: background 200ms; }
+.person:hover { background: var(--brand-m); }
+.person-av { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-m), var(--surface-el)); display: grid; place-items: center; font-family: var(--font-d); font-weight: 700; font-size: 0.75rem; color: var(--brand-l); }
+.person-name { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg); }
+.person-title { font-size: 0.6875rem; color: var(--fg-3); line-height: 1.4; }
+
+/* ── CMM RESEARCH LIST ── */
+.research-item { padding: 12px 0; border-bottom: 1px solid var(--border-s); }
+.research-item:last-child { border-bottom: none; }
+.research-title { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg); line-height: 1.4; margin-bottom: 4px; cursor: pointer; transition: color 200ms; }
+.research-title:hover { color: var(--brand); }
+.research-meta { font-size: 0.6875rem; color: var(--fg-3); display: flex; gap: 6px; align-items: center; }
+.research-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--fg-3); }
+
+/* ── SIDEBAR: QUICK STATS ── */
+.qs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-s); border-radius: var(--d-tab-r); overflow: hidden; }
+.qs-item { background: var(--d-w-bg, var(--white)); padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+[data-dir="editorial"] .qs-item { background: var(--bg); }
+.qs-label { font-size: 0.6875rem; color: var(--fg-3); font-weight: 500; }
+.qs-val { font-family: var(--font-m); font-weight: 600; font-size: 0.875rem; color: var(--fg); font-variant-numeric: tabular-nums; }
+
+/* ── SIDEBAR: OWNERSHIP ── */
+.own-bar { height: 8px; border-radius: 4px; display: flex; overflow: hidden; margin-bottom: 14px; }
+.own-seg-1 { background: var(--brand); }
+.own-seg-2 { background: var(--brand-l); }
+.own-seg-3 { background: var(--surface-el); }
+.own-list { display: flex; flex-direction: column; gap: 10px; }
+.own-item { display: flex; align-items: center; justify-content: space-between; }
+.own-name { font-size: 0.8125rem; color: var(--fg-2); display: flex; align-items: center; gap: 8px; }
+.own-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.own-pct { font-family: var(--font-m); font-weight: 600; font-size: 0.8125rem; color: var(--fg); }
+
+/* ── SIDEBAR: NEWS ── */
+.news-item { padding: 12px 0; border-bottom: 1px solid var(--border-s); }
+.news-item:last-child { border-bottom: none; padding-bottom: 0; }
+.news-title { font-family: var(--font-d); font-weight: 600; font-size: 0.8125rem; color: var(--fg); line-height: 1.4; margin-bottom: 4px; cursor: pointer; transition: color 200ms; }
+.news-title:hover { color: var(--brand); }
+.news-meta { font-size: 0.6875rem; color: var(--fg-3); display: flex; gap: 6px; align-items: center; }
+.news-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--fg-3); }
+
+/* ── BADGE (shared) ── */
+.badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-d); font-weight: var(--d-badge-w); font-size: var(--d-badge-s); text-transform: var(--d-badge-tt); letter-spacing: var(--d-badge-ls); line-height: 1; border-radius: var(--d-badge-r); padding: var(--d-badge-py) var(--d-badge-px); transition: all 400ms var(--ease); white-space: nowrap; }
+
+/* ── CHART ANIMATIONS ── */
+@keyframes chartDraw { from { stroke-dashoffset: 2000; } to { stroke-dashoffset: 0; } }
+@keyframes chartFillIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dotPop { 0% { r: 0; opacity: 0; } 60% { r: 6; opacity: 1; } 100% { r: 4.5; opacity: 1; } }
+@keyframes ringPop { 0% { r: 0; opacity: 0; } 60% { r: 9; opacity: 0.3; } 100% { r: 7; opacity: 0.3; } }
+@keyframes gridFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes labelSlide { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+.chart-wrap polyline { stroke-dasharray: 2000; stroke-dashoffset: 2000; }
+.chart-wrap polygon { opacity: 0; }
+.chart-wrap circle:nth-of-type(1) { r: 0; }
+.chart-wrap circle:nth-of-type(2) { r: 0; }
+.chart-wrap .grid-line { opacity: 0; }
+.chart-wrap .grid-label { opacity: 0; }
+/* Initial scroll-in: slow, dramatic */
+.chart-animated polyline { animation: chartDraw 2.4s var(--ease) forwards; }
+.chart-animated polygon { animation: chartFillIn 1.2s 1s var(--ease) forwards; }
+.chart-animated circle:nth-of-type(1) { animation: dotPop 600ms 2s var(--ease) forwards; }
+.chart-animated circle:nth-of-type(2) { animation: ringPop 600ms 2s var(--ease) forwards; }
+.chart-animated .grid-line { animation: gridFade 600ms var(--ease) forwards; }
+.chart-animated .grid-line:nth-child(1) { animation-delay: 0ms; }
+.chart-animated .grid-line:nth-child(2) { animation-delay: 150ms; }
+.chart-animated .grid-line:nth-child(3) { animation-delay: 300ms; }
+.chart-animated .grid-label { animation: labelSlide 500ms var(--ease) forwards; }
+.chart-animated .grid-label:nth-child(4) { animation-delay: 200ms; }
+.chart-animated .grid-label:nth-child(5) { animation-delay: 350ms; }
+.chart-animated .grid-label:nth-child(6) { animation-delay: 500ms; }
+/* Tab switch: medium pace */
+.chart-redraw polyline { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: chartDraw 1.6s var(--ease) forwards; }
+.chart-redraw polygon { opacity: 0; animation: chartFillIn 800ms 700ms var(--ease) forwards; }
+.chart-redraw circle:nth-of-type(1) { animation: dotPop 500ms 1.3s var(--ease) forwards; }
+.chart-redraw circle:nth-of-type(2) { animation: ringPop 500ms 1.3s var(--ease) forwards; }
+
+/* ── STAT COUNTER ANIMATION ── */
+/* no other widget animations — chart only */
+
+/* ── CHART INTERACTIVITY ── */
+.chart-wrap { cursor: crosshair; }
+.chart-tooltip { position: absolute; background: var(--fg); color: white; font-family: var(--font-m); font-size: 0.6875rem; padding: 4px 10px; border-radius: 4px; pointer-events: none; opacity: 0; transition: opacity 150ms; white-space: nowrap; transform: translateX(-50%); }
+.chart-tooltip.show { opacity: 1; }
+.chart-crosshair { stroke: var(--fg-3); stroke-width: 1; stroke-dasharray: 3,3; opacity: 0; transition: opacity 150ms; }
+.chart-crosshair.show { opacity: 1; }
+.chart-line-path { transition: d 600ms var(--ease); }
+.chart-fill-path { transition: d 600ms var(--ease); }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(12,10,29,0.4); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 300ms var(--ease); }
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+.modal { background: var(--white); border: 1px solid var(--border); border-radius: var(--d-card-r); padding: 40px; max-width: 480px; width: 90%; box-shadow: var(--shadow-lg); transform: translateY(12px) scale(0.98); transition: all 350ms var(--ease); position: relative; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+[data-dir="polished"] .modal { border-radius: 16px; box-shadow: 0 20px 60px rgba(62,20,156,0.15); }
+.modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--surface); color: var(--fg-3); cursor: pointer; display: grid; place-items: center; transition: all 200ms; }
+.modal-close:hover { background: var(--surface-el); color: var(--fg); }
+.modal-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; margin: 0 auto 16px; }
+.modal-icon svg { width: 24px; height: 24px; }
+.modal-icon.brand { background: var(--brand-m); color: var(--brand); }
+.modal-icon.success { background: rgba(5,150,105,0.1); color: var(--pos); }
+.modal-title { font-family: var(--font-d); font-weight: 800; font-size: 1.25rem; color: var(--fg); text-align: center; margin-bottom: 6px; letter-spacing: -0.02em; }
+.modal-desc { font-size: 0.8125rem; color: var(--fg-2); text-align: center; line-height: 1.5; margin-bottom: 24px; }
+.modal-form { display: flex; flex-direction: column; gap: 12px; }
+.modal-label { font-family: var(--font-d); font-weight: 600; font-size: 0.75rem; color: var(--fg-2); margin-bottom: -6px; }
+.modal-input, .modal-select, .modal-textarea { height: 44px; padding: 0 14px; border: 1px solid var(--border); border-radius: var(--d-btn-r); font-family: var(--font-b); font-size: 0.875rem; color: var(--fg); background: var(--white); outline: none; width: 100%; transition: all 200ms; }
+.modal-input:focus, .modal-select:focus, .modal-textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-m); }
+.modal-input::placeholder, .modal-textarea::placeholder { color: var(--fg-3); }
+.modal-textarea { height: 80px; padding: 12px 14px; resize: none; font-family: var(--font-b); }
+.modal-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7793' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.modal-submit { font-family: var(--font-d); font-weight: 700; font-size: 0.875rem; padding: 12px 24px; border-radius: var(--d-btn-r); border: none; background: var(--brand); color: white; cursor: pointer; transition: all 200ms; margin-top: 4px; }
+.modal-submit:hover { background: var(--brand-h); transform: translateY(-1px); }
+.modal-submit:disabled { opacity: 0.6; cursor: default; transform: none; }
+.modal-footer { font-size: 0.6875rem; color: var(--fg-3); text-align: center; margin-top: 14px; line-height: 1.5; }
+.modal-success { text-align: center; }
+.check-circle { width: 56px; height: 56px; border-radius: 50%; background: rgba(5,150,105,0.1); display: grid; place-items: center; margin: 0 auto 16px; }
+.check-circle svg { width: 28px; height: 28px; color: var(--pos); stroke-dasharray: 30; stroke-dashoffset: 30; animation: checkDraw 500ms 200ms forwards var(--ease); }
+@keyframes checkDraw { to { stroke-dashoffset: 0; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .two-col { grid-template-columns: 1fr; }
+  .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+}
+@media (max-width: 640px) {
+  .two-col { grid-template-columns: 1fr; }
+  .sidebar { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .profile-header { flex-direction: column; }
+  .people-grid { grid-template-columns: 1fr; }
+  .stats-row { flex-direction: column; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="insights-index.html" style="text-decoration:none;color:var(--brand)">MarketIQ</a>
+    <div class="nav-links">
+      <a class="nav-link on" href="directory-index.html">Directory</a>
+      <a class="nav-link" href="insights-index.html">Insights</a>
+      <a class="nav-link" href="#">Market Feed</a>
+      <a class="nav-link" href="#">Events</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <button class="nav-btn">Sign In</button>
+    </div>
+  </div>
+</nav>
+
+<!-- DIRECTION SWITCHER -->
+<div class="dir-sw">
+  <button class="dir-btn" onclick="go('editorial')">Editorial</button>
+  <button class="dir-btn" onclick="go('dense')">Dense</button>
+  <button class="dir-btn on" onclick="go('polished')">Polished</button>
+</div>
+
+<main class="wrap">
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb reveal">
+    <a href="directory-index.html">Directory</a>
+    <span class="sep">›</span>
+    <a href="directory-index.html">Public Companies</a>
+    <span class="sep">›</span>
+    <span>Erdene Resource Development</span>
+  </div>
+
+  <!-- PROFILE HEADER -->
+  <div class="profile-header reveal rd1">
+    <div class="profile-logo">ER</div>
+    <div class="profile-info">
+      <h1 class="profile-name">Erdene Resource Development</h1>
+      <div class="ticker-line">
+        <span class="ticker-code">MSE: ERDN</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-price">₮4,280</span>
+        <span class="ticker-change">+2.4% ↑</span>
+      </div>
+      <div class="profile-tags">
+        <span class="tag tag-co">Public Company</span>
+        <span class="tag tag-sector">Mining &amp; Resources</span>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-primary" onclick="openModal('conn-modal')">Request Connection</button>
+        <button class="btn-secondary">Website →</button>
+      </div>
+      <p class="profile-desc">Erdene Resource Development is a diversified mining company focused on gold and base metal exploration in southwestern Mongolia. Listed on the MSE and TSX, the company's flagship asset is the Bayan Khundii Gold Project in the Khundii Gold District.</p>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="two-col">
+
+    <!-- MAIN COLUMN -->
+    <div class="main-col">
+
+      <!-- MARKET DATA WIDGET -->
+      <div class="widget reveal rd2">
+        <div class="w-head">
+          <span class="w-title">Market Data</span>
+          <a class="w-action" href="#">Full Chart →</a>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-label">Price</span>
+            <span class="stat-val">₮4,280 <span class="up">+2.4%</span></span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Volume</span>
+            <span class="stat-val">1.2M</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Day Range</span>
+            <span class="stat-range">4,180 — 4,310</span>
+          </div>
+        </div>
+        <div class="chart-tabs">
+          <button class="chart-tab">1M</button>
+          <button class="chart-tab on">3M</button>
+          <button class="chart-tab">1Y</button>
+          <button class="chart-tab">ALL</button>
+        </div>
+        <div class="chart-wrap">
+          <svg viewBox="0 0 700 200" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="chartGradPos" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="#059669" stop-opacity="0.01"/>
+              </linearGradient>
+              <linearGradient id="chartGradNeg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#DC2626" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="#DC2626" stop-opacity="0.01"/>
+              </linearGradient>
+            </defs>
+            <line class="grid-line" x1="0" y1="50" x2="700" y2="50" stroke="var(--border-s)" stroke-width="1"/>
+            <line class="grid-line" x1="0" y1="100" x2="700" y2="100" stroke="var(--border-s)" stroke-width="1"/>
+            <line class="grid-line" x1="0" y1="150" x2="700" y2="150" stroke="var(--border-s)" stroke-width="1"/>
+            <text class="grid-label" x="4" y="47" fill="var(--fg-3)" font-size="9" font-family="var(--font-m)">4,400</text>
+            <text class="grid-label" x="4" y="97" fill="var(--fg-3)" font-size="9" font-family="var(--font-m)">4,200</text>
+            <text class="grid-label" x="4" y="147" fill="var(--fg-3)" font-size="9" font-family="var(--font-m)">4,000</text>
+            <!-- Gradient fill area -->
+            <polygon points="40,160 80,152 120,148 160,135 200,142 240,128 280,118 320,125 360,110 400,105 440,98 480,102 520,88 560,82 600,78 640,85 670,72 670,200 40,200" fill="url(#chartGradPos)"/>
+            <polyline points="40,160 80,152 120,148 160,135 200,142 240,128 280,118 320,125 360,110 400,105 440,98 480,102 520,88 560,82 600,78 640,85 670,72" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="670" cy="72" r="4.5" fill="#059669"/>
+            <circle cx="670" cy="72" r="7" fill="none" stroke="#059669" stroke-width="1.5" opacity="0.3"/>
+          </svg>
+        </div>
+        <div class="chart-tooltip" id="chart-tip">₮4,280</div>
+        <div class="chart-source">Last updated: Apr 7, 2026 · Source: MSE</div>
+      </div>
+
+      <!-- FINANCIAL PERFORMANCE WIDGET -->
+      <div class="widget reveal rd3">
+        <div class="w-head">
+          <span class="w-title">Financial Performance</span>
+          <div class="fin-tabs">
+            <button class="fin-tab on">P&amp;L</button>
+            <button class="fin-tab">Balance Sheet</button>
+            <button class="fin-tab">Cash Flow</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>2023</th>
+              <th>2024</th>
+              <th>2025</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Revenue (₮B)</td>
+              <td>42.8</td>
+              <td>67.3</td>
+              <td>89.1</td>
+            </tr>
+            <tr>
+              <td>Net Income (₮B)</td>
+              <td class="neg-val">-2.1</td>
+              <td>8.4</td>
+              <td>18.7</td>
+            </tr>
+            <tr>
+              <td>EBITDA (₮B)</td>
+              <td>12.3</td>
+              <td>28.9</td>
+              <td>41.2</td>
+            </tr>
+            <tr>
+              <td>Total Assets (₮B)</td>
+              <td>156.4</td>
+              <td>198.2</td>
+              <td>243.8</td>
+            </tr>
+            <tr>
+              <td>Total Debt (₮B)</td>
+              <td>45.2</td>
+              <td>38.6</td>
+              <td>31.4</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-source">MSE Annual Report 2025. Audited figures.</div>
+      </div>
+
+      <!-- KEY PERSONNEL WIDGET -->
+      <div class="widget reveal rd4">
+        <div class="w-head">
+          <span class="w-title">Key Personnel</span>
+        </div>
+        <div class="people-grid">
+          <div class="person">
+            <div class="person-av">PD</div>
+            <div class="person-name">Peter Dalton</div>
+            <div class="person-title">Chief Executive Officer</div>
+          </div>
+          <div class="person">
+            <div class="person-av">BE</div>
+            <div class="person-name">Bat-Erdene G.</div>
+            <div class="person-title">Chief Financial Officer</div>
+          </div>
+          <div class="person">
+            <div class="person-av">JC</div>
+            <div class="person-name">Jay Cleary</div>
+            <div class="person-title">VP Exploration</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CMM RESEARCH WIDGET -->
+      <div class="widget reveal rd5">
+        <div class="w-head">
+          <span class="w-title">CMM Research</span>
+          <a class="w-action" href="#">View All →</a>
+        </div>
+        <div class="research-item" onclick="nav('content-detail.html')" style="cursor:pointer">
+          <div class="research-title">Erdene Resource Development: Q4 2025 Results &amp; Forward Guidance</div>
+          <div class="research-meta">
+            <span>Deal Insight</span>
+            <span class="dot"></span>
+            <span>Mar 22, 2026</span>
+          </div>
+        </div>
+        <div class="research-item" onclick="nav('content-detail.html')" style="cursor:pointer">
+          <div class="research-title">Mongolia's Mining Sector: A Comprehensive 2026 Outlook</div>
+          <div class="research-meta">
+            <span>Research Report</span>
+            <span class="dot"></span>
+            <span>Mar 28, 2026</span>
+          </div>
+        </div>
+        <div class="research-item" onclick="nav('content-detail.html')" style="cursor:pointer">
+          <div class="research-title">Bayan Khundii Gold District: Resource Estimate Update</div>
+          <div class="research-meta">
+            <span>Investment Teaser</span>
+            <span class="dot"></span>
+            <span>Feb 14, 2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- QUICK STATS -->
+      <div class="widget reveal rd2">
+        <div class="w-head">
+          <span class="w-title">Quick Stats</span>
+        </div>
+        <div class="qs-grid">
+          <div class="qs-item">
+            <span class="qs-label">Market Cap</span>
+            <span class="qs-val">₮892B</span>
+          </div>
+          <div class="qs-item">
+            <span class="qs-label">P/E Ratio</span>
+            <span class="qs-val">47.7x</span>
+          </div>
+          <div class="qs-item">
+            <span class="qs-label">52W High</span>
+            <span class="qs-val">₮4,520</span>
+          </div>
+          <div class="qs-item">
+            <span class="qs-label">52W Low</span>
+            <span class="qs-val">₮2,180</span>
+          </div>
+          <div class="qs-item">
+            <span class="qs-label">Avg Volume</span>
+            <span class="qs-val">840K</span>
+          </div>
+          <div class="qs-item">
+            <span class="qs-label">Sector</span>
+            <span class="qs-val" style="font-family: var(--font-b); font-weight: 600; font-size: 0.8125rem;">Mining</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- OWNERSHIP -->
+      <div class="widget reveal rd3">
+        <div class="w-head">
+          <span class="w-title">Ownership</span>
+        </div>
+        <div class="own-bar">
+          <div class="own-seg-1" style="width: 72%;"></div>
+          <div class="own-seg-2" style="width: 18%;"></div>
+          <div class="own-seg-3" style="width: 10%;"></div>
+        </div>
+        <div class="own-list">
+          <div class="own-item">
+            <span class="own-name"><span class="own-dot" style="background: var(--brand);"></span>Erdene Mining Corp</span>
+            <span class="own-pct">72%</span>
+          </div>
+          <div class="own-item">
+            <span class="own-name"><span class="own-dot" style="background: var(--brand-l);"></span>Institutional</span>
+            <span class="own-pct">18%</span>
+          </div>
+          <div class="own-item">
+            <span class="own-name"><span class="own-dot" style="background: var(--surface-el);"></span>Public Float</span>
+            <span class="own-pct">10%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MARKET NEWS -->
+      <div class="widget reveal rd4">
+        <div class="w-head">
+          <span class="w-title">Market News</span>
+        </div>
+        <div class="news-item">
+          <div class="news-title">Erdene Reports Record Gold Production in Q1 2026</div>
+          <div class="news-meta">
+            <span>Mining Weekly</span>
+            <span class="dot"></span>
+            <span>Apr 5, 2026</span>
+          </div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">Mongolia Mining Sector Attracts $2.1B in Foreign Investment</div>
+          <div class="news-meta">
+            <span>Bloomberg</span>
+            <span class="dot"></span>
+            <span>Apr 2, 2026</span>
+          </div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">Bayan Khundii Expansion Permit Approved by MRAM</div>
+          <div class="news-meta">
+            <span>UB Post</span>
+            <span class="dot"></span>
+            <span>Mar 29, 2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<!-- CONNECTION REQUEST MODAL -->
+<div class="modal-overlay" id="conn-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('conn-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div id="conn-form">
+      <div class="modal-icon brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="modal-title">Request Connection</div>
+      <div class="modal-desc">Request an introduction to Erdene Resource Development through CMM's advisory network.</div>
+      <div class="modal-form">
+        <label class="modal-label">Full Name</label>
+        <input class="modal-input" type="text" placeholder="Your full name" value="Batbold Enkhtaivan">
+        <label class="modal-label">Email</label>
+        <input class="modal-input" type="email" placeholder="your@email.com" value="batbold@firm.com">
+        <label class="modal-label">Company</label>
+        <input class="modal-input" type="text" placeholder="Investment firm or organization" value="Frontier Capital Partners">
+        <label class="modal-label">Investment Ticket Size</label>
+        <select class="modal-select">
+          <option value="">Select range</option>
+          <option>Under $1M</option>
+          <option selected>$1M — $5M</option>
+          <option>$5M — $25M</option>
+          <option>$25M+</option>
+        </select>
+        <label class="modal-label">Message</label>
+        <textarea class="modal-textarea" placeholder="Briefly describe your interest in this entity...">Interested in exploring equity participation in the Bayan Khundii expansion. Would appreciate an introduction to management.</textarea>
+        <button class="modal-submit" onclick="submitConnection()">Send Request</button>
+      </div>
+      <div class="modal-footer">CMM will facilitate the introduction. Typical response time: 1-2 business days.</div>
+    </div>
+    <div id="conn-success" class="modal-success" style="display:none">
+      <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="modal-title">Request Sent</div>
+      <div class="modal-desc" style="margin-bottom:8px">A CMM analyst will review your request and facilitate the introduction to Erdene Resource Development.</div>
+      <div style="font-family:var(--font-m);font-size:0.6875rem;color:var(--fg-3)">Expected response: 1-2 business days</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function nav(page) { location.href = page + location.hash; }
+function go(d) {
+  document.documentElement.setAttribute('data-dir', d);
+  document.body.setAttribute('data-dir', d);
+  document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('on', b.textContent.toLowerCase().includes(d.slice(0,4))));
+  history.replaceState(null, null, '#' + d);
+  document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute('href'); if (h && h.endsWith('.html')) a.setAttribute('href', h.split('#')[0] + '#' + d); });
+}
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); obs.unobserve(e.target); }}), { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Chart draw animation on scroll
+const chartObs = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) {
+    e.target.classList.add('chart-animated');
+    chartObs.unobserve(e.target);
+  }
+}), { threshold: 0.2 });
+const cw = document.querySelector('.chart-wrap');
+if (cw) chartObs.observe(cw);
+const h = location.hash.replace('#','');
+go(['editorial','dense','polished'].includes(h) ? h : 'polished');
+
+// ── MODAL SYSTEM ──
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('.modal-overlay').forEach(ov => { ov.addEventListener('click', e => { if (e.target === ov) closeModal(ov.id); }); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id)); });
+
+// ── CONNECTION REQUEST ──
+function submitConnection() {
+  const btn = document.querySelector('#conn-modal .modal-submit');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  setTimeout(() => {
+    document.getElementById('conn-form').style.display = 'none';
+    document.getElementById('conn-success').style.display = 'block';
+    setTimeout(() => {
+      closeModal('conn-modal');
+      setTimeout(() => { document.getElementById('conn-form').style.display = ''; document.getElementById('conn-success').style.display = 'none'; btn.disabled = false; btn.textContent = 'Send Request'; }, 400);
+    }, 2200);
+  }, 1000);
+}
+
+// ── INTERACTIVE CHART ──
+const chartData = {
+  '1M': {
+    points: '40,68 80,72 120,78 160,72 200,82 240,88 280,85 320,95 360,92 400,100 440,105 480,98 520,108 560,115 600,112 640,120 670,125',
+    trend: 'down', low: '4,080', high: '4,420', change: '-3.8%',
+    labels: ['Mar 8','Mar 15','Mar 22','Mar 29','Apr 7']
+  },
+  '3M': {
+    points: '40,160 80,152 120,148 160,135 200,142 240,128 280,118 320,125 360,110 400,105 440,98 480,102 520,88 560,82 600,78 640,85 670,72',
+    trend: 'up', low: '3,620', high: '4,310', change: '+18.2%',
+    labels: ['Jan','Feb','Mar','Apr']
+  },
+  '1Y': {
+    points: '40,175 80,168 120,160 160,148 200,140 240,125 280,118 320,130 360,142 400,128 440,115 480,108 520,95 560,88 600,80 640,78 670,72',
+    trend: 'up', low: '2,180', high: '4,520', change: '+96.3%',
+    labels: ['May 25','Aug 25','Nov 25','Feb 26']
+  },
+  'ALL': {
+    points: '40,72 80,78 120,85 160,95 200,110 240,125 280,140 320,128 360,115 400,130 440,148 480,155 520,140 560,120 600,95 640,82 670,72',
+    trend: 'volatile', low: '1,840', high: '4,520', change: '+132%',
+    labels: ['2022','2023','2024','2025','2026']
+  }
+};
+
+// Gradients defined in SVG defs (chartGradPos + chartGradNeg)
+const chartLine = document.querySelector('.chart-wrap polyline:nth-of-type(1)') || document.querySelector('.chart-wrap polyline');
+const chartPoly = document.querySelector('.chart-wrap polygon');
+
+document.querySelectorAll('.chart-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('on'));
+    tab.classList.add('on');
+    const period = tab.textContent;
+    const d = chartData[period];
+    if (!d) return;
+
+    const cw = document.querySelector('.chart-wrap');
+    const line = document.querySelector('.chart-wrap polyline');
+    const poly = document.querySelector('.chart-wrap polygon');
+    const dot = document.querySelector('.chart-wrap circle:nth-of-type(1)');
+    const ring = document.querySelector('.chart-wrap circle:nth-of-type(2)');
+    const chgEl = document.querySelector('.ticker-change');
+
+    const pts = d.points.trim().split(' ');
+    const firstY = parseFloat(pts[0].split(',')[1]);
+    const lastY = parseFloat(pts[pts.length - 1].split(',')[1]);
+    const isDown = lastY > firstY;
+    const strokeColor = isDown ? '#DC2626' : '#059669';
+    const fillId = isDown ? 'url(#chartGradNeg)' : 'url(#chartGradPos)';
+
+    // Trigger redraw
+    cw.classList.remove('chart-animated', 'chart-redraw');
+    void cw.offsetWidth;
+    cw.classList.add('chart-redraw');
+
+    // Update polyline
+    if (line) { line.setAttribute('points', d.points); line.setAttribute('stroke', strokeColor); }
+
+    // Update polygon fill
+    if (poly) {
+      const lastPt = pts[pts.length - 1];
+      const lastX = lastPt.split(',')[0];
+      const firstX = pts[0].split(',')[0];
+      poly.setAttribute('points', d.points + ' ' + lastX + ',200 ' + firstX + ',200');
+      poly.setAttribute('fill', fillId);
+    }
+
+    // Update dot + ring
+    if (dot) {
+      const last = pts[pts.length - 1].split(',');
+      dot.setAttribute('cx', last[0]); dot.setAttribute('cy', last[1]);
+      dot.setAttribute('fill', strokeColor);
+      if (ring) { ring.setAttribute('cx', last[0]); ring.setAttribute('cy', last[1]); ring.setAttribute('stroke', strokeColor); }
+    }
+
+    // Update change display
+    if (chgEl && d.change) {
+      chgEl.textContent = d.change + (isDown ? ' ↓' : ' ↑');
+      chgEl.style.color = isDown ? 'var(--neg)' : 'var(--pos)';
+    }
+  });
+});
+
+// Chart hover tooltip
+const chartWrap = document.querySelector('.chart-wrap');
+const chartTip = document.getElementById('chart-tip');
+if (chartWrap && chartTip) {
+  chartWrap.addEventListener('mousemove', e => {
+    const rect = chartWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const pct = x / rect.width;
+    const price = Math.round(3620 + pct * (4310 - 3620));
+    chartTip.textContent = '₮' + price.toLocaleString();
+    chartTip.style.left = x + 'px';
+    chartTip.style.top = '-28px';
+    chartTip.classList.add('show');
+  });
+  chartWrap.addEventListener('mouseleave', () => { chartTip.classList.remove('show'); });
+}
+
+// ── FINANCIAL TABLE TABS ──
+const finData = {
+  'P&L': [
+    ['Revenue (₮B)', '42.8', '67.3', '89.1'],
+    ['Net Income (₮B)', '-2.1', '8.4', '18.7'],
+    ['EBITDA (₮B)', '12.3', '28.9', '41.2'],
+    ['Total Assets (₮B)', '156.4', '198.2', '243.8'],
+    ['Total Debt (₮B)', '45.2', '38.6', '31.4']
+  ],
+  'Balance Sheet': [
+    ['Total Assets (₮B)', '156.4', '198.2', '243.8'],
+    ['Current Assets (₮B)', '28.3', '42.1', '58.6'],
+    ['Total Liabilities (₮B)', '68.9', '72.4', '65.8'],
+    ['Shareholders Equity (₮B)', '87.5', '125.8', '178.0'],
+    ['Book Value/Share (₮)', '2,180', '3,140', '4,450']
+  ],
+  'Cash Flow': [
+    ['Operating CF (₮B)', '8.2', '24.6', '38.4'],
+    ['Investing CF (₮B)', '-22.1', '-18.4', '-14.2'],
+    ['Financing CF (₮B)', '15.6', '-4.8', '-8.6'],
+    ['Free Cash Flow (₮B)', '-13.9', '6.2', '24.2'],
+    ['CAPEX (₮B)', '22.1', '18.4', '14.2']
+  ]
+};
+document.querySelectorAll('.fin-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.fin-tab').forEach(t => t.classList.remove('on'));
+    tab.classList.add('on');
+    const key = tab.textContent;
+    const data = finData[key];
+    if (!data) return;
+    const tbody = document.querySelector('.data-table tbody');
+    tbody.innerHTML = data.map(row =>
+      '<tr>' + row.map((cell, i) => {
+        const isNeg = cell.startsWith('-');
+        return i === 0 ? '<td>' + cell + '</td>' : '<td' + (isNeg ? ' class="neg-val"' : '') + '>' + cell + '</td>';
+      }).join('') + '</tr>'
+    ).join('');
+  });
+});
+</script>
+</body>
+</html>
