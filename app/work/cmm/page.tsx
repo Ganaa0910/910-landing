@@ -64,7 +64,7 @@ export default function CMMCaseStudy() {
       <nav className="cs-nav">
         <div className="cs-nav-inner">
           <div className="cs-nav-logo">910 <span>Case Study</span></div>
-          <Link href="/" className="cs-nav-back">Back to Work</Link>
+          <Link href="/work" className="cs-nav-back">Back to Work</Link>
         </div>
       </nav>
 

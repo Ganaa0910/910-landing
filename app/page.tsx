@@ -653,7 +653,7 @@ function HomePage() {
               </button>
 
               <a
-                href="/work/cmm"
+                href="/work"
                 className="crt-button group relative overflow-hidden border-2 bg-black/70 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
                 style={{
                   fontFamily: `var(${uiFont})`,
