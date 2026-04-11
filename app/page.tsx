@@ -651,6 +651,39 @@ function HomePage() {
                 />
                 <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">Randomize</span>
               </button>
+
+              <a
+                href="/work/cmm"
+                className="crt-button group relative overflow-hidden border-2 bg-black/70 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
+                style={{
+                  fontFamily: `var(${uiFont})`,
+                  borderColor: `${accentColor}60`,
+                  color: `${accentColor}B0`,
+                }}
+              >
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-30"
+                  style={{
+                    background: `repeating-linear-gradient(
+                      0deg,
+                      transparent,
+                      transparent 2px,
+                      ${accentColor}20 2px,
+                      ${accentColor}20 4px
+                    )`,
+                  }}
+                />
+                <div
+                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-0 group-hover:opacity-60"
+                  style={{
+                    background: accentColor,
+                    boxShadow: `0 0 10px ${accentColor}`,
+                    animation: "scanline-sweep 3s linear infinite",
+                    animationPlayState: "paused",
+                  }}
+                />
+                <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">View Work</span>
+              </a>
             </div>
 
             {/* Info text */}
