@@ -1,1097 +1,158 @@
-"use client";
+import Link from "next/link";
+import { HeroSection } from "@/components/hero/hero-section";
+import { LineArt } from "@/components/ui/line-art";
+import { CapabilityCard } from "@/components/ui/capability-card";
 
-import React, { useState, useEffect, useRef, Suspense } from "react";
-import gsap from "gsap";
+const CAPABILITIES = [
+  { num: "01", title: "design systems & token architecture" },
+  { num: "02", title: "platforms & web applications" },
+  { num: "03", title: "creative development" },
+  { num: "04", title: "brand identity & digital strategy" },
+] as const;
 
-// New utilities and state management
-import {
-  type ComboState,
-  generateRandomCombo,
-  changeBackground,
-  changeFont,
-  changeColorPalette,
-  randomizeAll,
-  getPalette,
-  getFont,
-  getAccentColor,
-  SIGNATURE_COMBOS,
-} from "@/lib/combo-state";
-import {
-  getBackgroundByIndex,
-  getNextBackgroundIndex,
-  getPrevBackgroundIndex,
-} from "@/lib/background-registry";
-import { trackEvent } from "@/lib/analytics";
-
-// New hooks
-import { useKeyboardShortcuts, type ShortcutConfig } from "@/hooks/useKeyboardShortcuts";
-import { useComboUrlSync } from "@/hooks/useComboUrlSync";
-import { useBackgroundTransition } from "@/hooks/useBackgroundTransition";
-import { useFavorites } from "@/hooks/useFavorites";
-import { useKonamiCode } from "@/hooks/useKonamiCode";
-import { useTypedCommands } from "@/hooks/useTypedCommands";
-import { useSwipeGesture } from "@/hooks/useSwipeGesture";
-
-// New components
-import { HelpOverlay } from "@/components/HelpOverlay";
-import { FavoritesPanel } from "@/components/FavoritesPanel";
-import { Toast, useToast } from "@/components/Toast";
-import { CustomSelect } from "@/components/CustomSelect";
-import { MeetingScheduler } from "@/components/MeetingScheduler";
-import { CRTBootLoader } from "@/components/CRTBootLoader";
-import { CustomCursor } from "@/components/CustomCursor";
-import { TVStatic } from "@/components/TVStatic";
-
-// Taglines
-const quirkyLines = [
-  // REFINED CLASSICS
-  "refined by design. defined by code.",
-  "where intention meets interaction",
-  "crafted, not constructed",
-  "beyond beautiful. built right.",
-  "where craft meets code",
-  "performance meets poetry",
-  "obsessively refined",
-
-  // COCKY & CONFIDENT
-  "fuck around and find out",
-  "built different. literally.",
-  "your idea. our execution. their envy.",
-  "we don't do boring",
-  "too fast. too clean. too good.",
-  "zero bullshit. pure execution.",
-  "we build monuments, not websites",
-  "ctrl+alt+elite",
-  "your unfair advantage",
-  "making the web sexier",
-  "we don't follow trends. we set them.",
-  "better than your ex's new website",
-  "sorry bout your other options",
-  "we're the reason they're nervous",
-  "main character websites only",
-  "your competition hates us",
-  "not for the faint of budget",
-  "we don't pitch. we get picked.",
-  "out of your league? maybe.",
-  "the website your brand deserves",
-  "too pretty to be this functional",
-  "yes, we know we're good",
-  "humble isn't our font",
-
-  // BRATTY & PLAYFUL
-  "it's giving... everything",
-  "slay then ship",
-  "no thoughts just pixels",
-  "vibes checked. site shipped.",
-  "ate and left no crumbs",
-  "understood the assignment",
-  "she's beauty, she's grace, she's loading at pace",
-  "not your dad's web agency",
-  "delulu is the solulu",
-  "giving what needed to be gave",
-  "the audacity to be this good",
-  "rent free in their browser tabs",
-  "it's called taste, look it up",
-  "mother is mothering",
-  "no notes. just ship it.",
-  "sickening, no?",
-
-  // Y2K & DIGITAL NOSTALGIA
-  "loading your digital destiny...",
-  "error 404: boring not found",
-  "welcome to your inbox's favorite sender",
-  "now buffering greatness",
-  "you've got site",
-  "please wait... perfection loading",
-  "new site who dis",
-  "downloading main character energy",
-  "your cache can't handle this",
-  "bandwidth for the bold",
-  "dial-up dreamers, fiber optic delivery",
-  "buffering... just kidding, we're fast",
-  "AOL away message: building your empire",
-  "webmaster certified baddie",
-  "under construction (forever evolving)",
-  "hit counter: infinity",
-  "best viewed at any resolution",
-  "optimized for stunting",
-  "cookies? we prefer the whole bakery",
-
-  // VAPORWAVE & AESTHETIC
-  "a e s t h e t i c a l l y   e n g i n e e r e d",
-  "digital dreams in high resolution",
-  "neon-lit and pixel-perfect",
-  "sunset gradients & clean code",
-  "late night pixels, early morning deploys",
-  "chrome reflections, sharp designs",
-  "mall music for the modern web",
-  "retrowave meets real results",
-  "palm trees and perfect padding",
-  "vapor trails and version control",
-  "synthesized aesthetics",
-  "feeling cute, might deploy later",
-  "liminal web spaces",
-  "windows 95 soul, 2025 execution",
-  "corporate aesthetic, indie heart",
-  "endless scroll, endless style",
-  "somewhere between dream and deploy",
-
-  // UNHINGED & CHAOTIC
-  "chaotic good code",
-  "feral but make it functional",
-  "feral pixel energy",
-  "unhinged and well-documented",
-  "menace to bad design",
-  "slightly unhinged, fully optimized",
-  "a lil toxic, a lot talented",
-  "chaos coordinated",
-  "trust issues? here's our portfolio",
-  "emotionally unavailable for bad clients",
-  "situationship with perfection",
-  "gaslight, gatekeep, girlboss your brand",
-  "hot girl shit but make it semantic",
-
-  // FLEX & FINESSE
-  "taste meets tech",
-  "vibes + velocity = victory",
-  "code like poetry. ship like clockwork.",
-  "aesthetics are non-negotiable",
-  "make them stop scrolling",
-  "build loud. ship fast.",
-  "making pixels dance",
-  "where vision becomes velocity",
-  "built for virality",
-  "designed to be screenshotted",
-  "building experiences that hit different",
-  "where code becomes culture",
-];
-
-// Fonts that need extra letter spacing
-const wideSpacingFonts = new Set([
-  "--font-fjalla",
-  "--font-ultra",
-  "--font-black-ops",
-  "--font-unbounded",
-  "--font-staatliches",
-  "--font-block-talk",
-  "--font-gnaw-hard",
-  "--font-hardstyle",
-  "--font-harden",
-  "--font-vermin-verile",
-  "--font-modeccio",
-  "--font-helicopta",
-]);
-
-const getLetterSpacing = (font: string): string => {
-  return wideSpacingFonts.has(font) ? "0.05em" : "normal";
-};
-
-function HomePage() {
-  // Consistent UI font
-  const uiFont = "--font-ibm-plex-mono";
-
-  // Combo state (centralized)
-  // Start with 910 signature combo to avoid SSR hydration mismatch
-  const [combo, setCombo] = useState<ComboState>(SIGNATURE_COMBOS["910"]);
-
-  // Derived state
-  const palette = getPalette(combo);
-  const displayFont = getFont(combo);
-  const accentColor = getAccentColor(combo);
-  const tagline = quirkyLines[combo.taglineIndex];
-
-  // UI state
-  const [showModal, setShowModal] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Toast notifications
-  const { toast, showToast } = useToast();
-
-  // Inquiry form state
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    projectType: "Website",
-    budget: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [modalView, setModalView] = useState<"form" | "scheduler" | "success">("form");
-
-  // Sync accent color to CSS variable for scrollbars etc
-  useEffect(() => {
-    document.documentElement.style.setProperty("--current-accent", accentColor);
-  }, [accentColor]);
-
-  // Favorites management
-  const { favorites, addFavorite, removeFavorite, clearFavorites, isFavorited } =
-    useFavorites();
-
-  // Background transition system with TV static effect
-  const { current, showStatic, transitionTo, handleStaticMidpoint, handleStaticComplete } =
-    useBackgroundTransition({
-      element: getBackgroundByIndex(combo.backgroundIndex, palette),
-      key: `bg-${combo.backgroundIndex}-${palette.name}`,
-    });
-
-  // Refs for GSAP animations
-  const modalRef = useRef<HTMLDivElement>(null);
-  const backdropRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // URL parameter sync
-  const hasUrlComboRef = useRef(false);
-  const updateUrl = useComboUrlSync((decodedCombo) => {
-    hasUrlComboRef.current = true;
-    setCombo(decodedCombo);
-    trackEvent({ type: "combo_share" as const, combo: decodedCombo });
-  });
-
-  // Randomize on mount if no URL combo param
-  useEffect(() => {
-    // Small delay to let URL sync run first
-    const timer = setTimeout(() => {
-      if (!hasUrlComboRef.current) {
-        setCombo(generateRandomCombo(quirkyLines.length));
-      }
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Update URL when combo changes
-  useEffect(() => {
-    updateUrl(combo);
-    trackEvent({ type: "combo_view" as const, combo });
-  }, [combo, updateUrl]);
-
-  // Update background when combo changes
-  // Track previous background index to detect background vs palette-only changes
-  const prevBackgroundIndexRef = useRef(combo.backgroundIndex);
-
-  useEffect(() => {
-    const newBackground = {
-      element: getBackgroundByIndex(combo.backgroundIndex, palette),
-      key: `bg-${combo.backgroundIndex}-${palette.name}`,
-    };
-
-    // If background index changed: smooth transition
-    // If only background palette changed: instant swap (no flash)
-    const isBackgroundChange = prevBackgroundIndexRef.current !== combo.backgroundIndex;
-    prevBackgroundIndexRef.current = combo.backgroundIndex;
-
-    transitionTo(newBackground, !isBackgroundChange); // instant=true for palette changes
-  }, [combo.backgroundIndex, combo.paletteIndex]); // Only background palette, not uiPalette
-
-  // Handlers
-  const handleRandomizeAll = () => {
-    setCombo(randomizeAll(combo, quirkyLines.length));
-  };
-
-  const handleChangeFont = () => {
-    // Font change with RGB CRT glitch
-    if (!titleRef.current) return;
-
-    const newCombo = changeFont(combo);
-
-    const tl = gsap.timeline({
-      onComplete: () => setCombo(newCombo),
-    });
-
-    // RGB CRT glitch sequence
-    tl.to(titleRef.current, {
-      textShadow: `3px 0 0 #ff0000, -3px 0 0 #00ffff, 0 0 25px rgba(255,255,255,0.6)`,
-      duration: 0.06,
-      ease: "none",
-    })
-    .to(titleRef.current, {
-      textShadow: `-4px 0 0 #ff0000, 4px 0 0 #00ffff, 0 3px 0 #00ff00`,
-      x: -4,
-      duration: 0.06,
-      ease: "none",
-    })
-    .to(titleRef.current, {
-      textShadow: `5px 0 0 #00ffff, -5px 0 0 #ff00ff, 0 -3px 0 #ffff00`,
-      x: 5,
-      scaleX: 1.03,
-      duration: 0.06,
-      ease: "none",
-    })
-    .to(titleRef.current, {
-      textShadow: "none",
-      x: 0,
-      scaleX: 1,
-      duration: 0.1,
-      ease: "power2.out",
-    });
-  };
-
-  const handleChangeColor = () => {
-    setCombo(changeColorPalette(combo));
-  };
-
-  const handleChangeBackground = () => {
-    setCombo(changeBackground(combo));
-  };
-
-  const handleSaveFavorite = () => {
-    if (isFavorited(combo)) {
-      showToast("Already in favorites!");
-    } else {
-      addFavorite(combo);
-      showToast("Saved to favorites!");
-      trackEvent({ type: "favorite_save" as const, combo });
-    }
-  };
-
-  const handleLoadFavorite = (favCombo: ComboState) => {
-    setCombo(favCombo);
-    setShowFavorites(false);
-    showToast("Favorite loaded!");
-    trackEvent({ type: "favorite_load" as const, combo: favCombo });
-  };
-
-  // Keyboard shortcuts
-  const shortcuts: ShortcutConfig[] = [
-    { key: " ", description: "Randomize all", handler: handleRandomizeAll, preventDefault: true },
-    { key: "f", description: "Change font", handler: handleChangeFont },
-    { key: "c", description: "Change color", handler: handleChangeColor },
-    { key: "b", description: "Change background", handler: handleChangeBackground },
-    { key: "s", description: "Save to favorites", handler: handleSaveFavorite },
-    { key: "v", description: "View favorites", handler: () => setShowFavorites(!showFavorites) },
-    { key: "?", description: "Show help", handler: () => setShowHelp(!showHelp) },
-    { key: "Escape", description: "Close modal/help", handler: () => {
-      // Only handle main modal here - HelpOverlay and FavoritesPanel handle their own ESC
-      if (showModal) closeModal();
-    }},
-  ];
-
-  useKeyboardShortcuts(shortcuts, !showHelp && !showFavorites);
-
-  // Easter eggs
-  useKonamiCode(() => {
-    // TODO: Load secret Matrix background
-    showToast("Konami code activated! 🎮");
-    trackEvent({ type: "easter_egg" as const, egg: "konami" });
-  });
-
-  useTypedCommands({
-    "910": () => {
-      setCombo(SIGNATURE_COMBOS["910"]);
-      showToast("910 signature loaded 🎨");
-      trackEvent({ type: "easter_egg" as const, egg: "910" });
-    },
-    "gray": () => {
-      setCombo(SIGNATURE_COMBOS["gray"]);
-      showToast("Gray mode activated 🔥");
-      trackEvent({ type: "easter_egg" as const, egg: "gray" });
-    },
-  });
-
-  // Mobile gestures
-  useSwipeGesture(containerRef, {
-    onSwipeLeft: () => {
-      const nextIdx = getNextBackgroundIndex(combo.backgroundIndex);
-      setCombo({ ...combo, backgroundIndex: nextIdx });
-    },
-    onSwipeRight: () => {
-      const prevIdx = getPrevBackgroundIndex(combo.backgroundIndex);
-      setCombo({ ...combo, backgroundIndex: prevIdx });
-    },
-    onSwipeUp: handleChangeColor, // NEW: swipe up for colors
-    onSwipeDown: handleChangeColor, // NEW: swipe down for colors
-    onDoubleTap: handleRandomizeAll,
-    onLongPress: () => setShowFavorites(true),
-  });
-
-  // Form submission handler
-  const handleInquirySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-
-    try {
-      const res = await fetch("/api/inquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        showToast("Inquiry sent!");
-        closeModal();
-        setFormData({
-          name: "",
-          email: "",
-          projectType: "Website",
-          budget: "",
-          message: "",
-        });
-      } else {
-        showToast("Failed to send. Try again.");
-      }
-    } catch {
-      showToast("Network error. Try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Modal animations (existing code preserved)
-  const openModal = () => {
-    setModalView("form");
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    if (!modalRef.current || !backdropRef.current) return;
-
-    const timeline = gsap.timeline({
-      onComplete: () => {
-        setShowModal(false);
-        setModalView("form");
-      },
-    });
-
-    timeline
-      .to(modalRef.current, {
-        scaleY: 0.02,
-        duration: 0.2,
-        ease: "power2.in",
-      })
-      .to(
-        modalRef.current,
-        {
-          scaleX: 0.01,
-          scaleY: 0.01,
-          opacity: 0,
-          duration: 0.15,
-          ease: "power2.in",
-        },
-        "+=0.05"
-      )
-      .to(
-        backdropRef.current,
-        {
-          opacity: 0,
-          duration: 0.2,
-        },
-        0
-      );
-  };
-
-  useEffect(() => {
-    if (showModal && modalRef.current && backdropRef.current) {
-      gsap.fromTo(
-        backdropRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: "power2.out" }
-      );
-
-      const timeline = gsap.timeline();
-      timeline
-        .set(modalRef.current, {
-          scaleX: 0.01,
-          scaleY: 0.01,
-          opacity: 0.5,
-        })
-        .to(modalRef.current, {
-          scaleX: 1,
-          scaleY: 0.02,
-          opacity: 1,
-          duration: 0.15,
-          ease: "power2.out",
-        })
-        .to(modalRef.current, {
-          scaleY: 1,
-          duration: 0.25,
-          ease: "power3.out",
-        });
-    }
-  }, [showModal]);
-
+export default function HomePage() {
   return (
-    <>
-      {/* CRT Boot Loader */}
-      {showLoader && (
-        <CRTBootLoader
-          accentColor={accentColor}
-          uiFont={uiFont}
-          onComplete={() => {
-            setShowLoader(false);
-            setIsLoaded(true);
-          }}
+    <main>
+      {/* Hero */}
+      <HeroSection />
+
+      {/* Capabilities */}
+      <section className="relative bg-base-black overflow-hidden">
+        <LineArt
+          variant="scribble"
+          color="#14b8a6"
+          strokeWidth={6}
+          className="absolute -top-10 -right-10 w-56 opacity-20 sm:w-72"
+          delay={0.2}
+          loop
         />
-      )}
 
-      {/* Main content (only after loader) */}
-      {isLoaded && (
-        <div ref={containerRef} className="relative h-screen w-screen overflow-hidden bg-black">
-          {/* Custom cursor */}
-          <CustomCursor accentColor={accentColor} />
+        <div className="mx-auto max-w-[1120px] px-8 py-24">
+          <p className="mb-16 text-[10px] uppercase tracking-[0.2em] text-zinc-600">
+            [ what we do ]
+          </p>
 
-          {/* Background layer */}
-          <div className="fixed inset-0">
-            <div className="absolute inset-0">
-              {current.element}
-            </div>
+          <div className="relative grid grid-cols-1 sm:grid-cols-2">
+            {CAPABILITIES.map((cap, i) => (
+              <CapabilityCard key={cap.num} num={cap.num} title={cap.title} index={i} />
+            ))}
+
+            <LineArt
+              variant="vertical"
+              color="#e4e4e7"
+              strokeWidth={5}
+              className="absolute -right-4 top-0 h-full opacity-10"
+              delay={0.5}
+            />
           </div>
 
-          {/* CRT line transition overlay */}
-          <TVStatic
-            visible={showStatic}
-            duration={320}
-            onMidpoint={handleStaticMidpoint}
-            onComplete={handleStaticComplete}
-            color={accentColor}
-          />
-
-          {/* Main content overlay */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center p-8 text-white">
-            {/* Title */}
-            <h1
-              ref={titleRef}
-              className="mb-4 cursor-pointer text-center text-5xl font-bold leading-tight tracking-tight transition-opacity hover:opacity-80 sm:text-7xl md:text-8xl lg:text-9xl"
-              style={{
-                fontFamily: `var(${displayFont})`,
-                letterSpacing: getLetterSpacing(displayFont),
-                color: accentColor,
-                textShadow: `0 0 40px ${accentColor}80, 0 0 80px ${accentColor}40`,
-              }}
-              onClick={handleChangeFont}
-            >
-              910STUDIO
-            </h1>
-
-            {/* Tagline */}
-            <p
-              className="mb-12 max-w-4xl text-center text-base font-medium uppercase tracking-[0.2em] sm:text-lg md:text-xl"
-              style={{
-                fontFamily: `var(${uiFont})`,
-                color: accentColor,
-                textShadow: `0 0 30px ${accentColor}60, 0 0 60px ${accentColor}30`,
-              }}
-            >
-              {tagline}
+          <div className="relative mt-20">
+            <p className="font-bebas text-3xl uppercase tracking-wide text-zinc-400 sm:text-4xl">
+              we build the things that matter to your business.
+              <br />
+              design systems, platforms, and digital products —{" "}
+              <span className="text-zinc-200">crafted with conviction.</span>
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <button
-                onClick={openModal}
-                className="crt-button group relative overflow-hidden border-2 bg-black/90 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
-                style={{
-                  fontFamily: `var(${uiFont})`,
-                  borderColor: accentColor,
-                  color: accentColor,
-                  boxShadow: `0 0 20px ${accentColor}40`,
-                }}
-              >
-                {/* CRT Scanlines Overlay - visible on hover */}
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-30"
-                  style={{
-                    background: `repeating-linear-gradient(
-                      0deg,
-                      transparent,
-                      transparent 2px,
-                      ${accentColor}20 2px,
-                      ${accentColor}20 4px
-                    )`,
-                  }}
-                />
-                {/* Glitch line sweep on hover */}
-                <div
-                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-0 group-hover:opacity-60"
-                  style={{
-                    background: accentColor,
-                    boxShadow: `0 0 10px ${accentColor}`,
-                    animation: "scanline-sweep 3s linear infinite",
-                    animationPlayState: "paused",
-                  }}
-                />
-                <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">Get Started</span>
-              </button>
-
-              <button
-                onClick={handleRandomizeAll}
-                className="crt-button group relative overflow-hidden border-2 bg-black/70 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
-                style={{
-                  fontFamily: `var(${uiFont})`,
-                  borderColor: `${accentColor}60`,
-                  color: `${accentColor}B0`,
-                }}
-              >
-                {/* CRT Scanlines Overlay - visible on hover */}
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-30"
-                  style={{
-                    background: `repeating-linear-gradient(
-                      0deg,
-                      transparent,
-                      transparent 2px,
-                      ${accentColor}20 2px,
-                      ${accentColor}20 4px
-                    )`,
-                  }}
-                />
-                {/* Glitch line sweep on hover */}
-                <div
-                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-0 group-hover:opacity-60"
-                  style={{
-                    background: accentColor,
-                    boxShadow: `0 0 10px ${accentColor}`,
-                    animation: "scanline-sweep 3s linear infinite",
-                    animationPlayState: "paused",
-                  }}
-                />
-                <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">Randomize</span>
-              </button>
-
-              <a
-                href="/work"
-                className="crt-button group relative overflow-hidden border-2 bg-black/70 px-8 py-4 font-bold uppercase tracking-wide backdrop-blur-sm transition-all"
-                style={{
-                  fontFamily: `var(${uiFont})`,
-                  borderColor: `${accentColor}60`,
-                  color: `${accentColor}B0`,
-                }}
-              >
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-30"
-                  style={{
-                    background: `repeating-linear-gradient(
-                      0deg,
-                      transparent,
-                      transparent 2px,
-                      ${accentColor}20 2px,
-                      ${accentColor}20 4px
-                    )`,
-                  }}
-                />
-                <div
-                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-0 group-hover:opacity-60"
-                  style={{
-                    background: accentColor,
-                    boxShadow: `0 0 10px ${accentColor}`,
-                    animation: "scanline-sweep 3s linear infinite",
-                    animationPlayState: "paused",
-                  }}
-                />
-                <span className="relative z-10 transition-all group-hover:drop-shadow-[0_0_8px_var(--current-accent)]">View Work</span>
-              </a>
-            </div>
-
-            {/* Info text */}
-            <p
-              className="mt-8 text-center text-xs"
-              style={{
-                fontFamily: `var(${uiFont})`,
-                color: `${accentColor}60`,
-              }}
-            >
-              <span className="hidden sm:inline">
-                Press <kbd className="rounded bg-white/10 px-2 py-1">?</kbd> for shortcuts
-              </span>
-              <span className="sm:hidden">
-                Tap title for font · Swipe for colors/backgrounds
-              </span>
-            </p>
-
-            {/* Mobile action buttons */}
-            <div className="fixed bottom-4 left-4 flex gap-2 sm:hidden">
-              <button
-                onClick={() => setShowHelp(true)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-bold transition-all hover:scale-110"
-                style={{
-                  fontFamily: `var(${uiFont})`,
-                  borderColor: `${accentColor}60`,
-                  color: accentColor,
-                  backgroundColor: '#00000080',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                ?
-              </button>
-              <button
-                onClick={handleSaveFavorite}
-                className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-lg transition-all hover:scale-110"
-                style={{
-                  borderColor: isFavorited(combo) ? accentColor : `${accentColor}60`,
-                  color: accentColor,
-                  backgroundColor: isFavorited(combo) ? `${accentColor}20` : '#00000080',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                {isFavorited(combo) ? '★' : '☆'}
-              </button>
-            </div>
+            <LineArt
+              variant="underline"
+              color="#14b8a6"
+              strokeWidth={5}
+              className="mt-3 w-56 opacity-50 sm:w-80"
+              delay={0.3}
+            />
           </div>
-
-          {/* Inquiry Modal */}
-          {showModal && (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-4"
-              onClick={closeModal}
-            >
-              <div ref={backdropRef} className="absolute inset-0 bg-black/95" />
-
-              <div
-                ref={modalRef}
-                className="relative w-full"
-                style={{ maxWidth: "min(90vw, 32rem)" }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div
-                  className="relative max-h-[85vh] overflow-y-auto border-4 bg-black px-6 py-8 sm:px-8 sm:py-10"
-                  style={{
-                    borderColor: accentColor,
-                    boxShadow: `0 0 60px ${accentColor}40`,
-                  }}
-                >
-                  {/* Form View */}
-                  {modalView === "form" && (
-                    <div className="animate-crt-in">
-                      <h2
-                        className="mb-6 text-center text-2xl font-bold sm:text-3xl"
-                        style={{
-                          fontFamily: `var(${uiFont})`,
-                          color: accentColor,
-                        }}
-                      >
-                        START A PROJECT
-                      </h2>
-
-                      <form onSubmit={handleInquirySubmit} className="space-y-4">
-                        {/* Name */}
-                        <div>
-                          <label
-                            className="mb-1 block text-xs uppercase tracking-wider"
-                            style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
-                          >
-                            Name *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="w-full bg-transparent px-3 py-2 text-white outline-none transition-colors"
-                            style={{
-                              border: `2px solid ${accentColor}40`,
-                              fontFamily: `var(${uiFont})`,
-                            }}
-                            onFocus={(e) => (e.target.style.borderColor = accentColor)}
-                            onBlur={(e) => (e.target.style.borderColor = `${accentColor}40`)}
-                          />
-                        </div>
-
-                        {/* Email */}
-                        <div>
-                          <label
-                            className="mb-1 block text-xs uppercase tracking-wider"
-                            style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
-                          >
-                            Email *
-                          </label>
-                          <input
-                            type="email"
-                            required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full bg-transparent px-3 py-2 text-white outline-none transition-colors"
-                            style={{
-                              border: `2px solid ${accentColor}40`,
-                              fontFamily: `var(${uiFont})`,
-                            }}
-                            onFocus={(e) => (e.target.style.borderColor = accentColor)}
-                            onBlur={(e) => (e.target.style.borderColor = `${accentColor}40`)}
-                          />
-                        </div>
-
-                        {/* Project Type & Budget Row */}
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                          <CustomSelect
-                            label="Project Type"
-                            value={formData.projectType}
-                            onChange={(val) => setFormData({ ...formData, projectType: val })}
-                            accentColor={accentColor}
-                            uiFont={uiFont}
-                            options={[
-                              { value: "Website", label: "Website" },
-                              { value: "Web App", label: "Web App" },
-                              { value: "Mobile App", label: "Mobile App" },
-                              { value: "Branding", label: "Branding" },
-                              { value: "Other", label: "Other" },
-                            ]}
-                          />
-
-                          <CustomSelect
-                            label="Budget Range"
-                            value={formData.budget}
-                            onChange={(val) => setFormData({ ...formData, budget: val })}
-                            accentColor={accentColor}
-                            uiFont={uiFont}
-                            placeholder="Select..."
-                            options={[
-                              { value: "<$1K", label: "<$1K" },
-                              { value: "$1K-5K", label: "$1K - $5K" },
-                              { value: "$5K-10K", label: "$5K - $10K" },
-                              { value: "$10K+", label: "$10K+" },
-                              { value: "Not sure", label: "Not sure" },
-                            ]}
-                          />
-                        </div>
-
-                        {/* Message */}
-                        <div>
-                          <label
-                            className="mb-1 block text-xs uppercase tracking-wider"
-                            style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
-                          >
-                            Tell us about your project *
-                          </label>
-                          <textarea
-                            required
-                            rows={3}
-                            value={formData.message}
-                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                            className="w-full resize-none bg-transparent px-3 py-2 text-white outline-none transition-colors"
-                            style={{
-                              border: `2px solid ${accentColor}40`,
-                              fontFamily: `var(${uiFont})`,
-                            }}
-                            onFocus={(e) => (e.target.style.borderColor = accentColor)}
-                            onBlur={(e) => (e.target.style.borderColor = `${accentColor}40`)}
-                            placeholder="What are you building? What's the vision?"
-                          />
-                        </div>
-
-                        {/* Submit Button */}
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="w-full py-3 text-sm font-bold uppercase tracking-wider transition-all disabled:cursor-not-allowed disabled:opacity-50"
-                          style={{
-                            backgroundColor: accentColor,
-                            color: "#000",
-                            fontFamily: `var(${uiFont})`,
-                          }}
-                        >
-                          {isSubmitting ? "Sending..." : "Send Inquiry"}
-                        </button>
-
-                        {/* Divider */}
-                        <div className="flex items-center gap-3 py-1">
-                          <div className="h-px flex-1" style={{ backgroundColor: `${accentColor}30` }} />
-                          <span
-                            className="text-xs uppercase"
-                            style={{ color: `${accentColor}60`, fontFamily: `var(${uiFont})` }}
-                          >
-                            or
-                          </span>
-                          <div className="h-px flex-1" style={{ backgroundColor: `${accentColor}30` }} />
-                        </div>
-
-                        {/* Book a Call Button - CRT Style */}
-                        {(() => {
-                          const isDisabled = !formData.name.trim() || !formData.email.trim();
-                          return (
-                            <button
-                              type="button"
-                              onClick={() => setModalView("scheduler")}
-                              disabled={isDisabled}
-                              className={`group relative w-full overflow-hidden border-2 py-3 text-sm font-bold uppercase tracking-wider ${
-                                isDisabled
-                                  ? "cursor-not-allowed opacity-40"
-                                  : ""
-                              }`}
-                              style={{
-                                borderColor: isDisabled ? `${accentColor}40` : accentColor,
-                                color: isDisabled ? `${accentColor}40` : accentColor,
-                                fontFamily: `var(${uiFont})`,
-                                textShadow: isDisabled
-                                  ? "none"
-                                  : `0 0 10px ${accentColor}, 0 0 20px ${accentColor}, 0 0 40px ${accentColor}`,
-                                boxShadow: isDisabled
-                                  ? "none"
-                                  : `0 0 10px ${accentColor}60, inset 0 0 20px ${accentColor}20`,
-                                animation: isDisabled ? "none" : "crt-flicker 4s infinite",
-                              }}
-                            >
-                              {/* CRT Scanlines Overlay */}
-                              {!isDisabled && (
-                                <div
-                                  className="pointer-events-none absolute inset-0 opacity-30"
-                                  style={{
-                                    background: `repeating-linear-gradient(
-                                      0deg,
-                                      transparent,
-                                      transparent 2px,
-                                      ${accentColor}20 2px,
-                                      ${accentColor}20 4px
-                                    )`,
-                                  }}
-                                />
-                              )}
-                              {/* Glitch line that sweeps */}
-                              {!isDisabled && (
-                                <div
-                                  className="pointer-events-none absolute inset-x-0 h-[2px] opacity-60"
-                                  style={{
-                                    background: accentColor,
-                                    boxShadow: `0 0 10px ${accentColor}`,
-                                    animation: "scanline-sweep 3s linear infinite",
-                                  }}
-                                />
-                              )}
-                              <span className="relative z-10">
-                                {isDisabled ? "Fill name & email to book a call" : "Book a Call Instead"}
-                              </span>
-                            </button>
-                          );
-                        })()}
-
-                        {/* Close Button */}
-                        <button
-                          type="button"
-                          onClick={closeModal}
-                          className="w-full py-2 text-xs transition-all hover:opacity-70"
-                          style={{
-                            color: `${accentColor}50`,
-                            fontFamily: `var(${uiFont})`,
-                          }}
-                        >
-                          Cancel [ESC]
-                        </button>
-                      </form>
-                    </div>
-                  )}
-
-                  {/* Scheduler View */}
-                  {modalView === "scheduler" && (
-                    <div className="animate-crt-in">
-                      <MeetingScheduler
-                        accentColor={accentColor}
-                        uiFont={uiFont}
-                        clientName={formData.name || "Guest"}
-                        clientEmail={formData.email || ""}
-                        projectType={formData.projectType}
-                        onBooked={() => setModalView("success")}
-                        onBack={() => setModalView("form")}
-                      />
-                    </div>
-                  )}
-
-                  {/* Success View */}
-                  {modalView === "success" && (
-                    <div className="animate-crt-in space-y-6 text-center">
-                      <div
-                        className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
-                        style={{ backgroundColor: `${accentColor}20` }}
-                      >
-                        <svg
-                          className="h-8 w-8"
-                          fill="none"
-                          stroke={accentColor}
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-
-                      <div>
-                        <h2
-                          className="mb-2 text-2xl font-bold"
-                          style={{ color: accentColor, fontFamily: `var(${uiFont})` }}
-                        >
-                          You&apos;re Booked!
-                        </h2>
-                        <p
-                          className="text-sm"
-                          style={{ color: "#888", fontFamily: `var(${uiFont})` }}
-                        >
-                          Check your email for the calendar invite.
-                        </p>
-                        <p
-                          className="mt-2 text-xs"
-                          style={{ color: "#555", fontFamily: `var(${uiFont})` }}
-                        >
-                          Click the .ics attachment to add it to your calendar.
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={closeModal}
-                        className="w-full py-3 text-sm font-bold uppercase tracking-wider transition-all"
-                        style={{
-                          backgroundColor: accentColor,
-                          color: "#000",
-                          fontFamily: `var(${uiFont})`,
-                        }}
-                      >
-                        Done
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Help Overlay */}
-          {showHelp && (
-            <HelpOverlay
-              shortcuts={shortcuts}
-              accentColor={accentColor}
-              uiFont={uiFont}
-              onClose={() => setShowHelp(false)}
-            />
-          )}
-
-          {/* Favorites Panel */}
-          {showFavorites && (
-            <FavoritesPanel
-              favorites={favorites}
-              accentColor={accentColor}
-              uiFont={uiFont}
-              onSelectFavorite={handleLoadFavorite}
-              onRemoveFavorite={removeFavorite}
-              onClearAll={clearFavorites}
-              onClose={() => setShowFavorites(false)}
-            />
-          )}
-
-          {/* Toast Notifications */}
-          {toast && (
-            <Toast
-              message={toast}
-              accentColor={accentColor}
-              uiFont={uiFont}
-              onClose={() => showToast(null)}
-            />
-          )}
         </div>
-      )}
-    </>
-  );
-}
+      </section>
 
-// Wrap in Suspense to fix useSearchParams SSR error
-export default function Home() {
-  return (
-    <Suspense fallback={<div className="h-screen w-screen bg-black" />}>
-      <HomePage />
-    </Suspense>
+      {/* Studio Signal */}
+      <section className="relative bg-base-black overflow-hidden">
+        <LineArt
+          variant="spiral"
+          color="#e4e4e7"
+          strokeWidth={5}
+          className="absolute -left-8 top-4 w-32 opacity-8 sm:w-44"
+          delay={0.3}
+          loop
+        />
+
+        <div className="mx-auto max-w-[1120px] px-8 py-20">
+          <div className="flex flex-wrap gap-x-16 gap-y-6 text-sm">
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">location</span>
+              <p className="mt-1 text-zinc-300">ulaanbaatar, mn</p>
+            </div>
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">est.</span>
+              <p className="mt-1 text-zinc-300">2024</p>
+            </div>
+            <div className="relative">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">status</span>
+              <p className="mt-1">
+                <span className="text-accent">accepting projects</span>
+                <span className="text-zinc-600"> — Q3 2026</span>
+              </p>
+              <LineArt
+                variant="star"
+                color="#14b8a6"
+                strokeWidth={4}
+                className="absolute -right-8 -top-2 w-8 opacity-40"
+                delay={0.5}
+              />
+            </div>
+          </div>
+
+          <p className="mt-12 font-mono text-xs uppercase tracking-[0.15em] text-zinc-600">
+            we write code that looks good and design that works hard.
+          </p>
+        </div>
+      </section>
+
+      {/* Contact CTA */}
+      <section className="relative bg-base-black overflow-hidden">
+        <LineArt
+          variant="twist"
+          color="#14b8a6"
+          strokeWidth={7}
+          className="absolute bottom-6 left-0 w-full opacity-15"
+          delay={0.2}
+          loop
+        />
+
+        <LineArt
+          variant="swoop"
+          color="#e4e4e7"
+          strokeWidth={6}
+          className="absolute -top-8 right-0 w-48 opacity-12 sm:w-64"
+          delay={0.4}
+          loop
+        />
+
+        <div className="relative mx-auto max-w-[1120px] px-8 py-24 sm:py-32">
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            <div className="relative">
+              <h2 className="font-bebas text-7xl uppercase tracking-wide text-zinc-100 sm:text-8xl lg:text-9xl">
+                have a
+                <br />
+                project?
+              </h2>
+              <LineArt
+                variant="underline"
+                color="#14b8a6"
+                strokeWidth={6}
+                className="-mt-1 w-64 opacity-60 sm:w-80"
+                delay={0.3}
+              />
+            </div>
+            <Link
+              href="/contact"
+              className="cartoon-shadow-accent inline-block bg-accent px-10 py-5 text-center text-sm font-semibold uppercase tracking-wider text-base-black sm:mb-4"
+            >
+              get in touch -&gt;
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

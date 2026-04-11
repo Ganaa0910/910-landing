@@ -1,23 +1,4 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, DM_Sans, JetBrains_Mono } from "next/font/google";
-
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jb-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
 
 export const metadata: Metadata = {
   title: "MarketIQ — Case Study",
@@ -35,12 +16,5 @@ export default function CaseStudyLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div
-      className={`${plusJakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
-      style={{ background: "#FAFAF8", color: "#0C0A1D" }}
-    >
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }

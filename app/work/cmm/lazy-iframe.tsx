@@ -19,7 +19,6 @@ export function LazyDemoFrame({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -27,7 +26,7 @@ export function LazyDemoFrame({
           obs.disconnect();
         }
       },
-      { rootMargin: "200px 0px" }
+      { rootMargin: "200px 0px" },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -37,7 +36,6 @@ export function LazyDemoFrame({
     if (!mounted) return;
     const el = ref.current;
     if (!el) return;
-
     const iframe = el.querySelector<HTMLIFrameElement>("iframe");
     if (!iframe) return;
 
@@ -65,33 +63,25 @@ export function LazyDemoFrame({
   }, [mounted]);
 
   return (
-    <div ref={ref} className="demo-frame">
-      <div className="demo-bar">
-        <div className="demo-dots">
-          <span />
-          <span />
-          <span />
+    <div ref={ref} className="border border-zinc-800">
+      {/* Browser chrome bar */}
+      <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-950 px-4 py-3">
+        <div className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 bg-zinc-700" />
+          <span className="h-2.5 w-2.5 bg-zinc-700" />
+          <span className="h-2.5 w-2.5 bg-zinc-700" />
         </div>
-        <div className="demo-url">{label}</div>
-        <div className="demo-tag">{tag}</div>
+        <span className="flex-1 text-center font-mono text-[10px] text-zinc-500">{label}</span>
+        <span className="text-[9px] uppercase tracking-wider text-accent">{tag}</span>
       </div>
       {mounted ? (
-        <iframe src={src} style={{ height }} />
+        <iframe src={src} className="w-full border-0" style={{ height }} />
       ) : (
         <div
-          style={{
-            height,
-            background: "#F0EEF7",
-            display: "grid",
-            placeItems: "center",
-            fontFamily: "var(--font-m)",
-            fontSize: "0.6875rem",
-            color: "#7A7793",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-          }}
+          className="grid place-items-center font-mono text-[10px] uppercase tracking-wider text-zinc-600"
+          style={{ height, background: "#0a0a0a" }}
         >
-          Scroll to load demo
+          scroll to load demo
         </div>
       )}
     </div>

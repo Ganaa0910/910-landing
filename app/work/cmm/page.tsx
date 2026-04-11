@@ -1,16 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ScrollReveal } from "./scroll-reveal";
+import { LineArt } from "@/components/ui/line-art";
 import { LazyDemoFrame } from "./lazy-iframe";
-import "./casestudy.css";
 
 function ImageFrame({ src, alt, caption, tag }: { src: string; alt: string; caption: string; tag: string }) {
   return (
-    <div className="frame">
-      <Image src={src} alt={alt} width={1120} height={630} style={{ width: "100%", height: "auto" }} />
-      <div className="frame-caption">
-        {caption}
-        <span className="tag">{tag}</span>
+    <div className="border border-zinc-800">
+      <Image src={src} alt={alt} width={1120} height={630} className="w-full" />
+      <div className="flex items-center justify-between border-t border-zinc-800 px-4 py-3">
+        <span className="text-xs text-zinc-500">{caption}</span>
+        <span className="text-[9px] uppercase tracking-wider text-accent">{tag}</span>
       </div>
     </div>
   );
@@ -55,285 +54,256 @@ const TOKENS = [
   ["--shadow-*", "rgba(62,20,156,x)", "Brand-tinted purple shadows — even elevation carries identity"],
 ];
 
+const OUTCOMES = [
+  { num: "4", label: "Page Prototypes", desc: "Fully interactive HTML demos with real Mongolian market data." },
+  { num: "80+", label: "Design Tokens", desc: "Colors, typography, spacing, shadows, radii, easing — all brand-tinted, all production-ready." },
+  { num: "3", label: "Access Tiers", desc: "Public, Registered, and Paid — density scales with commitment, identity stays consistent." },
+];
+
 export default function CMMCaseStudy() {
   return (
-    <div className="cs-page">
-      <ScrollReveal />
+    <main className="min-h-screen bg-base-black pt-14">
+      {/* Back link */}
+      <div className="mx-auto max-w-[1120px] px-8 pt-8">
+        <Link href="/work" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
+          <span>&lt;-</span> back to work
+        </Link>
+      </div>
 
-      {/* NAV */}
-      <nav className="cs-nav">
-        <div className="cs-nav-inner">
-          <div className="cs-nav-logo">910 <span>Case Study</span></div>
-          <Link href="/work" className="cs-nav-back">Back to Work</Link>
+      {/* Hero */}
+      <div className="relative mx-auto max-w-[1120px] px-8 pt-12 pb-20">
+        <div className="pointer-events-none absolute -inset-20 -z-0">
+          <LineArt variant="spiral" color="#14b8a6" strokeWidth={10} className="absolute -right-10 top-10 w-64 opacity-12 sm:w-80" delay={0.3} loop />
+          <LineArt variant="star" color="#e4e4e7" strokeWidth={6} className="absolute left-0 bottom-10 w-14 opacity-15" delay={0.6} />
         </div>
-      </nav>
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="wrap">
-          <div className="rv">
-            <div className="hero-label">910 Case Study / Capital Markets Mongolia</div>
-            <h1>Designing Mongolia&apos;s first <em>AI-native</em> capital markets platform</h1>
-            <p className="hero-desc">Capital Markets Mongolia needed an intelligence platform that could serve finance professionals and general investors alike. 910studio designed MarketIQ — from initial exploration through client workshop to a production-ready Dense direction that became the foundation of the entire product.</p>
-          </div>
-          <div className="hero-meta rv">
-            <div><div className="meta-label">Client</div><div className="meta-val">Capital Markets Mongolia</div></div>
-            <div><div className="meta-label">Executor</div><div className="meta-val">910studio</div></div>
-            <div><div className="meta-label">Timeline</div><div className="meta-val">9 Weeks</div></div>
-            <div><div className="meta-label">Scope</div><div className="meta-val">Design System, Token Architecture, Frontend</div></div>
-          </div>
+        <p className="relative z-10 mb-6 text-[10px] uppercase tracking-[0.2em] text-zinc-600">
+          case study / capital markets mongolia
+        </p>
+
+        <h1 className="relative z-10 font-bebas text-6xl uppercase leading-[0.95] tracking-wide text-zinc-50 sm:text-7xl lg:text-8xl">
+          designing mongolia&apos;s first{" "}
+          <span className="text-accent">ai-native</span> capital markets platform
+        </h1>
+
+        <p className="relative z-10 mt-8 text-sm leading-relaxed text-zinc-400">
+          Capital Markets Mongolia needed an intelligence platform that could serve finance professionals and general investors alike. 910studio designed MarketIQ — from initial exploration through client workshop to a production-ready Dense direction that became the foundation of the entire product.
+        </p>
+
+        {/* Meta */}
+        <div className="relative z-10 mt-12 flex flex-wrap gap-x-14 gap-y-4 text-xs">
+          <div><span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">client</span><p className="mt-1 text-zinc-300">Capital Markets Mongolia</p></div>
+          <div><span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">executor</span><p className="mt-1 text-zinc-300">910studio</p></div>
+          <div><span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">timeline</span><p className="mt-1 text-zinc-300">9 Weeks</p></div>
+          <div><span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">scope</span><p className="mt-1 text-zinc-300">Design System, Token Architecture, Frontend</p></div>
         </div>
-      </section>
+      </div>
 
       {/* 01 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">01 / The Challenge</div>
-            <h2>No Bloomberg for Mongolia. No AlphaSense. Nothing.</h2>
-          </div>
-          <div className="rv">
-            <p className="section-text">Mongolia&apos;s capital markets are growing fast — mining IPOs, foreign investment, cross-border deals — but the entire ecosystem runs on PDFs, email chains, and Yahoo Finance tabs. There is no centralized intelligence platform. No entity database. No research hub. CMM, the country&apos;s leading capital markets advisory, wanted to build one from scratch.</p>
-            <p className="section-text">The problem isn&apos;t just &quot;build a website.&quot; It&apos;s building credibility. The platform needs to earn trust from institutional investors who live in Bloomberg terminals AND general users who&apos;ve never seen a P/E ratio. Same product, same brand, two completely different density expectations. That tension is the entire design challenge.</p>
-          </div>
-        </div>
-      </section>
+      <Section num="01" label="The Challenge" title="No Bloomberg for Mongolia. No AlphaSense. Nothing.">
+        <p className="text-sm leading-relaxed text-zinc-400">Mongolia&apos;s capital markets are growing fast — mining IPOs, foreign investment, cross-border deals — but the entire ecosystem runs on PDFs, email chains, and Yahoo Finance tabs. There is no centralized intelligence platform. No entity database. No research hub. CMM, the country&apos;s leading capital markets advisory, wanted to build one from scratch.</p>
+        <p className="mt-4 text-sm leading-relaxed text-zinc-400">The problem isn&apos;t just &quot;build a website.&quot; It&apos;s building credibility. The platform needs to earn trust from institutional investors who live in Bloomberg terminals AND general users who&apos;ve never seen a P/E ratio. Same product, same brand, two completely different density expectations.</p>
+      </Section>
 
       {/* 02 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">02 / Phase 1 — Exploration</div>
-            <h2>Building the visual vocabulary</h2>
-            <p className="section-text">Before touching a single component, we mapped the landscape. Moodboards, typography pairings, color systems, and early component explorations. The goal was to build a shared visual language before the client workshop — give them something to react to, not just describe.</p>
+      <Section num="02" label="Phase 1 — Exploration" title="Building the visual vocabulary">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">Before touching a single component, we mapped the landscape. Moodboards, typography pairings, color systems, and early component explorations.</p>
+        <div className="space-y-6">
+          <LazyDemoFrame src="/demos/cmm/design-workshops/cmm-marketiq-moodboard.html" label="Phase 1 — Moodboard" tag="Interactive" />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <ImageFrame src="/demos/cmm/assets/phase1-components.png" alt="Phase 1 component exploration" caption="Early component library" tag="Phase 1" />
+            <ImageFrame src="/demos/cmm/assets/phase1-entity.png" alt="Phase 1 entity profile" caption="Entity profile prototype" tag="Phase 1" />
           </div>
-          <div className="rv" style={{ marginBottom: 24 }}>
-            <LazyDemoFrame src="/demos/cmm/design-workshops/cmm-marketiq-moodboard.html" label="Phase 1 — Moodboard" tag="Interactive" />
-          </div>
-          <div className="grid-2 rv" style={{ marginBottom: 24 }}>
-            <ImageFrame src="/demos/cmm/assets/phase1-components.png" alt="Phase 1 component exploration" caption="Early component library — buttons, badges, cards, tables" tag="Phase 1" />
-            <ImageFrame src="/demos/cmm/assets/phase1-entity.png" alt="Phase 1 entity profile exploration" caption="Entity profile prototype — first layout tests" tag="Phase 1" />
-          </div>
-          <div className="rv">
-            <ImageFrame src="/demos/cmm/assets/phase1-directions.png" alt="Three component directions" caption="Three directions built for workshop — Editorial, Dense, Polished" tag="Phase 1" />
-          </div>
+          <ImageFrame src="/demos/cmm/assets/phase1-directions.png" alt="Three directions" caption="Three directions built for workshop" tag="Phase 1" />
         </div>
-      </section>
+      </Section>
 
       {/* 03 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">03 / Discovery</div>
-            <h2>How finance platforms earn trust</h2>
-            <p className="section-text">We studied platforms across the density spectrum — from editorial-first to terminal-grade. The key insight: data density is a feature, not a problem, when visual hierarchy is right.</p>
-          </div>
-          <div className="ref-grid rv">
-            {REFS.map((r) => (
-              <div key={r.name} className="ref-card">
-                <div className="ref-rank">{r.rank}</div>
-                <div className="ref-name">{r.name}</div>
-                <div className="ref-why">{r.why}</div>
-              </div>
-            ))}
-          </div>
+      <Section num="03" label="Discovery" title="How finance platforms earn trust">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">We studied platforms across the density spectrum. The key insight: data density is a feature, not a problem, when visual hierarchy is right.</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {REFS.map((r) => (
+            <div key={r.name} className="border border-zinc-800 p-5">
+              <span className="text-[9px] uppercase tracking-wider text-accent">{r.rank}</span>
+              <p className="mt-2 font-bebas text-2xl text-zinc-200">{r.name}</p>
+              <p className="mt-2 text-xs leading-relaxed text-zinc-500">{r.why}</p>
+            </div>
+          ))}
         </div>
-      </section>
+      </Section>
 
       {/* 04 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">04 / Client Workshop</div>
-            <h2>The client chose Dense</h2>
-            <p className="section-text">We ran a structured workshop with CMM&apos;s leadership — reference point ranking, moodboard reactions, and direction comparison. We presented three complete directions: Editorial, Dense, and Polished.</p>
-            <p className="section-text">The client chose Dense as MarketIQ&apos;s main direction. Finance professionals gravitate toward information density. The mandate: &quot;Creative, Sophisticated yet Corp.&quot;</p>
-          </div>
-          <div className="quote-block rv">
-            <p className="quote-text">&quot;Creative, Sophisticated yet Corp&quot; — data density is the feature, brand color is the identity, motion is the experience.</p>
-            <p className="quote-attr">Client mandate — CMM leadership workshop, March 2026</p>
-          </div>
-          <div className="rv">
-            <ImageFrame src="/demos/cmm/assets/moodboard.png" alt="Phase 2 moodboard" caption="Phase 2 moodboard — refined direction after workshop feedback" tag="Workshop" />
-          </div>
+      <Section num="04" label="Client Workshop" title="The client chose Dense">
+        <p className="text-sm leading-relaxed text-zinc-400">We ran a structured workshop with CMM&apos;s leadership. Three complete directions: Editorial, Dense, and Polished. The client chose Dense. Finance professionals gravitate toward information density.</p>
+        <div className="my-10 border-l-2 border-accent pl-6">
+          <p className="font-bebas text-2xl tracking-wide text-zinc-200">&quot;Creative, Sophisticated yet Corp&quot;</p>
+          <p className="mt-2 text-xs text-zinc-600">Client mandate — CMM leadership workshop, March 2026</p>
         </div>
-      </section>
+        <ImageFrame src="/demos/cmm/assets/moodboard.png" alt="Phase 2 moodboard" caption="Refined direction after workshop" tag="Workshop" />
+      </Section>
 
       {/* 05 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">05 / What We Killed</div>
-            <h2>Four directions died so Dense could live</h2>
-            <p className="section-text">Design is as much about what you reject as what you ship. The workshop killed four directions — each with clear reasoning from the client.</p>
+      <Section num="05" label="What We Killed" title="Four directions died so Dense could live">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">Design is as much about what you reject as what you ship.</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {KILLED.map((k) => (
+            <div key={k.name} className="border border-zinc-800 p-5">
+              <span className="text-[9px] uppercase tracking-wider text-error">hard no</span>
+              <p className="mt-2 font-bebas text-2xl text-zinc-200">{k.name}</p>
+              <p className="mt-2 text-xs leading-relaxed text-zinc-500">{k.reason}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 border-l-2 border-zinc-700 pl-6">
+          <p className="text-sm leading-relaxed text-zinc-400">The directions that died weren&apos;t bad design — they were wrong context. Ledger would be fire for a dev tool. But for a Mongolian capital markets platform that needs to earn trust from bankers? Dense was the only answer.</p>
+          <p className="mt-2 text-xs text-zinc-600">910studio design rationale</p>
+        </div>
+      </Section>
+
+      {/* 06 */}
+      <Section num="06" label="Design Philosophy" title="Western structure meets Eastern density">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">The client specifically requested a blend of Western and Eastern UI design. Western finance platforms prioritize whitespace and hierarchy. Eastern platforms pack information and use color as a navigation system. Dense lives at the intersection.</p>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="border border-zinc-800 p-6">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="font-bebas text-xl text-zinc-200">Western Influence</span>
+              <span className="text-[9px] uppercase tracking-wider text-accent">Structure</span>
+            </div>
+            <div className="space-y-3 text-xs leading-relaxed text-zinc-500">
+              <p>AlphaSense-grade readability — measured whitespace even in dense layouts</p>
+              <p>Clean typography hierarchy — Plus Jakarta Sans for authority, DM Sans for comfort</p>
+              <p>Professional component design — buttons, badges, cards follow Western SaaS conventions</p>
+              <p>Measured spacing rhythm — 32px section gaps, 12px grid gaps, 14px card padding</p>
+            </div>
           </div>
-          <div className="killed-grid rv">
-            {KILLED.map((k) => (
-              <div key={k.name} className="killed-card">
-                <div className="killed-label">Hard No</div>
-                <div className="killed-name">{k.name}</div>
-                <div className="killed-reason">{k.reason}</div>
+          <div className="border border-zinc-800 p-6">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="font-bebas text-xl text-zinc-200">Eastern Influence</span>
+              <span className="text-[9px] uppercase tracking-wider text-accent">Density</span>
+            </div>
+            <div className="space-y-3 text-xs leading-relaxed text-zinc-500">
+              <p>Prominent color coding — red/green for financial data is non-negotiable in Asian markets</p>
+              <p>Category badges as primary navigation — color-coded tags guide scanning</p>
+              <p>Higher information density — 4-column grids, 38px table rows, compact stat blocks</p>
+              <p>Bold brand color throughout — every surface whispers purple</p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* 07 */}
+      <Section num="07" label="The Dense Direction" title="Bloomberg conviction, CMM identity">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">Dense packs maximum information per pixel without sacrificing readability. 4px radii. 12px grid gaps. Compact 34px buttons. Every surface carries the brand through purple-tinted shadows and lavender backgrounds.</p>
+
+        {/* Colors */}
+        <div className="mb-8">
+          <p className="mb-4 text-[10px] uppercase tracking-[0.2em] text-zinc-600">color system</p>
+          <div className="flex flex-wrap gap-3">
+            {COLORS.map((c) => (
+              <div key={c.val + c.name} className="flex items-center gap-3 border border-zinc-800 px-3 py-2">
+                <div className="h-6 w-6" style={{ background: c.bg }} />
+                <div>
+                  <p className="text-xs text-zinc-300">{c.name}</p>
+                  <p className="font-mono text-[10px] text-zinc-600">{c.val}</p>
+                </div>
               </div>
             ))}
           </div>
-          <div className="quote-block rv">
-            <p className="quote-text">The directions that died weren&apos;t bad design — they were wrong context. Ledger would be fire for a dev tool. But for a Mongolian capital markets platform that needs to earn trust from bankers? Dense was the only answer.</p>
-            <p className="quote-attr">910studio design rationale</p>
-          </div>
         </div>
-      </section>
 
-      {/* 06 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">06 / Design Philosophy</div>
-            <h2>Western structure meets Eastern density</h2>
-            <p className="section-text">The client specifically requested a blend of Western and Eastern UI design. Western finance platforms prioritize whitespace and hierarchy. Eastern platforms pack information and use color as a navigation system. Dense lives at the intersection.</p>
-          </div>
-          <div className="phil-grid rv">
-            <div className="phil-col west">
-              <h4>Western Influence <span className="pill pill-w">Structure</span></h4>
-              <div className="phil-item">AlphaSense-grade readability — measured whitespace even in dense layouts</div>
-              <div className="phil-item">Clean typography hierarchy — Plus Jakarta Sans for authority, DM Sans for comfort</div>
-              <div className="phil-item">Professional component design — buttons, badges, cards follow Western SaaS conventions</div>
-              <div className="phil-item">Measured spacing rhythm — 32px section gaps, 12px grid gaps, 14px card padding</div>
-            </div>
-            <div className="phil-col east">
-              <h4>Eastern Influence <span className="pill pill-e">Density</span></h4>
-              <div className="phil-item">Prominent color coding — red/green for financial data is non-negotiable in Asian markets</div>
-              <div className="phil-item">Category badges as primary navigation — color-coded tags guide scanning, not just labeling</div>
-              <div className="phil-item">Higher information density — 4-column grids, 38px table rows, compact stat blocks</div>
-              <div className="phil-item">Bold brand color throughout — every surface whispers purple, not just accent elements</div>
-            </div>
-          </div>
-          <div className="narrow rv">
-            <p className="section-text">Mongolia sits between these two worlds. Dense doesn&apos;t compromise between them — it uses Western hierarchy to organize Eastern density. The result feels familiar to both audiences without cosplaying either.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 07 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">07 / The Dense Direction</div>
-            <h2>Bloomberg conviction, CMM identity</h2>
-            <p className="section-text">Dense packs maximum information per pixel without sacrificing readability. 4px radii. 12px grid gaps. Compact 34px buttons. Uppercase badges with 0.06em tracking. Every surface carries the brand through purple-tinted shadows and lavender backgrounds.</p>
-          </div>
-          <div className="tokens-grid rv">
-            <div className="token-group">
-              <h4>Color System</h4>
-              {COLORS.map((c) => (
-                <div key={c.val + c.name} className="color-row">
-                  <div className="color-swatch" style={{ background: c.bg }} />
-                  <div className="color-name">{c.name}</div>
-                  <div className="color-val">{c.val}</div>
-                </div>
-              ))}
-            </div>
-            <div className="token-group">
-              <h4>Typography</h4>
-              <div className="type-row"><div className="type-sample" style={{ fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.2 }}>Page Title</div><div className="type-meta">Plus Jakarta Sans 800<br />32px / -0.025em</div></div>
-              <div className="type-row"><div className="type-sample" style={{ fontSize: "1.25rem", fontWeight: 700, letterSpacing: "-0.02em" }}>Section Heading</div><div className="type-meta">Plus Jakarta Sans 700<br />20px / -0.02em</div></div>
-              <div className="type-row"><div className="type-sample" style={{ fontSize: "0.9375rem", fontWeight: 600 }}>Card Title</div><div className="type-meta">Plus Jakarta Sans 600<br />15px</div></div>
-              <div className="type-row"><div className="type-sample" style={{ fontFamily: "var(--font-b)", fontSize: "0.9375rem" }}>Body text reads like this across the platform</div><div className="type-meta">DM Sans 400<br />15px / 1.6 lh</div></div>
-              <div className="type-row"><div className="type-sample" style={{ fontFamily: "var(--font-m)", fontSize: "0.8125rem", fontWeight: 500 }}>₮4,280.00 +2.4%</div><div className="type-meta">JetBrains Mono 500<br />13px / tabular</div></div>
-              <div className="type-row"><div className="type-sample" style={{ fontFamily: "var(--font-m)", fontSize: "0.6875rem", fontWeight: 500, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#3E149C" }}>Section Label</div><div className="type-meta">JetBrains Mono 500<br />11px / 0.1em</div></div>
-            </div>
-          </div>
-          <div className="rv">
-            <LazyDemoFrame src="/demos/cmm/design-workshops/cmm-v1-design-system.html" label="Production Design System" tag="Interactive" height={700} />
-          </div>
-        </div>
-      </section>
+        <LazyDemoFrame src="/demos/cmm/design-workshops/cmm-v1-design-system.html" label="Production Design System" tag="Interactive" height={700} />
+      </Section>
 
       {/* 08 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">08 / Token Architecture</div>
-            <h2>The system behind the system</h2>
-            <p className="section-text">The Dense direction isn&apos;t a collection of styles — it&apos;s a token architecture. Every component references the same set of CSS custom properties. Change one token, every surface updates.</p>
-          </div>
-          <div className="rv"><h4 style={{ fontFamily: "var(--font-d)", fontWeight: 700, fontSize: "0.9375rem", marginBottom: 16 }}>The Three-Font System</h4></div>
-          <div className="font-grid rv">
-            <div className="font-card"><div className="font-card-role">Display</div><div className="font-card-sample" style={{ fontFamily: "var(--font-d)" }}>Erdene Resource</div><div className="font-card-name">Plus Jakarta Sans</div><div className="font-card-desc">Geometric precision with personality. 800 weight for heroes, 600-700 for UI.</div></div>
-            <div className="font-card"><div className="font-card-role">Body</div><div className="font-card-sample" style={{ fontFamily: "var(--font-b)", fontWeight: 400 }}>Research &amp; analysis</div><div className="font-card-name">DM Sans</div><div className="font-card-desc">Optical sizing makes it readable at any scale. AlphaSense-grade legibility.</div></div>
-            <div className="font-card"><div className="font-card-role">Data</div><div className="font-card-sample" style={{ fontFamily: "var(--font-m)", fontWeight: 500 }}>₮4,280 +2.4%</div><div className="font-card-name">JetBrains Mono</div><div className="font-card-desc">Tabular figures, consistent character width. Prices, tickers, percentages.</div></div>
-          </div>
-          <div className="rv"><h4 style={{ fontFamily: "var(--font-d)", fontWeight: 700, fontSize: "0.9375rem", marginBottom: 16 }}>Dense Component Tokens</h4></div>
-          <div className="rv">
-            <table className="token-table">
-              <thead><tr><th>Token</th><th>Value</th><th>Why</th></tr></thead>
-              <tbody>
-                {TOKENS.map(([token, val, why]) => (
-                  <tr key={token}><td>{token}</td><td>{val}</td><td>{why}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="narrow rv">
-            <p className="section-text">Every shadow is tinted purple. Every surface carries a lavender hint. The border color isn&apos;t gray — it&apos;s <span style={{ fontFamily: "var(--font-m)", fontSize: "0.8125rem" }}>#DDDBE8</span>, a purple-shifted neutral. The branding is the entire system.</p>
-          </div>
+      <Section num="08" label="Token Architecture" title="The system behind the system">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">Every component references the same set of CSS custom properties. Change one token, every surface updates.</p>
+
+        {/* Token table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="border-b border-zinc-800">
+                <th className="pb-3 pr-6 text-[10px] uppercase tracking-[0.2em] text-zinc-600">Token</th>
+                <th className="pb-3 pr-6 text-[10px] uppercase tracking-[0.2em] text-zinc-600">Value</th>
+                <th className="pb-3 text-[10px] uppercase tracking-[0.2em] text-zinc-600">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TOKENS.map(([token, val, why]) => (
+                <tr key={token} className="border-b border-zinc-900">
+                  <td className="py-3 pr-6 font-mono text-accent">{token}</td>
+                  <td className="py-3 pr-6 font-mono text-zinc-300">{val}</td>
+                  <td className="py-3 text-zinc-500">{why}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </section>
+      </Section>
 
       {/* 09 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">09 / Production Pages</div>
-            <h2>Four page types, one Dense system</h2>
-            <p className="section-text">Every page in MarketIQ shares the Dense token system. These are live, interactive demos — scroll, hover, click.</p>
-          </div>
-          <div className="rv">
-            <LazyDemoFrame src="/demos/cmm/demo-pages/insights-index.html#dense" label="Insights Index" />
-          </div>
-        </div>
-      </section>
+      <Section num="09" label="Production Pages" title="Four page types, one Dense system">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">Every page in MarketIQ shares the Dense token system. These are live, interactive demos — scroll, hover, click.</p>
+        <LazyDemoFrame src="/demos/cmm/demo-pages/insights-index.html#dense" label="Insights Index" />
+      </Section>
 
       {/* 10 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">10 / Access Architecture</div>
-            <h2>One Dense system, three access tiers</h2>
-            <p className="section-text">The Dense direction scales across three user tiers. Same brand, same tokens — information access increases as users commit. Density is the reward.</p>
-          </div>
-          <div className="outcome-grid rv">
-            <div className="outcome-card"><div className="outcome-num" style={{ color: "var(--fg-3)" }}>Free</div><div className="outcome-label">Public Tier</div><div className="outcome-desc">Attractive entry point. Key data visible, advanced metrics blurred with registration CTA.</div></div>
-            <div className="outcome-card"><div className="outcome-num" style={{ color: "var(--brand-l)" }}>Registered</div><div className="outcome-label">Registered Tier</div><div className="outcome-desc">Full profiles, basic charts, financial summaries. Functional and data-forward.</div></div>
-            <div className="outcome-card"><div className="outcome-num">Paid</div><div className="outcome-label">Premium Tier</div><div className="outcome-desc">Everything unlocked. AI insights, multi-metric rows, compact stat grids, export tools, alerts.</div></div>
-          </div>
+      <Section num="10" label="Access Architecture" title="One Dense system, three access tiers">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">The Dense direction scales across three user tiers. Same brand, same tokens — information access increases as users commit.</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="border border-zinc-800 p-5"><span className="font-bebas text-3xl text-zinc-500">Free</span><p className="mt-1 text-xs text-zinc-400">Public Tier</p><p className="mt-2 text-xs text-zinc-600">Attractive entry point. Key data visible, advanced metrics blurred.</p></div>
+          <div className="border border-zinc-800 p-5"><span className="font-bebas text-3xl text-[#6B4CC0]">Registered</span><p className="mt-1 text-xs text-zinc-400">Registered Tier</p><p className="mt-2 text-xs text-zinc-600">Full profiles, basic charts, financial summaries.</p></div>
+          <div className="border border-zinc-800 p-5"><span className="font-bebas text-3xl text-accent">Paid</span><p className="mt-1 text-xs text-zinc-400">Premium Tier</p><p className="mt-2 text-xs text-zinc-600">Everything unlocked. AI insights, multi-metric rows, export tools.</p></div>
         </div>
-      </section>
+      </Section>
 
       {/* 11 */}
-      <section className="section">
-        <div className="wrap">
-          <div className="rv">
-            <div className="section-label">11 / Outcome</div>
-            <h2>Shipped</h2>
-            <p className="section-text">From blank brief to production direction in three weeks. A structured client workshop validated the Dense direction. A complete token system powers every surface. The Dense direction is now the foundation of MarketIQ&apos;s production frontend.</p>
-          </div>
-          <div className="outcome-grid rv">
-            <div className="outcome-card"><div className="outcome-num">4</div><div className="outcome-label">Page Prototypes</div><div className="outcome-desc">Fully interactive HTML demos with real Mongolian market data.</div></div>
-            <div className="outcome-card"><div className="outcome-num">80+</div><div className="outcome-label">Design Tokens</div><div className="outcome-desc">Colors, typography, spacing, shadows, radii, easing — all brand-tinted, all production-ready.</div></div>
-            <div className="outcome-card"><div className="outcome-num">3</div><div className="outcome-label">Access Tiers</div><div className="outcome-desc">Public, Registered, and Paid — density scales with commitment, identity stays consistent.</div></div>
-          </div>
+      <Section num="11" label="Outcome" title="Shipped.">
+        <p className="mb-8 text-sm leading-relaxed text-zinc-400">From blank brief to production direction in three weeks. A structured client workshop validated the Dense direction. A complete token system powers every surface.</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {OUTCOMES.map((o) => (
+            <div key={o.label} className="border border-zinc-800 p-5">
+              <span className="font-bebas text-5xl text-accent">{o.num}</span>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-zinc-300">{o.label}</p>
+              <p className="mt-2 text-xs text-zinc-600">{o.desc}</p>
+            </div>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      {/* FOOTER */}
-      <footer className="cs-footer">
-        <div className="wrap">
-          <div className="footer-inner">
-            <div className="footer-logo">910studio</div>
-            <div className="footer-text">Ulaanbaatar, Mongolia &middot; 2026</div>
+      {/* CTA */}
+      <div className="relative mx-auto max-w-[1120px] px-8 py-24 overflow-hidden">
+        <LineArt variant="twist" color="#14b8a6" strokeWidth={7} className="absolute bottom-4 left-0 w-full opacity-10" delay={0.2} loop />
+        <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-bebas text-5xl uppercase tracking-wide text-zinc-100 sm:text-6xl">like what you see?</h2>
+            <LineArt variant="underline" color="#14b8a6" strokeWidth={5} className="-mt-1 w-48 opacity-50 sm:w-64" delay={0.3} />
           </div>
+          <Link href="/contact" className="cartoon-shadow-accent inline-block bg-accent px-10 py-5 text-sm font-semibold uppercase tracking-wider text-base-black">
+            start a project -&gt;
+          </Link>
         </div>
-      </footer>
-    </div>
+      </div>
+
+      {/* Back link bottom */}
+      <div className="mx-auto max-w-[1120px] px-8 pb-12">
+        <Link href="/work" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
+          <span>&lt;-</span> back to work
+        </Link>
+      </div>
+    </main>
+  );
+}
+
+function Section({ num, label, title, children }: { num: string; label: string; title: string; children: React.ReactNode }) {
+  return (
+    <section className="mx-auto max-w-[1120px] px-8 py-16">
+      <div className="mb-6 flex items-center gap-4">
+        <span className="font-bebas text-3xl text-accent">{num}</span>
+        <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">{label}</span>
+      </div>
+      <h2 className="mb-8 font-bebas text-4xl uppercase tracking-wide text-zinc-100 sm:text-5xl">{title}</h2>
+      {children}
+    </section>
   );
 }

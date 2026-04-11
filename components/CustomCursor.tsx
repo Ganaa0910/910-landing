@@ -1,35 +1,24 @@
 "use client";
 
-// Custom cursor with accent color glow
-// Smooth follow using requestAnimationFrame + lerp
+import { useEffect, useRef, useState } from "react";
 
-import React, { useEffect, useRef, useState } from "react";
-
-interface CustomCursorProps {
-  accentColor: string;
-}
-
-export function CustomCursor({ accentColor }: CustomCursorProps) {
+export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    // Detect touch devices - don't show custom cursor on mobile
     const checkTouch = () => {
       setIsTouchDevice(
-        "ontouchstart" in window || navigator.maxTouchPoints > 0
+        "ontouchstart" in window || navigator.maxTouchPoints > 0,
       );
     };
-
     checkTouch();
     window.addEventListener("resize", checkTouch);
-
     return () => window.removeEventListener("resize", checkTouch);
   }, []);
 
   useEffect(() => {
-    // Skip on touch devices
     if (isTouchDevice) return;
 
     let mouseX = 0;
@@ -38,23 +27,22 @@ export function CustomCursor({ accentColor }: CustomCursorProps) {
     let cursorY = 0;
     let rafId: number;
 
-    // Track mouse position
     const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+
+      const target = e.target as HTMLElement;
+      const interactive =
+        target.closest("a, button, [role='button'], input, textarea, select, label[class*='cursor']");
+      setIsHovering(!!interactive);
     };
 
-    // Smooth follow using requestAnimationFrame + lerp
     const animate = () => {
-      // Lerp for smooth following (0.15 = smooth lag)
       cursorX += (mouseX - cursorX) * 0.15;
       cursorY += (mouseY - cursorY) * 0.15;
 
       if (cursorRef.current) {
         cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-      }
-      if (glowRef.current) {
-        glowRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
       }
 
       rafId = requestAnimationFrame(animate);
@@ -69,36 +57,25 @@ export function CustomCursor({ accentColor }: CustomCursorProps) {
     };
   }, [isTouchDevice]);
 
-  // Don't render on touch devices
   if (isTouchDevice) return null;
 
   return (
     <>
-      {/* Hide default cursor globally */}
       <style jsx global>{`
         * {
           cursor: none !important;
         }
       `}</style>
 
-      {/* Custom cursor dot */}
       <div
         ref={cursorRef}
-        className="pointer-events-none fixed left-0 top-0 z-[99999] h-3 w-3 rounded-full mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[99999] mix-blend-difference transition-[width,height] duration-150"
         style={{
-          backgroundColor: accentColor,
-          transform: "translate(-50%, -50%)",
-        }}
-      />
-
-      {/* Glow layer */}
-      <div
-        ref={glowRef}
-        className="pointer-events-none fixed left-0 top-0 z-[99998] h-12 w-12 rounded-full"
-        style={{
-          background: `radial-gradient(circle, ${accentColor}40 0%, transparent 70%)`,
-          transform: "translate(-50%, -50%)",
-          filter: "blur(8px)",
+          width: isHovering ? 24 : 6,
+          height: isHovering ? 24 : 6,
+          backgroundColor: "#14b8a6",
+          marginLeft: isHovering ? -12 : -3,
+          marginTop: isHovering ? -12 : -3,
         }}
       />
     </>
