@@ -8,6 +8,8 @@ import {
   Black_Ops_One,
 } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { CustomCursor } from "@/components/CustomCursor";
@@ -65,22 +67,27 @@ const siteUrl = "https://910.studio";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "910studio | Creative Web Studio",
+    default: "910studio | Creative Web Studio in Ulaanbaatar, Mongolia",
     template: "%s | 910studio",
   },
   description:
-    "Creative web studio crafting exceptional digital experiences. Design systems, platforms, and creative development. Ulaanbaatar, Mongolia.",
+    "Creative web studio based in Ulaanbaatar, Mongolia. We design and build design systems, web platforms, and digital products for ambitious brands. Frontend development, creative coding, and brand identity.",
   keywords: [
-    "web studio",
-    "creative agency",
-    "web development",
+    "web studio Mongolia",
+    "creative agency Ulaanbaatar",
+    "web development Mongolia",
     "design systems",
-    "digital experiences",
-    "Mongolia",
-    "Ulaanbaatar",
     "frontend development",
-    "Next.js",
-    "React",
+    "creative development",
+    "web design Mongolia",
+    "digital agency Mongolia",
+    "React developer Mongolia",
+    "Next.js studio",
+    "UI/UX design Ulaanbaatar",
+    "brand identity Mongolia",
+    "token architecture",
+    "web application development",
+    "910studio",
   ],
   authors: [{ name: "910studio", url: siteUrl }],
   creator: "910studio",
@@ -100,15 +107,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "910studio",
-    title: "910studio | Creative Web Studio",
+    title: "910studio | Creative Web Studio in Ulaanbaatar",
     description:
-      "Creative web studio crafting exceptional digital experiences. Design systems, platforms, and creative development.",
+      "Design systems, web platforms, and creative development. Based in Ulaanbaatar, Mongolia. Working globally.",
     images: [
       {
         url: "/OG.png",
         width: 1200,
         height: 630,
-        alt: "910studio - Creative Web Studio",
+        alt: "910studio — Creative Web Studio, Ulaanbaatar Mongolia",
       },
     ],
   },
@@ -116,7 +123,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "910studio | Creative Web Studio",
     description:
-      "Creative web studio crafting exceptional digital experiences. Design systems, platforms, and creative development.",
+      "Design systems, web platforms, and creative development. Based in Ulaanbaatar, Mongolia.",
     images: ["/OG.png"],
     creator: "@910studio",
   },
@@ -133,6 +140,15 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    languages: {
+      "en": siteUrl,
+    },
+  },
+  other: {
+    "geo.region": "MN-1",
+    "geo.placename": "Ulaanbaatar",
+    "geo.position": "47.9184;106.9177",
+    "ICBM": "47.9184, 106.9177",
   },
 };
 
@@ -147,27 +163,103 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "910studio",
-              url: "https://910.studio",
-              logo: "https://910.studio/web-icon.ico",
-              description:
-                "Creative web studio crafting exceptional digital experiences. Design systems, platforms, and creative development.",
-              foundingDate: "2024",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Ulaanbaatar",
-                addressCountry: "MN",
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "ProfessionalService",
+                "@id": "https://910.studio/#organization",
+                name: "910studio",
+                url: "https://910.studio",
+                logo: "https://910.studio/web-icon.ico",
+                image: "https://910.studio/OG.png",
+                description:
+                  "Creative web studio based in Ulaanbaatar, Mongolia. Design systems, web platforms, creative development, and brand identity for ambitious brands.",
+                foundingDate: "2024",
+                priceRange: "$$$",
+                areaServed: [
+                  { "@type": "Country", name: "Mongolia" },
+                  { "@type": "Continent", name: "Asia" },
+                  "Worldwide",
+                ],
+                serviceType: [
+                  "Web Design",
+                  "Web Development",
+                  "Design Systems",
+                  "Frontend Development",
+                  "Creative Development",
+                  "Brand Identity",
+                  "UI/UX Design",
+                ],
+                knowsAbout: [
+                  "React", "Next.js", "TypeScript", "Tailwind CSS",
+                  "Three.js", "GSAP", "Prisma", "tRPC",
+                  "Design Systems", "Token Architecture",
+                ],
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "Ulaanbaatar",
+                  addressRegion: "Ulaanbaatar",
+                  addressCountry: "MN",
+                },
+                geo: {
+                  "@type": "GeoCoordinates",
+                  latitude: 47.9184,
+                  longitude: 106.9177,
+                },
+                sameAs: ["https://design.910.studio"],
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  contactType: "sales",
+                  url: "https://910.studio/contact",
+                  availableLanguage: ["English", "Mongolian"],
+                },
               },
-              sameAs: ["https://design.910.studio"],
-              contactPoint: {
-                "@type": "ContactPoint",
-                contactType: "customer service",
-                availableLanguage: ["English", "Mongolian"],
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "910studio",
+                url: "https://910.studio",
+                publisher: { "@id": "https://910.studio/#organization" },
               },
-            }),
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: [
+                  {
+                    "@type": "Question",
+                    name: "What is 910studio?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "910studio is a creative web studio based in Ulaanbaatar, Mongolia, founded in 2024. They specialize in design systems, token architecture, web platforms, creative development (WebGL, GSAP, Three.js), and brand identity. They work remotely with clients globally across Asia, Europe, and North America.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "What services does 910studio offer?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "910studio offers design systems and token architecture, full-stack web application development, creative development (WebGL, shaders, scroll experiences, interactive storytelling), brand identity and digital strategy. Their tech stack includes React, Next.js, TypeScript, Tailwind CSS, Prisma, tRPC, Three.js, and GSAP.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Where is 910studio located?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "910studio is based in Ulaanbaatar, Mongolia (UTC+8). They are remote-first and work with clients globally. The studio was founded in 2024.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "What projects has 910studio worked on?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Notable projects include MarketIQ for Capital Markets Mongolia — a design system and frontend for Mongolia's first AI-native capital markets intelligence platform, and Juraan — a cinematic portfolio with custom typeface for Mongolia's premier bronze sculptor Lkhagvasuren Nyamkhuu.",
+                    },
+                  },
+                ],
+              },
+            ]),
           }}
         />
       </head>
@@ -185,6 +277,8 @@ export default function RootLayout({
           <CustomCursor />
           <AudioToggle />
         </SiteGate>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

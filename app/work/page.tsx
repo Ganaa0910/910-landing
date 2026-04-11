@@ -4,9 +4,13 @@ import { PROJECTS } from "@/lib/projects";
 import { LineArt } from "@/components/ui/line-art";
 
 export const metadata: Metadata = {
-  title: "Work",
+  title: "Work — Selected Projects",
   description:
-    "Selected projects by 910studio. Design systems, platforms, and digital experiences.",
+    "Portfolio of 910studio. Design systems, web platforms, and creative development projects. Case studies from Mongolia's leading creative web studio.",
+  openGraph: {
+    title: "Work — 910studio",
+    description: "Design systems, web platforms, and creative development. See our case studies.",
+  },
 };
 
 export default function WorkPage() {

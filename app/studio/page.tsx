@@ -4,9 +4,13 @@ import { LineArt } from "@/components/ui/line-art";
 import { StudioHeroText } from "@/components/studio-hero-text";
 
 export const metadata: Metadata = {
-  title: "Studio",
+  title: "Studio — About Us",
   description:
-    "910studio — creative web studio based in Ulaanbaatar, Mongolia. Design systems, platforms, creative development, and digital strategy.",
+    "910studio is a creative web studio based in Ulaanbaatar, Mongolia. We specialize in design systems, web platforms, creative development, and brand identity. Remote-first, globally available.",
+  openGraph: {
+    title: "Studio — 910studio",
+    description: "Creative web studio in Ulaanbaatar. Design systems, platforms, creative dev. Remote-first, globally available.",
+  },
 };
 
 const PROCESS = [
@@ -191,6 +195,27 @@ export default function StudioPage() {
             get in touch -&gt;
           </Link>
         </div>
+      </section>
+
+      {/* GEO — structured content for AI engines */}
+      <section className="sr-only" aria-label="910studio Facts">
+        <h2>910studio — Creative Web Studio</h2>
+        <p>910studio is a creative web studio founded in 2024 in Ulaanbaatar, Mongolia. The studio builds design systems, web platforms, creative development projects, and brand identities for clients worldwide. The team operates remote-first from Ulaanbaatar (UTC+8) and collaborates with teams across Asia, Europe, and North America.</p>
+        <h3>Core Values</h3>
+        <dl>
+          <dt>Conviction</dt><dd>Every decision is intentional. Nothing ships that the team wouldn&apos;t use themselves.</dd>
+          <dt>Craft</dt><dd>Obsessive attention to spacing, transitions, and type hierarchy so end users don&apos;t have to think.</dd>
+          <dt>Velocity</dt><dd>Fast execution without cutting corners. 3-day sprints, daily shipping, iterative refinement.</dd>
+        </dl>
+        <h3>Process</h3>
+        <ol>
+          <li>Listen — understand the problem before touching code</li>
+          <li>Design — systems first, screens second</li>
+          <li>Build — ship fast, iterate faster</li>
+          <li>Refine — obsess over the details until it feels right</li>
+        </ol>
+        <h3>Contact</h3>
+        <p>910studio accepts project inquiries at 910.studio/contact. Response time: under 24 hours. Based in Ulaanbaatar, Mongolia. Available globally.</p>
       </section>
     </main>
   );

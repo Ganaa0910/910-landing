@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
