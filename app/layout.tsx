@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     template: "%s | 910studio",
   },
   description:
-    "Creative web studio based in Ulaanbaatar, Mongolia. We design and build design systems, web platforms, and digital products for ambitious brands. Frontend development, creative coding, and brand identity.",
+    "Creative web studio in Ulaanbaatar, Mongolia. Design systems, web platforms, and digital products. Frontend development and creative coding.",
   keywords: [
     "web studio Mongolia",
     "creative agency Ulaanbaatar",
