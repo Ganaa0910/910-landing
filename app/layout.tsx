@@ -110,21 +110,9 @@ export const metadata: Metadata = {
     title: "910studio | Creative Web Studio in Ulaanbaatar",
     description:
       "Design systems, web platforms, and creative development. Based in Ulaanbaatar, Mongolia. Working globally.",
-    images: [
-      {
-        url: "/OG.png",
-        width: 1200,
-        height: 630,
-        alt: "910studio — Creative Web Studio, Ulaanbaatar Mongolia",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "910studio | Creative Web Studio",
-    description:
-      "Design systems, web platforms, and creative development. Based in Ulaanbaatar, Mongolia.",
-    images: ["/OG.png"],
     creator: "@910studio",
   },
   robots: {
