@@ -43,11 +43,7 @@ export function CustomCursor() {
 
   return (
     <>
-      <style jsx global>{`
-        * {
-          cursor: none !important;
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{ __html: `* { cursor: none !important; }` }} />
 
       <div
         ref={cursorRef}
