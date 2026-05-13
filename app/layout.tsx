@@ -15,7 +15,6 @@ import { Footer } from "@/components/layout/footer";
 import { CustomCursor } from "@/components/CustomCursor";
 import { AudioToggle } from "@/components/ui/audio-toggle";
 import { LoadingScreen } from "@/components/ui/loading-screen";
-import { SiteGate } from "@/components/ui/site-gate";
 import { NowPlaying } from "@/components/ui/now-playing";
 import { PageTransition } from "@/components/ui/page-transition";
 import "./globals.css";
@@ -255,16 +254,14 @@ export default function RootLayout({
         className={`${ibmPlexMono.variable} ${syne.variable} ${jetbrainsMono.variable} ${bebas.variable} ${anton.variable} ${blackOps.variable} ${christmasPipow.variable} antialiased`}
       >
         <Nav />
+        <PageTransition>
+          {children}
+          <Footer />
+        </PageTransition>
         <LoadingScreen />
-        <SiteGate>
-          <PageTransition>
-            {children}
-            <Footer />
-          </PageTransition>
-          <NowPlaying />
-          <CustomCursor />
-          <AudioToggle />
-        </SiteGate>
+        <NowPlaying />
+        <CustomCursor />
+        <AudioToggle />
         <Analytics />
         <SpeedInsights />
       </body>
