@@ -1,19 +1,37 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const alt = "910studio — Creative Web Studio, Ulaanbaatar Mongolia";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function OGImage() {
-  // Load Bebas Neue from Google Fonts
-  const bebasFont = await fetch(
-    "https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXooxW4.ttf",
-  ).then((res) => res.arrayBuffer());
+// Resolve a Google Font's binary URL via the CSS API so Google's version
+// rotations (v19 → v20, etc.) don't break the OG image silently.
+async function loadGoogleFont(family: string): Promise<ArrayBuffer | null> {
+  try {
+    const css = await fetch(
+      `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}&display=swap`,
+      { headers: { "User-Agent": "Mozilla/5.0" } },
+    ).then((r) => r.text());
+    const match = css.match(/url\((https:\/\/[^)]+\.(?:ttf|woff2))\)/);
+    if (!match) return null;
+    const font = await fetch(match[1]);
+    if (!font.ok) return null;
+    return await font.arrayBuffer();
+  } catch {
+    return null;
+  }
+}
 
-  const ibmPlexMono = await fetch(
-    "https://fonts.gstatic.com/s/ibmplexmono/v19/-F63fjptAgt5VM-kVkqdyU8n5iQ.ttf",
-  ).then((res) => res.arrayBuffer());
+export default async function OGImage() {
+  const [bebasFont, ibmPlexMono] = await Promise.all([
+    loadGoogleFont("Bebas Neue"),
+    loadGoogleFont("IBM Plex Mono:wght@400"),
+  ]);
+
+  const fonts = [
+    bebasFont && { name: "Bebas Neue", data: bebasFont, style: "normal" as const, weight: 400 as const },
+    ibmPlexMono && { name: "IBM Plex Mono", data: ibmPlexMono, style: "normal" as const, weight: 400 as const },
+  ].filter((f): f is NonNullable<typeof f> => f !== null);
 
   return new ImageResponse(
     (
@@ -102,20 +120,7 @@ export default async function OGImage() {
     ),
     {
       ...size,
-      fonts: [
-        {
-          name: "Bebas Neue",
-          data: bebasFont,
-          style: "normal",
-          weight: 400,
-        },
-        {
-          name: "IBM Plex Mono",
-          data: ibmPlexMono,
-          style: "normal",
-          weight: 400,
-        },
-      ],
+      fonts: fonts.length > 0 ? fonts : undefined,
     },
   );
 }
