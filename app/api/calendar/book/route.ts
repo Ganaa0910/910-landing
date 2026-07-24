@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { v4 as uuidv4 } from "uuid";
+import { CONTACT_EMAIL, EMAIL_FROM, REPLY_TO, escapeHtml, sendEmail } from "@/lib/email";
 import {
   saveBooking,
   generateICS,
@@ -85,22 +85,38 @@ export async function POST(request: Request) {
       timeZone: BUSINESS_HOURS.timezone,
     });
 
-    // Send emails
-    if (process.env.RESEND_API_KEY) {
-      const resend = new Resend(process.env.RESEND_API_KEY);
+    // Booking is already persisted at this point — email failures are logged
+    // and reported, but must never roll back a confirmed slot.
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeProjectType = projectType ? escapeHtml(projectType) : "";
 
-      // Email to you (with ICS attachment)
-      await resend.emails.send({
-        from: "910studio <onboarding@resend.dev>",
-        to: process.env.CONTACT_EMAIL!,
-        subject: `New Call Booked: ${name} - ${formattedDate} ${formattedTime}`,
-        attachments: [
-          {
-            filename: "meeting.ics",
-            content: icsBase64,
-          },
-        ],
-        html: `
+    const attachments = [{ filename: "meeting.ics", content: icsBase64 }];
+    const emailErrors: string[] = [];
+
+    // Notification to 910studio (with ICS attachment)
+    if (CONTACT_EMAIL) {
+      const { sent, error } = await sendEmail(
+        {
+          from: EMAIL_FROM,
+          to: CONTACT_EMAIL,
+          replyTo: email,
+          subject: `New Call Booked: ${name} - ${formattedDate} ${formattedTime}`,
+          attachments,
+          text: [
+            "NEW CALL BOOKED",
+            "",
+            `Client: ${name} <${email}>`,
+            `Date: ${formattedDate}`,
+            `Time: ${formattedTime} (UB)`,
+            projectType ? `Project Type: ${projectType}` : "",
+            notes ? `Notes: ${notes}` : "",
+            "",
+            "ICS file attached.",
+          ]
+            .filter(Boolean)
+            .join("\n"),
+          html: `
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
@@ -118,8 +134,8 @@ export async function POST(request: Request) {
             <td style="padding: 40px;">
               <div style="padding: 16px; background-color: #14b8a610; border-left: 3px solid #14b8a6; margin-bottom: 24px;">
                 <p style="margin: 0 0 4px; font-size: 12px; color: #14b8a6; text-transform: uppercase;">Client</p>
-                <p style="margin: 0; font-size: 18px; color: #fff; font-weight: 600;">${name}</p>
-                <p style="margin: 4px 0 0; font-size: 14px; color: #888;">${email}</p>
+                <p style="margin: 0; font-size: 18px; color: #fff; font-weight: 600;">${safeName}</p>
+                <p style="margin: 4px 0 0; font-size: 14px; color: #888;">${safeEmail}</p>
               </div>
 
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
@@ -135,7 +151,7 @@ export async function POST(request: Request) {
                 </tr>
               </table>
 
-              ${projectType ? `<p style="margin: 0 0 16px; font-size: 14px; color: #888;"><strong style="color: #fff;">Project Type:</strong> ${projectType}</p>` : ""}
+              ${projectType ? `<p style="margin: 0 0 16px; font-size: 14px; color: #888;"><strong style="color: #fff;">Project Type:</strong> ${safeProjectType}</p>` : ""}
 
               <p style="margin: 24px 0 0; font-size: 13px; color: #14b8a6;">
                 📎 ICS file attached - add to your calendar
@@ -149,20 +165,36 @@ export async function POST(request: Request) {
 </body>
 </html>
         `.trim(),
-      });
+        },
+        "booking-notification"
+      );
+      if (!sent && error) emailErrors.push(`notification: ${error}`);
+    } else {
+      console.error("Calendar booking: CONTACT_EMAIL not configured");
+      emailErrors.push("notification: CONTACT_EMAIL not configured");
+    }
 
-      // Confirmation email to client (with ICS attachment)
-      await resend.emails.send({
-        from: "910studio <onboarding@resend.dev>",
-        to: email,
-        subject: `Your call with 910studio is confirmed - ${formattedDate}`,
-        attachments: [
-          {
-            filename: "meeting.ics",
-            content: icsBase64,
-          },
-        ],
-        html: `
+    // Confirmation to the client (with ICS attachment). This is the send that
+    // silently failed while the sandbox onboarding@resend.dev sender was in use.
+    {
+      const { sent, error } = await sendEmail(
+        {
+          from: EMAIL_FROM,
+          to: email,
+          replyTo: REPLY_TO,
+          subject: `Your call with 910studio is confirmed - ${formattedDate}`,
+          attachments,
+          text: [
+            "910STUDIO",
+            "",
+            "Your call is confirmed!",
+            "",
+            `When: ${formattedDate} at ${formattedTime} (Ulaanbaatar Time)`,
+            "",
+            "A calendar invite is attached — open it to add the call to your calendar.",
+            "We'll send you a meeting link before the call. See you there!",
+          ].join("\n"),
+          html: `
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
@@ -204,12 +236,18 @@ export async function POST(request: Request) {
 </body>
 </html>
         `.trim(),
-      });
+        },
+        "booking-confirmation"
+      );
+      if (!sent && error) emailErrors.push(`confirmation: ${error}`);
     }
 
     return NextResponse.json({
       success: true,
       bookingId: booking.id,
+      // Slot is held regardless; surface delivery problems instead of hiding them
+      emailsSent: emailErrors.length === 0,
+      ...(emailErrors.length > 0 && { emailErrors }),
     });
   } catch (error) {
     console.error("Calendar booking error:", error);
