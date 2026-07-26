@@ -238,6 +238,10 @@ h1 { margin:0; }
   to   { transform: translate(-50%,-50%) translateY(0) scale(1); }
 }
 @keyframes globeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes mottoIn {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:none; }
+}
 @keyframes arcReveal {
   from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
   to   { -webkit-mask-position:   0% 0; mask-position:   0% 0; }
@@ -261,6 +265,16 @@ h1 { margin:0; }
   animation: globeIn calc(1800ms * var(--t-scale))
              cubic-bezier(.16,1,.3,1) calc(var(--t-globe) * var(--t-scale)) both;
 }
+/* the phone's flat motto arrives on the same cue as the desktop arc —
+   without this it is simply present from the first frame, while the mark
+   is still centre-stage */
+.seq .motto-flat > span {
+  display:block;
+  animation: mottoIn calc(1500ms * var(--t-scale))
+             cubic-bezier(.33,1,.68,1) calc(var(--t-arc) * var(--t-scale)) both;
+}
+.motto-flat > span { display:block; }
+
 .seq .arc {
   animation: arcReveal calc(1600ms * var(--t-scale))
              cubic-bezier(.33,1,.68,1) calc(var(--t-arc) * var(--t-scale)) both;

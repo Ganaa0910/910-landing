@@ -68,7 +68,11 @@ export function Reel() {
         {/* phones set the motto flat; the arc auto-fits too small to be a
             headline at that width */}
         <p className="motto-flat" aria-hidden="true">
-          We build the things that <i>matter.</i>
+          {/* inner span carries the entry cue so the outer element keeps
+              its scroll-driven opacity */}
+          <span>
+            We build the things that <i>matter.</i>
+          </span>
         </p>
 
         <div className="anchor">
