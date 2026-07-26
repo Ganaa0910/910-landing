@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* /studio and the /work index folded into the one-pager. Redirect rather
+     than 404 so their existing search equity lands somewhere. */
+  redirects: async () => [
+    { source: "/studio", destination: "/", permanent: true },
+    { source: "/work", destination: "/", permanent: true },
+  ],
   images: {
     formats: ["image/avif", "image/webp"],
   },

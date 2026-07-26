@@ -1,0 +1,359 @@
+/* 910studio v2 reel — ported from v2-moodboard/s1-hero.html */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --paper:  #FBF9F6;
+  --ink:    #2B221F;
+  --ink-2:  rgba(43,34,31,.62);
+  --ink-3:  rgba(43,34,31,.38);
+  --rule:   rgba(43,34,31,.13);
+  --accent: #2660E8;
+  --mono:   "IBM Plex Mono", ui-monospace, monospace;
+
+  /* S1 globe diameter — the whole stage derives from this */
+  --D: clamp(340px, min(94vw, 128vh), 1180px);
+  /* how far the S1 stage sits below the viewport's bottom edge */
+  --drop: 15vh;
+  /* backdrop mark */
+  --logo-w: min(52vw, 750px);
+  --logo-y: 30%;
+
+  /* intro pose for the mark — --logo-shift is recomputed in JS from --logo-y */
+  --logo-shift: 20vh;
+  --logo-scale: 1.5;
+
+  /* sequence timing — everything is multiplied by --t-scale, so one
+     slider stretches or compresses the whole choreography */
+  --t-scale: 1;
+  --t-sq-dur:  520ms;
+  --t-sq-step:  45ms;
+  --t-studio: 1250ms;
+  --t-settle: 2600ms;
+  --t-globe:  3900ms;
+  --t-arc:    5200ms;
+
+  /* scroll phases, written by JS every frame.
+     --p  S1 → S2      --z  globe → ball + paper → ink     --roll  the descent */
+  --p: 0;
+  --z: 0;
+  --roll: 0;
+  --out: 0;
+}
+
+/* scoped to the reel page so the case studies keep their own ground */
+.reel-page {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── the reel: one scroll track, S1/S2/S3 share a sticky stage ── */
+.reel { position: relative; height: 560vh; }
+
+.viewport {
+  position: sticky; top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* S3 ground — paper flips to brand ink under everything */
+.s3-bg {
+  position:absolute; inset:0; z-index:0; background: var(--ink);
+  opacity: clamp(0, calc((var(--z) - 0.15) * 2), 1);
+}
+
+/* the globe canvas spans the whole viewport; its centre and radius are
+   driven in JS from scroll progress, so the dots never get scaled or
+   stretched by a CSS transform — they're re-sampled at the new size */
+.globe-layer { position:absolute; inset:0; z-index:3; opacity:0; }
+.globe-layer canvas { width:100%; height:100%; display:block; }
+
+/* reads --D and --drop back out of CSS as pixels */
+.probe { position:absolute; visibility:hidden; pointer-events:none;
+         width: var(--D); height: var(--drop); top:0; left:0; }
+
+/* ── S1 layers ────────────────────────────────────── */
+.brand {
+  position:absolute; left:50%; top:var(--logo-y);
+  transform: translate(-50%, -50%);
+  width: var(--logo-w); height:auto;
+  z-index: 1; pointer-events:none; overflow:visible;
+  opacity: clamp(0, calc(1 - var(--p) * 4), 1);
+}
+.brand .sq, .brand .word { opacity: 0; }
+
+/* ── S3: the rail ──────────────────────────────────
+   The rail is a squared switchback drawn on the canvas (so its trail can be
+   dither squares in the same language as the logo and the map). This layer
+   only carries the step labels, which sit in the band above each run. */
+.rail-track {
+  position:absolute; inset:0; z-index:2;
+  opacity: clamp(0, min(calc((var(--z) - 0.45) * 2.6), calc(1 - var(--out) * 3.0)), 1);
+  pointer-events:none;
+}
+
+.step {
+  position:absolute; width: min(24ch, 19%);
+  color: var(--paper);
+  opacity:0; will-change: opacity, transform;
+}
+.step.top, .step.bottom { text-align:center; }
+.step.right { text-align:left; }
+.step.left  { text-align:right; }
+.step .star {
+  display:block; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(251,249,246,.34); margin-top:8px;
+}
+
+/* "you are here" — parks next to the ball while it waits at the start.
+   Paper, not accent: it matches the ball it is labelling, and leaves blue
+   to mean "checkpoint" and nothing else. */
+.here {
+  position:absolute; z-index:4; pointer-events:none;
+  font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--paper); white-space:nowrap;
+  opacity:0; will-change: opacity, transform;
+}
+.here::before {
+  content:""; position:absolute; left:-26px; top:50%;
+  width:20px; height:1px; background:var(--paper);
+}
+.here.flip::before { left:auto; right:-26px; }
+.step .n {
+  font-size:10.5px; font-weight:600; letter-spacing:.24em; color:var(--accent);
+  margin:0 0 6px;
+}
+.step h3 {
+  font-size: clamp(22px, 2.4vw, 34px); font-weight:500;
+  letter-spacing:-.04em; line-height:1.05; margin:0 0 6px;
+}
+.step p { font-size:12px; line-height:1.6; color:rgba(251,249,246,.55); margin:0; }
+
+/* chart annotation — a star atlas caption for the plate */
+.s3-chart {
+  position:absolute; z-index:4;
+  right: clamp(20px, 4vw, 56px); bottom: 34px;
+  text-align:right; max-width:44ch;
+  font-size:9.5px; line-height:1.85; letter-spacing:.13em; text-transform:uppercase;
+  color:rgba(251,249,246,.30);
+  opacity: clamp(0, min(calc((var(--z) - 0.55) * 2.6), calc(1 - var(--out) * 3.0)), 1);
+}
+.s3-chart b {
+  display:block; font-weight:600; letter-spacing:.2em;
+  color:rgba(251,249,246,.62); margin-bottom:7px;
+}
+.s3-chart sup { font-size:7.5px; }
+
+/* section label, sits above the rail while it's on screen */
+.s3-label {
+  position:absolute; z-index:4; top:34px; left: clamp(20px, 4vw, 56px);
+  font-size:10.5px; font-weight:600; letter-spacing:.24em; text-transform:uppercase;
+  color:rgba(251,249,246,.45);
+  opacity: clamp(0, min(calc((var(--z) - 0.55) * 2.6), calc(1 - var(--out) * 3.0)), 1);
+}
+
+/* the arc's circle-centre coincides with the S1 sphere-centre, so the
+   motto is exactly concentric with the planet at rest */
+.anchor { position:absolute; left:50%; bottom:calc(-1 * var(--drop)); width:0; height:0; z-index:4; }
+
+.arc {
+  position:absolute; left:0; top:0;
+  width: calc(var(--D) * 1.4); height: calc(var(--D) * 0.72);
+  transform: translate(-50%, -100%);
+  overflow: visible; pointer-events:none;
+  opacity: clamp(0, calc(1 - var(--p) * 4), 1);
+  /* soft-edged reveal: a gradient mask 3× the element's width. Sliding it
+     from 100% → 0% sweeps a feathered edge across, left to right. */
+  -webkit-mask-image: linear-gradient(90deg, #000 0 33%, rgba(0,0,0,0) 66% 100%);
+          mask-image: linear-gradient(90deg, #000 0 33%, rgba(0,0,0,0) 66% 100%);
+  -webkit-mask-size: 300% 100%;   mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: 0% 0;    mask-position: 0% 0;
+}
+.arc text { font-family: var(--mono); font-weight:500; letter-spacing:-.02em; fill: var(--ink); }
+h1 { margin:0; }
+
+/* ── S2 copy ──────────────────────────────────────── */
+.s2 {
+  position:absolute; z-index:5;
+  left: clamp(20px, 6vw, 96px); top:50%;
+  transform: translateY(calc(-50% + (1 - var(--p)) * 28px - var(--z) * 60px));
+  max-width: min(38ch, 40vw);
+  /* fades in on --p, then back out as the globe collapses into the ball */
+  opacity: clamp(0, min(calc((var(--p) - 0.45) * 3.2), calc(1 - var(--z) * 2.6)), 1);
+  pointer-events: none;
+}
+.reel.s2-live .s2 { pointer-events: auto; }
+
+.s2 .coord {
+  font-size:10.5px; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 18px;
+}
+.s2 h2 {
+  font-size: clamp(28px, 3.4vw, 52px); font-weight:500;
+  line-height:1.08; letter-spacing:-.045em; margin:0 0 20px;
+}
+.s2 p { font-size:13px; line-height:1.8; color:var(--ink-2); margin:0 0 30px; }
+.s2 .stats { display:flex; gap:28px; margin:0 0 32px; flex-wrap:wrap; }
+.s2 .stats div { font-size:11px; color:var(--ink-3); line-height:1.5; }
+.s2 .stats b { display:block; font-size:22px; font-weight:500; color:var(--ink); letter-spacing:-.03em; }
+
+.cta {
+  display:inline-block; text-decoration:none; white-space:nowrap;
+  background:var(--ink); color:var(--paper);
+  font-size:11px; font-weight:600; letter-spacing:.11em; text-transform:uppercase;
+  padding:15px 28px;
+  box-shadow: 5px 5px 0 0 var(--accent);
+  transition: transform .16s cubic-bezier(.4,0,.2,1), box-shadow .16s cubic-bezier(.4,0,.2,1);
+}
+.cta:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 0 var(--accent); }
+
+/* ── intro sequence ───────────────────────────────── */
+/* 1. the 910 squares pop in, random order — big, centred
+   2. "studio" fades up beside them
+   3. the whole mark settles: scales down into its resting place
+   4. the globe rises from below
+   5. the motto sweeps on, left to right          */
+@keyframes sqIn   { from { opacity:0; transform:scale(.55); }        to { opacity:1; transform:scale(1); } }
+@keyframes wordIn { from { opacity:0; transform:translateY(10px); }  to { opacity:1; transform:translateY(0); } }
+/* the mark is laid out at its FINAL position; the intro is a pure transform
+   off that, so nothing reflows and the resting frame is what the CSS says */
+@keyframes brandSettle {
+  from { transform: translate(-50%,-50%) translateY(var(--logo-shift)) scale(var(--logo-scale)); }
+  to   { transform: translate(-50%,-50%) translateY(0) scale(1); }
+}
+@keyframes globeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes arcReveal {
+  from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  to   { -webkit-mask-position:   0% 0; mask-position:   0% 0; }
+}
+
+.seq .brand {
+  animation: brandSettle calc(1400ms * var(--t-scale))
+             cubic-bezier(.65,0,.32,1) calc(var(--t-settle) * var(--t-scale)) both;
+}
+.seq .brand .sq {
+  transform-box: fill-box; transform-origin: center;
+  animation: sqIn calc(var(--t-sq-dur) * var(--t-scale)) cubic-bezier(.2,.9,.3,1) both;
+  animation-delay: var(--d, 0ms);     /* set per-square in JS, shuffled + scaled */
+}
+.seq .brand .word {
+  transform-box: fill-box; transform-origin: center;
+  animation: wordIn calc(800ms * var(--t-scale))
+             cubic-bezier(.2,.9,.3,1) calc(var(--t-studio) * var(--t-scale)) both;
+}
+.seq .globe-layer {
+  animation: globeIn calc(1800ms * var(--t-scale))
+             cubic-bezier(.16,1,.3,1) calc(var(--t-globe) * var(--t-scale)) both;
+}
+.seq .arc {
+  animation: arcReveal calc(1600ms * var(--t-scale))
+             cubic-bezier(.33,1,.68,1) calc(var(--t-arc) * var(--t-scale)) both;
+}
+
+/* scroll-driven transition still works; only the autoplay intro is dropped */
+@media (prefers-reduced-motion: reduce) {
+  .seq .brand, .seq .brand .sq, .seq .brand .word,
+  .seq .globe-layer, .seq .arc { animation: none; }
+  .brand { transform: translate(-50%,-50%); }
+  .brand .sq, .brand .word { opacity:1; }
+  .globe-layer { opacity:1; }
+  .arc { -webkit-mask-position:0% 0; mask-position:0% 0; }
+}
+
+.motto-flat { display:none; }
+
+@media (max-width: 700px) {
+  /* S1 — the dome bleeds past both edges and the motto sets flat above it */
+  :root { --D: min(158vw, 58vh); --logo-w: 78vw; --logo-y: 15%; --drop: 3vh; --logo-scale: 1.12; }
+
+  .arc { display:none; }
+  .motto-flat {
+    display:block; position:absolute; z-index:4;
+    left:20px; right:20px;
+    bottom: calc(0.46 * var(--D) - var(--drop) + 22px);
+    margin:0; font-size:clamp(30px, 9.2vw, 46px); font-weight:500;
+    line-height:1.02; letter-spacing:-.05em; text-wrap:balance;
+    opacity: clamp(0, calc(1 - var(--p) * 4), 1);
+  }
+  .motto-flat i { font-style:normal; color:var(--accent); }
+
+  /* S2 — globe up top, copy beneath it */
+  .s2 { left:20px; right:20px; max-width:none; top:auto; bottom:6vh;
+        transform: translateY(calc((1 - var(--p)) * 28px - var(--z) * 60px)); }
+  .s2 h2 { font-size:26px; }
+  .s2 p  { font-size:12.5px; margin-bottom:22px; }
+  .s2 .stats { gap:18px; margin-bottom:24px; }
+  .s2 .stats b { font-size:18px; }
+
+  /* S3 — the diamond can't carry four labels around its points at this
+     width, so it moves up and the steps become one block at the foot
+     that swaps to whichever star the ball is on. */
+  .step {
+    left:20px !important; right:20px; width:auto !important;
+    top:auto !important; bottom:7vh;
+    text-align:left !important;
+    transform:none !important;
+    transition: opacity .35s ease;
+  }
+  .step h3 { font-size:30px; }
+  .step p  { font-size:13px; }
+  .step .star { margin-top:10px; }
+
+  .here { font-size:9.5px; letter-spacing:.16em; }
+  .here::before { width:12px; left:-16px; }
+  .here.flip::before { right:-16px; left:auto; }
+
+  .s3-label { top:26px; left:20px; }
+  .s3-chart { top:26px; right:20px; bottom:auto; text-align:right; font-size:8.5px; max-width:22ch; }
+  .s3-chart .detail { display:none; }
+  .s3-chart b { margin-bottom:0; }
+
+  /* S4 — ring centred behind, copy full width at the foot */
+  .s4 { align-items:flex-end; padding:0 20px 8vh; }
+  .s4-inner { max-width:none; }
+  .s4 h2 { font-size:clamp(28px, 8.4vw, 40px); margin-bottom:24px; }
+  .s4 .mail { font-size:17px; }
+}
+
+/* ── S4: contact ──────────────────────────────────
+   Three layers on the same scroll, travelling at different rates — the
+   eyebrow barely moves, the headline more, the details most. That
+   difference IS the parallax; nothing here is on a timer. */
+.s4 {
+  position:absolute; inset:0; z-index:6;
+  display:flex; align-items:center;
+  padding: 0 clamp(20px, 6vw, 96px);
+  pointer-events:none;
+  opacity: clamp(0, calc((var(--out) - 0.66) * 3.6), 1);
+}
+.reel.s4-live .s4 { pointer-events:auto; }
+.s4-inner { max-width: min(46ch, 54%); }
+
+.lyr-back  { transform: translateY(calc((1 - var(--out)) *  34px)); }
+.lyr-mid   { transform: translateY(calc((1 - var(--out)) *  82px)); }
+.lyr-front { transform: translateY(calc((1 - var(--out)) * 142px)); }
+
+/* the scene underneath is warm and dark, so the copy goes light */
+.s4 .eyebrow4 {
+  font-size:10.5px; font-weight:600; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 20px;
+}
+.s4 h2 {
+  font-size: clamp(30px, 4.6vw, 68px); font-weight:500;
+  line-height:1.03; letter-spacing:-.05em; margin:0 0 30px;
+  color:var(--ink); text-shadow:0 1px 22px rgba(251,249,246,.7);
+}
+.s4 .mail {
+  display:inline-block; font-size:clamp(15px,1.5vw,20px); color:var(--ink);
+  text-decoration:none; border-bottom:2px solid var(--accent);
+  padding-bottom:3px; margin-bottom:20px;
+}
+.s4 .mail:hover { color:var(--accent); }
+.s4 .meta4 { font-size:11.5px; line-height:1.8; color:var(--ink-2); margin:0 0 30px; }
+.s4 .cta { background:var(--ink); color:var(--paper); box-shadow:5px 5px 0 0 var(--accent); }
+
+/* copy sits low-left, clear of the sun on the right */
+.s4 { align-items:flex-end; padding-bottom:11vh; }

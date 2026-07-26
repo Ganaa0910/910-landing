@@ -10,14 +10,8 @@ import {
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { CustomCursor } from "@/components/CustomCursor";
-import { AudioToggle } from "@/components/ui/audio-toggle";
-import { LoadingScreen } from "@/components/ui/loading-screen";
-import { NowPlaying } from "@/components/ui/now-playing";
-import { PageTransition } from "@/components/ui/page-transition";
 import "./globals.css";
+import "./reel.css";
 
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
@@ -253,15 +247,7 @@ export default function RootLayout({
       <body
         className={`${ibmPlexMono.variable} ${syne.variable} ${jetbrainsMono.variable} ${bebas.variable} ${anton.variable} ${blackOps.variable} ${christmasPipow.variable} antialiased`}
       >
-        <Nav />
-        <PageTransition>
-          {children}
-          <Footer />
-        </PageTransition>
-        <LoadingScreen />
-        <NowPlaying />
-        <CustomCursor />
-        <AudioToggle />
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>
