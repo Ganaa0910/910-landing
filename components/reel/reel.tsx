@@ -131,9 +131,8 @@ export function Reel() {
               something beautiful.
             </h2>
             <div className="lyr-front">
-              <a className="mail" href="mailto:hello@910.studio">
-                hello@910.studio
-              </a>
+              {/* no mailto here on purpose — /contact is the path that
+                  actually works (form → /api/inquiry → Resend) */}
               <p className="meta4">
                 Reply within 24 hours · Ulaanbaatar, UTC+8
                 <br />
