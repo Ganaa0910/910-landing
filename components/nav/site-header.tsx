@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { BrandMark } from "@/components/reel/brand-mark";
 import { TransitionLink } from "./page-shell";
 
 /* Where "back" goes, per route. An explicit destination rather than
@@ -30,9 +29,10 @@ export function SiteHeader() {
         <span aria-hidden="true">←</span> {back.label}
       </TransitionLink>
 
+      {/* painted via CSS mask rather than <img> so the same file can flip
+          to paper on the case studies' dark ground */}
       <TransitionLink className="hdr-mark" href="/">
-        <BrandMark />
-        <span className="sr-only">910studio — home</span>
+        <span className="sr-only">910studies — home</span>
       </TransitionLink>
 
       <TransitionLink className="hdr-cta" href="/contact">

@@ -659,8 +659,14 @@ h1 { margin:0; }
 .hdr-back:hover { color: var(--ink); }
 .hdr-back:hover span[aria-hidden] { transform: translateX(-4px); }
 
-.hdr-mark { display: block; width: clamp(88px, 11vw, 132px); flex: 0 0 auto; }
-.hdr-mark svg { width: 100%; height: auto; display: block; }
+.hdr-mark {
+  display: block; flex: 0 0 auto;
+  width: clamp(104px, 12vw, 152px);
+  aspect-ratio: 475 / 140;
+  background-color: var(--ink);
+  -webkit-mask: url("/logo-header.svg") no-repeat center / contain;
+          mask: url("/logo-header.svg") no-repeat center / contain;
+}
 
 .site-header .hdr-cta {
   background: var(--ink); color: var(--paper);
@@ -679,8 +685,7 @@ h1 { margin:0; }
 }
 .site-header.on-dark .hdr-back { color: rgba(255,255,255,.62); }
 .site-header.on-dark .hdr-back:hover { color: #fff; }
-.site-header.on-dark .hdr-mark svg rect,
-.site-header.on-dark .hdr-mark svg path { fill: #FBF9F6; }
+.site-header.on-dark .hdr-mark { background-color: #FBF9F6; }
 .site-header.on-dark .hdr-cta { background: #FBF9F6; color: #0a0a0a; }
 .site-header.on-dark .hdr-cta:hover { color: #0a0a0a; }
 
@@ -690,5 +695,5 @@ h1 { margin:0; }
 @media (max-width: 640px) {
   .site-header { padding: 14px 20px; gap: 12px; }
   .hdr-cta { display: none; }          /* the page already ends in one */
-  .hdr-mark { width: 92px; }
+  .hdr-mark { width: 108px; }
 }
