@@ -68,15 +68,8 @@ const OUTCOMES = [
 export default function JuraanCaseStudy() {
   return (
     <main className="min-h-screen bg-base-black pt-14">
-      {/* Back link */}
-      <div className="mx-auto max-w-[1120px] px-8 pt-8">
-        <Link href="/work" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
-          <span>&lt;-</span> back to work
-        </Link>
-      </div>
-
       {/* Hero */}
-      <div className="relative mx-auto max-w-[1120px] px-8 pt-12 pb-20">
+      <div className="relative mx-auto max-w-[1120px] px-8 pt-4 pb-20">
         <div className="pointer-events-none absolute -inset-20 -z-0">
           <LineArt variant="spiral" color="#D4AF7A" strokeWidth={10} className="absolute -right-10 top-10 w-64 opacity-12 sm:w-80" delay={0.3} loop />
           <LineArt variant="star" color="#e4e4e7" strokeWidth={6} className="absolute left-0 bottom-10 w-14 opacity-15" delay={0.6} />

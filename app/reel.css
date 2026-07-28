@@ -634,3 +634,61 @@ h1 { margin:0; }
   .shell-inner,
   .shell.leaving .shell-inner { animation: none; opacity: 1; transform: none; }
 }
+
+/* ── site header ───────────────────────────────────
+   Only on the inner pages. The reel owns the mark on the home page, so a
+   second one in a bar would be two logos arguing. Sits outside the sliding
+   shell so it stays put while pages move under it. */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 8;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px;
+  padding: 18px clamp(20px, 6vw, 96px);
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.site-header a { text-decoration: none; color: inherit; }
+
+.hdr-back, .hdr-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-2);
+  transition: color .15s, transform .15s;
+}
+.hdr-back span[aria-hidden] { transition: transform .15s; }
+.hdr-back:hover { color: var(--ink); }
+.hdr-back:hover span[aria-hidden] { transform: translateX(-4px); }
+
+.hdr-mark { display: block; width: clamp(88px, 11vw, 132px); flex: 0 0 auto; }
+.hdr-mark svg { width: 100%; height: auto; display: block; }
+
+.site-header .hdr-cta {
+  background: var(--ink); color: var(--paper);
+  padding: 10px 18px; box-shadow: 3px 3px 0 0 var(--accent);
+}
+.site-header .hdr-cta:hover {
+  color: var(--paper);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 0 var(--accent);
+}
+
+/* the case studies keep v1's dark ground */
+.site-header.on-dark {
+  background: #0a0a0a;
+  border-bottom-color: rgba(255,255,255,.08);
+}
+.site-header.on-dark .hdr-back { color: rgba(255,255,255,.62); }
+.site-header.on-dark .hdr-back:hover { color: #fff; }
+.site-header.on-dark .hdr-mark svg rect,
+.site-header.on-dark .hdr-mark svg path { fill: #FBF9F6; }
+.site-header.on-dark .hdr-cta { background: #FBF9F6; color: #0a0a0a; }
+.site-header.on-dark .hdr-cta:hover { color: #0a0a0a; }
+
+/* clear the bar */
+.work-page, .contact-page { padding-top: clamp(112px, 14vh, 168px); }
+
+@media (max-width: 640px) {
+  .site-header { padding: 14px 20px; gap: 12px; }
+  .hdr-cta { display: none; }          /* the page already ends in one */
+  .hdr-mark { width: 92px; }
+}
