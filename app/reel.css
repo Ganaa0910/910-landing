@@ -588,3 +588,23 @@ h1 { margin:0; }
   .work-meta { gap: 6px 20px; }
   .work-item:hover .work-shot { transform: none; box-shadow: none; }
 }
+
+/* the globe's third life — the vertical project index on /work */
+.work-rail {
+  position: fixed;
+  right: clamp(8px, 2.4vw, 40px);
+  top: 0;
+  width: 74px;
+  height: 100dvh;
+  z-index: 5;
+  pointer-events: none;
+}
+/* the copy already sits well inside 1180px, so the rail only needs
+   clearing on narrower screens */
+@media (max-width: 1400px) {
+  .work-page { padding-right: clamp(84px, 9vw, 130px); }
+}
+@media (max-width: 760px) {
+  .work-rail { display: none; }
+  .work-page { padding-right: clamp(20px, 6vw, 96px); }
+}
