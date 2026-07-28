@@ -9,7 +9,13 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-export type ReelHandle = { destroy: () => void };
+export type ReelRoute = "reel" | "rail" | "hidden";
+export type ReelHandle = {
+  /* called on every navigation; the object morphs toward the new pose
+     instead of being torn down and rebuilt */
+  setRoute: (path: string) => void;
+  destroy: () => void;
+};
 
 type Pt = [number, number];
 type Lobe = { x: number; y: number; r: number };
@@ -24,7 +30,27 @@ type Cue = { v: number; on: boolean; from: number; target: number; t0: number; m
 type StarSpec = { name: string; cx: number; cy: number; side: "top" | "right" | "bottom" | "left" };
 
 
-export function createReel(root: HTMLElement): ReelHandle {
+export function createReel(canvas: HTMLCanvasElement): ReelHandle {
+
+  /* Per-route DOM. The canvas is permanent; everything it reads is not, so
+     refs are nullable and re-queried whenever the route changes. */
+  const q = <T extends Element>(sel: string) => document.querySelector<T>(sel);
+  const qa = <T extends Element>(sel: string) => [...document.querySelectorAll<T>(sel)];
+
+  let reel: HTMLElement | null = null;
+  let probe: HTMLElement | null = null;
+  let stepEls: HTMLElement[] = [];
+  let hereEl: HTMLElement | null = null;
+  let squares: SVGRectElement[] = [];
+
+  function syncRefs() {
+    reel     = q<HTMLElement>("[data-reel]");
+    probe    = q<HTMLElement>("[data-probe]");
+    hereEl   = q<HTMLElement>("[data-here]");
+    stepEls  = qa<HTMLElement>("[data-step]");
+    squares  = qa<SVGRectElement>("[data-sq]");
+  }
+
 
   /* ═══════════════════════════════════════════════════════════
      DOTTED GLOBE — orthographic dot-map, spin + scroll-driven pan
@@ -275,12 +301,11 @@ export function createReel(root: HTMLElement): ReelHandle {
   }
 
   /* ── scroll progress ──────────────────────────────── */
-  const reel = root;
-  const probe = root.querySelector<HTMLElement>("[data-probe]")!;
   const scrub = null;
 
   function masterProgress() {
     if (scrub !== null) return scrub;
+    if (!reel) return 0;                       // not on the reel route
     const total = reel.offsetHeight - window.innerHeight;
     if (total <= 0) return 0;
     return clamp01(-reel.getBoundingClientRect().top / total);
@@ -303,8 +328,6 @@ export function createReel(root: HTMLElement): ReelHandle {
      right, down, left. Corners get a small radius and the whole line is
      pushed off-true by smooth noise, so it reads hand-drawn rather than
      CAD-straight. The entire path fits one screen; nothing pans. */
-  const stepEls = [...root.querySelectorAll<HTMLElement>("[data-step]")];
-  const hereEl = root.querySelector<HTMLElement>("[data-here]")!;
 
   /* The Diamond of Virgo — a real asterism. Positions are the four stars'
      actual RA/Dec, projected flat and normalised into the viewport, so the
@@ -458,7 +481,12 @@ export function createReel(root: HTMLElement): ReelHandle {
   };
 
   /* ── draw ─────────────────────────────────────────── */
-  function draw(cv: HTMLCanvasElement, p: number, z: number, roll: number, time: number, out: number) {
+  function draw(
+    cv: HTMLCanvasElement, p: number, z: number, roll: number, time: number, out: number,
+    /* the route morph flies the object between poses; when set, it wins over
+       whatever the scroll would have chosen */
+    poseOverride?: { cx: number; cy: number; r: number },
+  ) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const W = cv.clientWidth, H = cv.clientHeight;
     if (!W || !H) return;
@@ -476,8 +504,8 @@ export function createReel(root: HTMLElement): ReelHandle {
     /* S1 pose: a dome — sphere centre pinned below the viewport's bottom
        edge, so only the northern hemisphere is on screen.
        S2 pose: the whole sphere, off to one side of the copy. */
-    const D = probe.clientWidth || W;
-    const dropPx = probe.clientHeight || 0;
+    const D = (probe && probe.clientWidth) || W;
+    const dropPx = (probe && probe.clientHeight) || 0;
 
     const R1 = D * 0.46,           cx1 = W / 2,            cy1 = H + dropPx;
     const R2 = narrow ? W * 0.36 : Math.min(W, H) * 0.34;
@@ -508,6 +536,7 @@ export function createReel(root: HTMLElement): ReelHandle {
     /* S4: the bearing opens back into the planet, centres, then the camera
        dives into it — R runs away quadratically so the last stretch is a
        surface, not a globe. */
+    const _pose  = poseOverride;
     const reform = clamp01(eo / 0.30);
     const dive   = clamp01((eo - 0.26) / 0.52);
     const sunA   = clamp01((eo - 0.54) / 0.30);
@@ -517,6 +546,13 @@ export function createReel(root: HTMLElement): ReelHandle {
       cx = lerp(cx, W * 0.5, reform);
       cy = lerp(cy, H * 0.5, reform);
     }
+
+    /* route morph wins — the object is in transit between pages */
+    if (_pose) { cx = _pose.cx; cy = _pose.cy; R = _pose.r; }
+
+    /* the pose is published so a route change can pick the object up
+       exactly where it is rather than guessing */
+    lastPose = { cx, cy, r: R };
 
     /* the sky comes up with the dark ground, behind everything else, and
        smears radially away from the globe while the warp is running */
@@ -907,17 +943,20 @@ export function createReel(root: HTMLElement): ReelHandle {
   const ARC_CX = 70, ARC_CY = 72;
 
   function layoutArc() {
-    const text = root.querySelector<SVGTextElement>("[data-arc-text]")!;
-    root.querySelector<SVGPathElement>("[data-arc-path]")!.setAttribute(
+    const text = q<SVGTextElement>("[data-arc-text]");
+    const path = q<SVGPathElement>("[data-arc-path]");
+    const measure = q<SVGTextElement>("[data-arc-measure]");
+    if (!text || !path || !measure) return;    // no motto on this route
+    path.setAttribute(
       "d", `M ${ARC_CX - ARC.r} ${ARC_CY} A ${ARC.r} ${ARC.r} 0 0 1 ${ARC_CX + ARC.r} ${ARC_CY}`
     );
 
     /* Auto-fit. The arc's widest point is its chord, not its radius, so the
        font shrinks until BOTH the chord fits the viewport and the text stops
        wrapping past the horizon. One viewBox unit = D/100 css px. */
-    const unitPx = (probe.clientWidth || 100) / 100;
+    const unitPx = ((probe && probe.clientWidth) || 100) / 100;
     const availHalf = (window.innerWidth / 2 - 16) / unitPx;
-    const len1 = root.querySelector<SVGTextElement>("[data-arc-measure]")!.getComputedTextLength() || 19.2;
+    const len1 = measure.getComputedTextLength() || 19.2;
 
     let f = ARC.size;
     for (let i = 0; i < 60; i++) {
@@ -931,7 +970,6 @@ export function createReel(root: HTMLElement): ReelHandle {
   }
 
   /* ── intro sequence ───────────────────────────────── */
-  const squares = [...root.querySelectorAll<SVGRectElement>("[data-sq]")];
 
   function shuffleSquares() {
     const order = squares.map((_, i) => i);
@@ -950,7 +988,8 @@ export function createReel(root: HTMLElement): ReelHandle {
   /* the mark starts centred in the viewport and settles up to --logo-y,
      so the intro shift is whatever distance separates the two */
   function computeLogoShift() {
-    const h = root.querySelector<HTMLElement>("[data-viewport]")!.clientHeight || window.innerHeight;
+    const vp = q<HTMLElement>("[data-viewport]");
+    const h = (vp && vp.clientHeight) || window.innerHeight;
     const logoY = parseFloat(getComputedStyle(document.documentElement)
       .getPropertyValue("--logo-y")) || 30;
     document.documentElement.style.setProperty("--logo-shift", `${((50 - logoY) / 100) * h}px`);
@@ -972,7 +1011,8 @@ export function createReel(root: HTMLElement): ReelHandle {
   }
 
   function playSequence() {
-    const vp = root.querySelector<HTMLElement>("[data-viewport]")!;
+    const vp = q<HTMLElement>("[data-viewport]");
+    if (!vp) return;                           // no intro off the reel route
     computeLogoShift();
 
     if (introAlreadyPlayed()) {
@@ -1039,8 +1079,84 @@ export function createReel(root: HTMLElement): ReelHandle {
     if (k >= 1) { cue.v = cue.target; cue.on = false; unlockScroll(); }
   }
 
+  /* ── routes ─────────────────────────────────────────
+     The canvas lives in the root layout, so it survives navigation. Each
+     route only chooses a pose; the object eases from wherever it currently
+     is to wherever the new route wants it. Nothing is torn down. */
+  let mode: ReelRoute = "hidden";
+  let morphFrom: { cx: number; cy: number; r: number } | null = null;
+  let morphT0 = 0;
+  /* the clock is stamped by the frame loop, not by setRoute — rAF
+     timestamps and performance.now() are not guaranteed to share an origin,
+     and mixing them gave a negative elapsed time that pinned the morph at
+     its first frame forever */
+  let morphPending = false;
+  const MORPH_MS = 900;
+  let lastPose = { cx: 0, cy: 0, r: 0 };
+
+  const RAIL_BALL_R = 13;
+
+  /* where the work index wants the object: a vertical track down the right */
+  function railPose(W: number, H: number) {
+    const items = qa<HTMLElement>(".work-item");
+    const x = W - Math.min(56, Math.max(26, W * 0.035));
+    const y0 = H * 0.20, y1 = H * 0.80;
+    if (items.length < 2) return { cx: x, cy: (y0 + y1) / 2, r: RAIL_BALL_R, x, y0, y1, p: 0 };
+    const first = items[0].getBoundingClientRect();
+    const last = items[items.length - 1].getBoundingClientRect();
+    const span = last.top - first.top;
+    const p = span > 0 ? clamp01((H * 0.42 - first.top) / span) : 0;
+    return { cx: x, cy: lerp(y0, y1, p), r: RAIL_BALL_R, x, y0, y1, p };
+  }
+
+  function drawRail(ctx: CanvasRenderingContext2D, W: number, H: number, a: number) {
+    const rp = railPose(W, H);
+    const n = qa<HTMLElement>(".work-item").length;
+
+    /* the track, in the same stamped squares as the constellation */
+    ctx.fillStyle = P.ink;
+    for (let i = 0, y = rp.y0; y <= rp.y1; y += 9, i++) {
+      const passed = y <= rp.cy;
+      const jx = (h1(i * 1.7) - 0.5) * 1.6;
+      const sz = (passed ? 2.6 : 2.1) * (0.85 + h1(i * 5.1) * 0.3);
+      ctx.globalAlpha = a * (passed ? 0.6 : 0.16);
+      ctx.save();
+      ctx.translate(rp.x + jx, y);
+      ctx.rotate((h1(i * 7.9) - 0.5) * 0.5);
+      ctx.fillRect(-sz / 2, -sz / 2, sz, sz);
+      ctx.restore();
+    }
+
+    /* one checkpoint per project, lighting as it is reached */
+    for (let i = 0; i < n; i++) {
+      const f = n > 1 ? i / (n - 1) : 0.5;
+      const y = lerp(rp.y0, rp.y1, f);
+      const reached = rp.p >= f - 0.02;
+      if (reached && starReady) {
+        const g = 26;
+        ctx.globalAlpha = a;
+        ctx.drawImage(starBitmap(g), rp.x - g / 2, y - g / 2, g, g);
+      } else {
+        ctx.globalAlpha = a * 0.5;
+        ctx.strokeStyle = P.ink;
+        ctx.lineWidth = 1.5;
+        ctx.save();
+        ctx.translate(rp.x, y);
+        ctx.rotate((h1(i * 11.3) - 0.5) * 0.2);
+        ctx.strokeRect(-4.5, -4.5, 9, 9);
+        ctx.restore();
+      }
+      ctx.globalAlpha = a * (reached ? 0.85 : 0.32);
+      ctx.fillStyle = reached ? P.accent : P.ink;
+      ctx.font = "600 9px ui-monospace, 'IBM Plex Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(i + 1).padStart(2, "0"), rp.x, y + 20);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   /* ── frame loop ───────────────────────────────────── */
-  const canvas = root.querySelector<HTMLCanvasElement>("[data-globe]")!;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let inView = true, last = 0, raf = 0, dirty = true;
@@ -1052,8 +1168,66 @@ export function createReel(root: HTMLElement): ReelHandle {
 
   function frame(now: number) {
     raf = requestAnimationFrame(frame);
+
+    /* The canvas deliberately survives navigation, which puts it outside
+       React's lifecycle. Relying on a usePathname effect to tell it where
+       it is proved unreliable under StrictMode's mount/unmount/mount, so
+       it reads the URL itself. One string compare a frame. */
+    if (location.pathname !== currentPath) setRoute(location.pathname);
     const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
     last = now;
+
+    if (morphPending) { morphT0 = now; morphPending = false; }
+
+    /* how far through a route change we are; 1 means settled */
+    const morph = morphFrom
+      ? ease(clamp01((now - morphT0) / MORPH_MS))
+      : 1;
+    if (morphFrom && morph >= 1) morphFrom = null;
+
+    if (mode === "hidden") {
+      /* case studies and /contact: the object is off stage. Clear once,
+         then stop drawing entirely rather than looping over a blank frame. */
+      if (dirty) {
+        const c = canvas.getContext("2d");
+        if (c) c.clearRect(0, 0, canvas.width, canvas.height);
+        dirty = false;
+      }
+      return;
+    }
+
+    if (mode === "rail") {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = canvas.clientWidth, H = canvas.clientHeight;
+      if (!W || !H) return;
+      if (canvas.width !== W * dpr || canvas.height !== H * dpr) {
+        canvas.width = W * dpr; canvas.height = H * dpr;
+      }
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+
+      const target = railPose(W, H);
+      const pose = morphFrom
+        ? { cx: lerp(morphFrom.cx, target.cx, morph),
+            cy: lerp(morphFrom.cy, target.cy, morph),
+            r:  lerp(morphFrom.r,  target.r,  morph) }
+        : target;
+      lastPose = { ...pose };
+
+      /* the track only arrives once the object has nearly landed on it */
+      drawRail(ctx, W, H, morph);
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = P.ink;
+      ctx.beginPath(); ctx.arc(pose.cx, pose.cy, pose.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = P.paper;
+      ctx.beginPath();
+      ctx.arc(pose.cx, pose.cy, Math.max(1.5, pose.r * 0.28), 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
 
     /* while a cue is playing the page is pinned — hold the scroll position
        so masterProgress can't drift under us */
@@ -1084,13 +1258,13 @@ export function createReel(root: HTMLElement): ReelHandle {
       curRoll = roll;
       curOut  = out;
 
-      const root = document.documentElement.style;
-      root.setProperty("--p",    curP.toFixed(4));
-      root.setProperty("--z",    curZ.toFixed(4));
-      root.setProperty("--roll", curRoll.toFixed(4));
-      root.setProperty("--out",  curOut.toFixed(4));
-      reel.classList.toggle("s4-live", curOut > 0.5);
-      reel.classList.toggle("s2-live", curP > 0.6 && curZ < 0.2);
+      const css = document.documentElement.style;
+      css.setProperty("--p",    curP.toFixed(4));
+      css.setProperty("--z",    curZ.toFixed(4));
+      css.setProperty("--roll", curRoll.toFixed(4));
+      css.setProperty("--out",  curOut.toFixed(4));
+      reel?.classList.toggle("s4-live", curOut > 0.5);
+      reel?.classList.toggle("s2-live", curP > 0.6 && curZ < 0.2);
 
       const W = canvas.clientWidth, H = canvas.clientHeight;
       if (W && H) {
@@ -1131,12 +1305,14 @@ export function createReel(root: HTMLElement): ReelHandle {
         /* park the tag on the side facing the middle of the diamond — the
            outside edge is where the step labels live */
         const inward = bx > W * 0.5;
-        hereEl.classList.toggle("flip", inward);
-        hereEl.style.opacity = String(showHere);
-        hereEl.style.left = `${bx + (inward ? -1 : 1) * (BALL_R + 34)}px`;
-        hereEl.style.top  = `${by - 26}px`;
-        hereEl.style.transform =
-          `translateY(-50%) ${inward ? "translateX(-100%)" : ""} translateX(${((1 - showHere) * (inward ? 8 : -8)).toFixed(1)}px)`;
+        if (hereEl) {
+          hereEl.classList.toggle("flip", inward);
+          hereEl.style.opacity = String(showHere);
+          hereEl.style.left = `${bx + (inward ? -1 : 1) * (BALL_R + 34)}px`;
+          hereEl.style.top  = `${by - 26}px`;
+          hereEl.style.transform =
+            `translateY(-50%) ${inward ? "translateX(-100%)" : ""} translateX(${((1 - showHere) * (inward ? 8 : -8)).toFixed(1)}px)`;
+        }
       }
 
       lastT = t;
@@ -1152,36 +1328,95 @@ export function createReel(root: HTMLElement): ReelHandle {
     /* the sky breathes, so once it is up the canvas is never idle */
     if (curZ > 0.2 && !reduced.matches) dirty = true;
 
-    if (dirty) { draw(canvas, curP, curZ, curRoll, now / 1000, curOut); dirty = false; }
+    /* arriving back on the reel, fly the object in from wherever it was
+       rather than snapping it to whatever the scroll position implies */
+    let poseOverride: { cx: number; cy: number; r: number } | undefined;
+    if (morphFrom) {
+      poseOverride = { ...morphFrom };   // replaced below once draw reports the target
+      dirty = true;
+    }
+
+    if (dirty || morphFrom) {
+      if (morphFrom) {
+        /* draw once to learn where the scroll wants the object, then draw
+           again at the blended pose — cheap, and avoids duplicating the
+           whole pose calculation out here */
+        draw(canvas, curP, curZ, curRoll, now / 1000, curOut);
+        const target = lastPose;
+        poseOverride = {
+          cx: lerp(morphFrom.cx, target.cx, morph),
+          cy: lerp(morphFrom.cy, target.cy, morph),
+          r:  lerp(morphFrom.r,  target.r,  morph),
+        };
+      }
+      draw(canvas, curP, curZ, curRoll, now / 1000, curOut, poseOverride);
+      dirty = false;
+    }
   }
 
   function start() { if (!raf && inView) { last = 0; raf = requestAnimationFrame(frame); } }
   function stop()  { cancelAnimationFrame(raf); raf = 0; }
 
-  /* don't burn CPU when the reel is off screen or the tab is hidden */
+  /* the canvas is always mounted, so it is what we watch — the reel root
+     comes and goes with the route */
   const io = new IntersectionObserver(es => {
     inView = es.some(e => e.isIntersecting);
     inView ? start() : stop();
   }, { threshold: 0 });
-  io.observe(reel);
+  io.observe(canvas);
 
   const onVis = () => (document.hidden ? stop() : start());
   document.addEventListener("visibilitychange", onVis);
   const ro = new ResizeObserver(() => { requestDraw(); layoutArc(); layoutSteps(); computeLogoShift(); lastT = -1; });
   ro.observe(canvas);
 
-  layoutArc();
-  layoutSteps();
-  computeLogoShift();
-  start();
-  playSequence();
+  /* ── route switching ─────────────────────────────── */
+  function routeFor(path: string): ReelRoute {
+    if (path === "/") return "reel";
+    if (path === "/work") return "rail";
+    return "hidden";                     // case studies, contact
+  }
+
+  let currentPath = "";
+  function setRoute(path: string) {
+    currentPath = path;
+    const next = routeFor(path);
+    syncRefs();
+
+    if (next !== mode) {
+      /* pick the object up exactly where it is, then fly it to the new pose */
+      morphFrom = { ...lastPose };
+      morphPending = true;
+      mode = next;
+    }
+
+    if (mode === "reel") {
+      layoutArc();
+      layoutSteps();
+      computeLogoShift();
+      playSequence();
+      lastT = -1;
+    }
+    requestDraw();
+    start();
+  }
+
+  const ro2 = new ResizeObserver(() => requestDraw());
+  ro2.observe(document.documentElement);
+
+  /* boot onto whatever route we woke up on, then the frame loop keeps it
+     in step from there */
+  setRoute(location.pathname);
 
   /* re-measure once the webfont lands — metrics change under the fallback */
   if (document.fonts) document.fonts.ready.then(layoutArc);
+
   return {
+    setRoute,
     destroy() {
       stop();
       io.disconnect();
+      ro2.disconnect();
       ro.disconnect();
       document.removeEventListener("visibilitychange", onVis);
       removeEventListener("wheel", eat);

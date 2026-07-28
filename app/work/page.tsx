@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PROJECTS } from "@/lib/projects";
-import { WorkRail } from "@/components/reel/work-rail";
 
 export const metadata: Metadata = {
   title: "Work — Selected Projects",
@@ -18,8 +17,6 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <main className="work-page">
-      <WorkRail count={PROJECTS.length} />
-
       <div className="work-wrap">
         <p className="eyebrow">Work</p>
         <h1>

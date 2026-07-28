@@ -1,8 +1,4 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { createReel } from "@/lib/reel/engine";
 import { BrandMark } from "./brand-mark";
 
 const STEPS = [
@@ -12,17 +8,11 @@ const STEPS = [
   { n: "04", title: "Refine", body: "Obsess over the details until it feels right.", star: "Cor Caroli · α² Can. Ven.", side: "top" },
 ] as const;
 
+/* The reel's DOM. The canvas it draws on lives in the root layout so it can
+   survive navigation — see components/reel/reel-canvas.tsx. */
 export function Reel() {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!rootRef.current) return;
-    const reel = createReel(rootRef.current);
-    return () => reel.destroy();
-  }, []);
-
   return (
-    <div className="reel" ref={rootRef}>
+    <div className="reel" data-reel="">
       <div className="viewport" data-viewport="">
         <div className="probe" data-probe="" />
 
@@ -56,11 +46,6 @@ export function Reel() {
             <br />
             Centre RA 13<sup>h</sup>05<sup>m</sup> · Dec +15°43′ · epoch J2000
           </span>
-        </div>
-
-        {/* the globe persists across every section — one canvas, never remounted */}
-        <div className="globe-layer">
-          <canvas data-globe="" />
         </div>
 
         {/* S1 backdrop mark */}

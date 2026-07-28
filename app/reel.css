@@ -81,8 +81,6 @@
 /* the globe canvas spans the whole viewport; its centre and radius are
    driven in JS from scroll progress, so the dots never get scaled or
    stretched by a CSS transform — they're re-sampled at the new size */
-.globe-layer { position:absolute; inset:0; z-index:3; opacity:0; }
-.globe-layer canvas { width:100%; height:100%; display:block; }
 
 /* reads --D and --drop back out of CSS as pixels */
 .probe { position:absolute; visibility:hidden; pointer-events:none;
@@ -262,7 +260,7 @@ h1 { margin:0; }
   animation: wordIn calc(800ms * var(--t-scale))
              cubic-bezier(.2,.9,.3,1) calc(var(--t-studio) * var(--t-scale)) both;
 }
-.seq .globe-layer {
+.seq .reel-canvas {
   animation: globeIn calc(1800ms * var(--t-scale))
              cubic-bezier(.16,1,.3,1) calc(var(--t-globe) * var(--t-scale)) both;
 }
@@ -287,16 +285,16 @@ h1 { margin:0; }
 .settled .brand { transform: translate(-50%, -50%); }
 .settled .brand .sq,
 .settled .brand .word,
-.settled .globe-layer { opacity: 1; }
+.settled .reel-canvas { opacity: 1; }
 .settled .motto-flat > span { opacity: 1; transform: none; }
 
 /* scroll-driven transition still works; only the autoplay intro is dropped */
 @media (prefers-reduced-motion: reduce) {
   .seq .brand, .seq .brand .sq, .seq .brand .word,
-  .seq .globe-layer, .seq .arc { animation: none; }
+  .seq .arc { animation: none; }
   .brand { transform: translate(-50%,-50%); }
   .brand .sq, .brand .word { opacity:1; }
-  .globe-layer { opacity:1; }
+  .reel-canvas { opacity:1; }
   .arc { -webkit-mask-position:0% 0; mask-position:0% 0; }
 }
 
@@ -590,13 +588,13 @@ h1 { margin:0; }
 }
 
 /* the globe's third life — the vertical project index on /work */
-.work-rail {
+/* the shared object — one canvas over every route, never remounted */
+.reel-canvas {
   position: fixed;
-  right: clamp(8px, 2.4vw, 40px);
-  top: 0;
-  width: 74px;
+  inset: 0;
+  width: 100vw;
   height: 100dvh;
-  z-index: 5;
+  z-index: 3;
   pointer-events: none;
 }
 /* the copy already sits well inside 1180px, so the rail only needs
