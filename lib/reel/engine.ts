@@ -550,6 +550,11 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     /* route morph wins — the object is in transit between pages */
     if (_pose) { cx = _pose.cx; cy = _pose.cy; R = _pose.r; }
 
+    /* Belt and braces. Every sampling loop below steps by a fraction of R,
+       so a zero or negative radius is an infinite loop and a locked tab —
+       not a blank frame. Never let it through. */
+    if (!(R > 0.5)) R = 0.5;
+
     /* the pose is published so a route change can pick the object up
        exactly where it is rather than guessing */
     lastPose = { cx, cy, r: R };
@@ -684,7 +689,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
        the loop is clipped to the canvas so the hidden hemisphere in the
        S1 dome pose is never sampled at all */
     if (detail > 0.01) {
-      const gstep = (2 * R) / P.dotsAcross;
+      const gstep = Math.max(0.5, (2 * R) / P.dotsAcross);
       const rDot = Math.max(0.9, gstep * P.dotScale);
       const gy0 = Math.max(cy - R, -gstep), gy1 = Math.min(cy + R, H + gstep);
       const gx0 = Math.max(cx - R, -gstep), gx1 = Math.min(cx + R, W + gstep);
@@ -1384,8 +1389,10 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     syncRefs();
 
     if (next !== mode) {
-      /* pick the object up exactly where it is, then fly it to the new pose */
-      morphFrom = { ...lastPose };
+      /* Pick the object up exactly where it is — but only if it has ever
+         actually been drawn. On boot lastPose is still {0,0,0}, and
+         morphing from a zero radius fed draw() an R of 0. */
+      morphFrom = lastPose.r > 0.5 ? { ...lastPose } : null;
       morphPending = true;
       mode = next;
     }
