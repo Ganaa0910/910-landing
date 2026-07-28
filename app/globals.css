@@ -82,8 +82,12 @@
 @layer base {
   html,
   body {
-    background-color: #0a0a0a;
-    color: #e4e4e7;
+    /* Paper, not v1 black. Between pages the shell is momentarily empty and
+       you look straight through to the body — black there read as a hole
+       punched in the transition. The case studies still paint their own
+       dark ground on <main>. */
+    background-color: #FBF9F6;
+    color: #2B221F;
     min-height: 100vh;
     min-height: 100dvh;
     margin: 0;

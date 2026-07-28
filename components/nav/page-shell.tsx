@@ -25,7 +25,7 @@ import { usePathname, useRouter } from "next/navigation";
  * Transitions API: view transitions snapshot the document as an image, which
  * would freeze the globe mid-roll — the one thing that has to stay live. */
 
-const EXIT_MS = 380;
+const EXIT_MS = 300;
 
 const NavContext = createContext<(href: string) => void>(() => {});
 
@@ -43,6 +43,11 @@ export function PageShell({ children }: { children: ReactNode }) {
     (href: string) => {
       if (href === pathname) return;
       setLeaving(true);
+      /* Tell the object where it is going now, rather than letting it find
+         out when the URL changes. The sequence is: page slides out WHILE the
+         globe shrinks, then the next page slides in — if the morph waited
+         for the route it would start late and land after the arrival. */
+      window.dispatchEvent(new CustomEvent("reel:route", { detail: href }));
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => router.push(href), EXIT_MS);
     },

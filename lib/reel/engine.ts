@@ -1063,6 +1063,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       removeEventListener("wheel", eat);
       removeEventListener("touchmove", eat);
       removeEventListener("keydown", eatKeys);
+      removeEventListener("reel:route", onRouteIntent);
     }
   }
 
@@ -1444,6 +1445,14 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   /* boot onto whatever route we woke up on, then the frame loop keeps it
      in step from there */
   setRoute(location.pathname);
+
+  /* the shell fires this the moment a slide-out begins, so the object is
+     already travelling while the old page is still leaving */
+  const onRouteIntent = (e: Event) => {
+    const path = (e as CustomEvent<string>).detail;
+    if (typeof path === "string") setRoute(path);
+  };
+  addEventListener("reel:route", onRouteIntent);
 
   /* re-measure once the webfont lands — metrics change under the fallback */
   if (document.fonts) document.fonts.ready.then(layoutArc);
