@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
      existing search equity lands somewhere. /work is a real page again. */
   redirects: async () => [
     { source: "/studio", destination: "/", permanent: true },
+    { source: "/works", destination: "/work", permanent: true },
   ],
   images: {
     formats: ["image/avif", "image/webp"],

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { createReel } from "@/lib/reel/engine";
 import { BrandMark } from "./brand-mark";
 
@@ -120,9 +121,9 @@ export function Reel() {
               <b>Global</b>remote-first
             </div>
           </div>
-          <a className="cta" href="/work">
+          <Link className="cta" href="/work">
             View works →
-          </a>
+          </Link>
         </div>
 
         {/* S4 */}
@@ -142,9 +143,9 @@ export function Reel() {
                 <br />
                 Accepting projects — Q3 2026
               </p>
-              <a className="cta" href="/contact">
+              <Link className="cta" href="/contact">
                 Start a project →
-              </a>
+              </Link>
             </div>
           </div>
         </div>

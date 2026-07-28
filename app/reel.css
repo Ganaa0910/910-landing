@@ -281,6 +281,15 @@ h1 { margin:0; }
              cubic-bezier(.33,1,.68,1) calc(var(--t-arc) * var(--t-scale)) both;
 }
 
+/* Coming back from /work or /contact remounts the reel, which would replay
+   the whole 6.8s intro. Once per session is enough — after that the mark,
+   globe and motto are simply already there. */
+.settled .brand { transform: translate(-50%, -50%); }
+.settled .brand .sq,
+.settled .brand .word,
+.settled .globe-layer { opacity: 1; }
+.settled .motto-flat > span { opacity: 1; transform: none; }
+
 /* scroll-driven transition still works; only the autoplay intro is dropped */
 @media (prefers-reduced-motion: reduce) {
   .seq .brand, .seq .brand .sq, .seq .brand .word,

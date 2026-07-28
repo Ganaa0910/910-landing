@@ -303,7 +303,6 @@ export function createReel(root: HTMLElement): ReelHandle {
      right, down, left. Corners get a small radius and the whole line is
      pushed off-true by smooth noise, so it reads hand-drawn rather than
      CAD-straight. The entire path fits one screen; nothing pans. */
-  const railTrack = root.querySelector<HTMLElement>("[data-rail-track]")!;
   const stepEls = [...root.querySelectorAll<HTMLElement>("[data-step]")];
   const hereEl = root.querySelector<HTMLElement>("[data-here]")!;
 
@@ -957,13 +956,36 @@ export function createReel(root: HTMLElement): ReelHandle {
     document.documentElement.style.setProperty("--logo-shift", `${((50 - logoY) / 100) * h}px`);
   }
 
+  /* The intro is a first-impression, not a toll gate. Navigating to /work
+     and back remounts this component, which would replay all 6.8s of it —
+     so it runs once per session and lands settled after that. */
+  const INTRO_KEY = "910-intro-played";
+  function introAlreadyPlayed(): boolean {
+    try {
+      return sessionStorage.getItem(INTRO_KEY) === "1";
+    } catch {
+      return false;   // private mode / blocked storage: just play it
+    }
+  }
+  function markIntroPlayed() {
+    try { sessionStorage.setItem(INTRO_KEY, "1"); } catch { /* nothing to do */ }
+  }
+
   function playSequence() {
     const vp = root.querySelector<HTMLElement>("[data-viewport]")!;
-    vp.classList.remove("seq");
-    void vp.offsetWidth;            // force reflow so the animations restart
     computeLogoShift();
+
+    if (introAlreadyPlayed()) {
+      vp.classList.remove("seq");
+      vp.classList.add("settled");
+      return;
+    }
+
+    vp.classList.remove("seq", "settled");
+    void vp.offsetWidth;            // force reflow so the animations restart
     shuffleSquares();
     vp.classList.add("seq");
+    markIntroPlayed();
   }
 
   /* ── the two cues ───────────────────────────────────
