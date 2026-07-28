@@ -65,8 +65,8 @@ export default function CMMCaseStudy() {
     <main className="min-h-screen bg-base-black pt-14">
       {/* Back link */}
       <div className="mx-auto max-w-[1120px] px-8 pt-8">
-        <Link href="/" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
-          <span>&lt;-</span> back to home
+        <Link href="/work" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
+          <span>&lt;-</span> back to work
         </Link>
       </div>
 
@@ -287,8 +287,8 @@ export default function CMMCaseStudy() {
 
       {/* Back link bottom */}
       <div className="mx-auto max-w-[1120px] px-8 pb-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
-          <span>&lt;-</span> back to home
+        <Link href="/work" className="inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-accent">
+          <span>&lt;-</span> back to work
         </Link>
       </div>
     </main>

@@ -120,7 +120,7 @@ export function Reel() {
               <b>Global</b>remote-first
             </div>
           </div>
-          <a className="cta" href="/contact">
+          <a className="cta" href="/work">
             View works →
           </a>
         </div>
