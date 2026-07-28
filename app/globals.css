@@ -126,28 +126,18 @@
   }
 }
 
-/* === SCROLLBAR: thin, teal, square === */
+/* === SCROLLBAR: hidden ===
+   The page is a scroll experience; the teal v1 bar sat on top of it and
+   read as chrome from another site. Scrolling itself is untouched. */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #14b8a6 #0a0a0a;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  background: #0a0a0a;
-}
-
-*::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #14b8a6;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: #2dd4bf;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /* === UTILITIES === */

@@ -43,10 +43,10 @@ export function BrandMark({ className }: { className?: string }) {
     <svg className={className} viewBox="0 0 439 140" fill="none" aria-hidden="true">
       <g fill="#2B221F">
         {CELLS.map(([x, y]) => (
-          <rect key={`${x}-${y}`} data-sq="" x={x} y={y} width={21} height={21} />
+          <rect key={`${x}-${y}`} className="sq" data-sq="" x={x} y={y} width={21} height={21} />
         ))}
       </g>
-      <path data-word="" fill="#2B221F" d={WORDMARK} />
+      <path className="word" data-word="" fill="#2B221F" d={WORDMARK} />
     </svg>
   );
 }

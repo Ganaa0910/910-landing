@@ -44,7 +44,7 @@
   --t-studio: 1250ms;
   --t-settle: 2600ms;
   --t-globe:  3900ms;
-  --t-arc:    5200ms;
+  --t-arc:    4500ms;
 
   /* scroll phases, written by JS every frame.
      --p  S1 → S2      --z  globe → ball + paper → ink     --roll  the descent */
@@ -270,13 +270,13 @@ h1 { margin:0; }
    is still centre-stage */
 .seq .motto-flat > span {
   display:block;
-  animation: mottoIn calc(1500ms * var(--t-scale))
+  animation: mottoIn calc(850ms * var(--t-scale))
              cubic-bezier(.33,1,.68,1) calc(var(--t-arc) * var(--t-scale)) both;
 }
 .motto-flat > span { display:block; }
 
 .seq .arc {
-  animation: arcReveal calc(1600ms * var(--t-scale))
+  animation: arcReveal calc(900ms * var(--t-scale))
              cubic-bezier(.33,1,.68,1) calc(var(--t-arc) * var(--t-scale)) both;
 }
 
