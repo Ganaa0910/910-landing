@@ -32,6 +32,10 @@ const EXIT_MS = 300;
    the intro and short of the S3 collapse at 0.34. */
 const REEL_S2 = 0.26;
 
+/* Long enough for a smooth scroll to the top to settle before the page
+   starts leaving. */
+const TO_TOP_MS = 420;
+
 type NavContextValue = {
   navigate: (href: string) => void;
   leaving: boolean;
