@@ -10,6 +10,7 @@ import {
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { ReelCanvas } from "@/components/reel/reel-canvas";
+import { PageShell } from "@/components/nav/page-shell";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import "./reel.css";
@@ -249,7 +250,7 @@ export default function RootLayout({
         className={`${ibmPlexMono.variable} ${syne.variable} ${jetbrainsMono.variable} ${bebas.variable} ${anton.variable} ${blackOps.variable} ${christmasPipow.variable} antialiased`}
       >
         <ReelCanvas />
-        {children}
+        <PageShell>{children}</PageShell>
         <Analytics />
         <SpeedInsights />
       </body>

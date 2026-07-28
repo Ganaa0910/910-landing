@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/components/nav/page-shell";
 import { PROJECTS } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function WorkPage() {
         </p>
 
         {PROJECTS.map((project, i) => (
-          <Link key={project.slug} href={`/work/${project.slug}`} className="work-item">
+          <TransitionLink key={project.slug} href={`/work/${project.slug}`} className="work-item">
             <div className="work-head">
               <span className="work-num">{String(i + 1).padStart(2, "0")}</span>
               <h2>{project.title}</h2>
@@ -61,14 +61,14 @@ export default function WorkPage() {
             <span className="work-go">
               Read the case study <span aria-hidden="true">→</span>
             </span>
-          </Link>
+          </TransitionLink>
         ))}
 
         <div className="work-tail">
           <p>More coming — we take on a handful of projects a year.</p>
-          <Link className="cta" href="/contact">
+          <TransitionLink className="cta" href="/contact">
             Start a project →
-          </Link>
+          </TransitionLink>
         </div>
       </div>
     </main>

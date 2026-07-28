@@ -1096,7 +1096,11 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
      and mixing them gave a negative elapsed time that pinned the morph at
      its first frame forever */
   let morphPending = false;
-  const MORPH_MS = 900;
+  /* the reel's scroll state at the moment of departure — the globe carries
+     on being drawn from this while it rolls across to the rail */
+  let frozen = { p: 0, z: 0, roll: 0, out: 0 };
+  let rollSpin = 0;   // extra rotation, driven by distance travelled
+  const MORPH_MS = 1050;
   let lastPose = { cx: 0, cy: 0, r: 0 };
 
   const RAIL_BALL_R = 13;
@@ -1219,18 +1223,42 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
             cy: lerp(morphFrom.cy, target.cy, morph),
             r:  lerp(morphFrom.r,  target.r,  morph) }
         : target;
+
+      /* It rolls. The extra rotation is the distance travelled divided by
+         the circumference, so the spin matches the ground it covers rather
+         than being an arbitrary spin rate. */
+      const dx = pose.cx - lastPose.cx;
+      if (morphFrom && Math.abs(dx) < W) {
+        rollSpin += (dx / Math.max(1, 2 * Math.PI * pose.r)) * 360;
+      }
       lastPose = { ...pose };
 
-      /* the track only arrives once the object has nearly landed on it */
-      drawRail(ctx, W, H, morph);
+      /* while it is still recognisably a globe, keep drawing it as one —
+         un-panning from Ulaanbaatar as it goes so the rotation reads */
+      const asGlobe = clamp01(1 - morph / 0.62);
+      if (morphFrom && asGlobe > 0.01) {
+        spinAngle = ((spinAngle + rollSpin * 0.12 + 180) % 360 + 360) % 360 - 180;
+        rollSpin = 0;
+        draw(canvas, frozen.p * asGlobe, frozen.z, frozen.roll, now / 1000, frozen.out, pose);
+      } else {
+        ctx.clearRect(0, 0, W, H);
+      }
 
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = P.ink;
-      ctx.beginPath(); ctx.arc(pose.cx, pose.cy, pose.r, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = P.paper;
-      ctx.beginPath();
-      ctx.arc(pose.cx, pose.cy, Math.max(1.5, pose.r * 0.28), 0, Math.PI * 2);
-      ctx.fill();
+      /* the track arrives as the object lands on it */
+      drawRail(ctx, W, H, clamp01((morph - 0.35) / 0.45));
+
+      /* and the bearing fades up underneath as the globe fades out */
+      const asBall = 1 - asGlobe;
+      if (asBall > 0.01) {
+        ctx.globalAlpha = asBall;
+        ctx.fillStyle = P.ink;
+        ctx.beginPath(); ctx.arc(pose.cx, pose.cy, pose.r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = P.paper;
+        ctx.beginPath();
+        ctx.arc(pose.cx, pose.cy, Math.max(1.5, pose.r * 0.28), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
       return;
     }
 
@@ -1394,6 +1422,8 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
          morphing from a zero radius fed draw() an R of 0. */
       morphFrom = lastPose.r > 0.5 ? { ...lastPose } : null;
       morphPending = true;
+      frozen = { p: curP, z: curZ, roll: curRoll, out: curOut };
+      rollSpin = 0;
       mode = next;
     }
 

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink } from "@/components/nav/page-shell";
 import { BrandMark } from "./brand-mark";
 
 const STEPS = [
@@ -106,9 +106,9 @@ export function Reel() {
               <b>Global</b>remote-first
             </div>
           </div>
-          <Link className="cta" href="/work">
+          <TransitionLink className="cta" href="/work">
             View works →
-          </Link>
+          </TransitionLink>
         </div>
 
         {/* S4 */}
@@ -128,9 +128,9 @@ export function Reel() {
                 <br />
                 Accepting projects — Q3 2026
               </p>
-              <Link className="cta" href="/contact">
+              <TransitionLink className="cta" href="/contact">
                 Start a project →
-              </Link>
+              </TransitionLink>
             </div>
           </div>
         </div>
