@@ -40,11 +40,15 @@ const TO_TOP_MS = 420;
 type NavContextValue = {
   navigate: (href: string) => void;
   leaving: boolean;
+  /* false until the first in-app navigation — a cold load is not a
+     transition, so it must not play the transition's entrance */
+  navigated: boolean;
 };
 
 const NavContext = createContext<NavContextValue>({
   navigate: () => {},
   leaving: false,
+  navigated: false,
 });
 
 export function useTransitionNav() {
@@ -70,8 +74,16 @@ export function NavProvider({ children }: { children: ReactNode }) {
      so without this flag a cold visit to the home page got scrolled straight
      into S2 — past the entire intro, which is the first thing anyone sees.
      A hard load has no "where you were" to restore; leave the scroll where
-     the browser put it. */
+     the browser put it.
+
+     A ref rather than the state below because the scroll effect keys on
+     pathname alone: making it depend on state would re-run the restore
+     mid-exit, when the flag flips but the route has not changed yet. */
   const cameFromAnotherPage = useRef(false);
+
+  /* the same fact, as state, because the shell has to re-render to drop the
+     entrance animation class */
+  const [navigated, setNavigated] = useState(false);
 
   const navigate = useCallback(
     (href: string) => {
@@ -80,6 +92,7 @@ export function NavProvider({ children }: { children: ReactNode }) {
       const depart = (from: number) => {
         scrollMemory.current[pathname] = from;
         cameFromAnotherPage.current = true;
+        setNavigated(true);
         setLeaving(true);
         /* Tell the object where it is going now, rather than letting it find
            out when the URL changes. The sequence is: page slides out WHILE the
@@ -155,20 +168,23 @@ export function NavProvider({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   return (
-    <NavContext.Provider value={{ navigate, leaving }}>
+    <NavContext.Provider value={{ navigate, leaving, navigated }}>
       {children}
     </NavContext.Provider>
   );
 }
 
 export function PageShell({ children }: { children: ReactNode }) {
-  const { leaving } = useContext(NavContext);
+  const { leaving, navigated } = useContext(NavContext);
   const pathname = usePathname();
 
   return (
     <div className={`shell${leaving ? " leaving" : ""}`}>
-      {/* keyed on the path so the entrance animation re-runs per route */}
-      <div className="shell-inner" key={pathname}>
+      {/* keyed on the path so the entrance animation re-runs per route.
+          `cold` on the very first mount: there is no page being transitioned
+          from, and playing the entrance anyway drags the whole reel in from
+          the right while S1's mark is still assembling itself. */}
+      <div className={`shell-inner${navigated ? "" : " cold"}`} key={pathname}>
         {children}
       </div>
     </div>

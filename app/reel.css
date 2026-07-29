@@ -636,6 +636,15 @@ h1 { margin:0; }
    it. `forwards` on the exit is fine: that transform only exists while the
    page is actually leaving. */
 .shell-inner { animation: pageIn 460ms cubic-bezier(.16, 1, .3, 1) backwards; }
+
+/* A cold load is not a transition. Playing the entrance anyway slides the
+   whole page in from the right for half a second — which on the home page
+   means S1's mark travels ~290px into frame while its squares are only a
+   quarter of the way through assembling, so the thing reads as sliding in
+   rather than building. Nothing to come in from, so: don't.
+   (.shell.leaving .shell-inner still out-specifies this, so the exit plays
+   normally the first time you navigate away.) */
+.shell-inner.cold { animation: none; }
 .shell.leaving .shell-inner {
   animation: pageOut 300ms cubic-bezier(.7, 0, .84, 0) forwards;
 }
