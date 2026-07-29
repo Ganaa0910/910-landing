@@ -26,7 +26,6 @@ type RailGeom = { pts: Pt[]; cum: number[]; total: number; vertex: number[]; W: 
 type Star = { x: number; y: number; s: number; ph: number; sp: number; rot: number; big: boolean };
 type Planet = { x: number; y: number; r: number; sp: number; ph: number };
 type Sky = { stars: Star[]; planets: Planet[]; W: number; H: number };
-type Cue = { v: number; on: boolean; from: number; target: number; t0: number; ms: number; dur: number };
 type StarSpec = { name: string; cx: number; cy: number; side: "top" | "right" | "bottom" | "left" };
 
 
@@ -312,16 +311,19 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   }
 
   /* carve the master scroll into phases. the gaps between them are holds —
-     each section gets a beat at rest instead of only existing in transit */
+     each section gets a beat at rest instead of only existing in transit.
+     Every phase is scrubbed: the reader's scroll is the only clock on this
+     page, so nothing ever swallows a wheel event to play itself out. */
   const seg = (t: number, a: number, b: number) => clamp01((t - a) / (b - a));
   const PHASE = {
-    p:   [0.04, 0.20] as const,     // S1 → S2
-    out: [0.58, 0.93] as const,     // S3 → S4 — scrubbed, because parallax has to be
+    p:    [0.03, 0.17] as const,    // S1 → S2
+    /* The collapse out of orbit. Deliberately the shortest window on the
+       track — the same journey over less scroll is what makes it read as a
+       rip into the galaxy rather than a slow deflation. */
+    snap: [0.30, 0.38] as const,    // S2 → S3, ending parked at "you are here"
+    run:  [0.45, 0.66] as const,    // the walk round the diamond, a beat per star
+    out:  [0.69, 0.96] as const,    // S3 → S4 — the parallax
   };
-  /* S2 → S3 is a snap, not a scrub: crossing SNAP_T plays the collapse and
-     parks the ball at "you are here" on its own clock. Crossing RUN_T then
-     plays the descent. Nothing in between is scroll-driven. */
-  const SNAP_T = 0.34, RUN_T = 0.48;
 
   /* ── S3 rail ──────────────────────────────────────
      A switchback in normalised viewport coords — right, down, left, down,
@@ -1033,56 +1035,35 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     markIntroPlayed();
   }
 
-  /* ── the two cues ───────────────────────────────────
-     Scroll only chooses S1 or S2. Everything after is a timed cue: SNAP
-     collapses the globe and parks the ball, RUN sends it round the diamond.
-     Both are reversible — scrolling back up plays them backwards — so the
-     section is never a one-way door. The page is pinned for the duration
-     of each so neither can be scrubbed past, and both release on a hard
-     timer even if something throws. */
-  function makeCue(ms: number): Cue { return { v: 0, on: false, from: 0, target: 0, t0: 0, ms, dur: ms }; }
-  const snap = makeCue(2800);
-  const run  = makeCue(3600);
-  let lockY = 0, locks = 0;
+  /* ── the follower ───────────────────────────────────
+     Scroll owns where the reel is; this owns how it gets there.
 
-  const eat = (e: Event) => e.preventDefault();
-  const eatKeys = (e: KeyboardEvent) => {
-    if ([" ", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) e.preventDefault();
-  };
+     S2 → S3 used to be a timed cue that pinned the page for 2.8s and then
+     3.6s more, eating every wheel event in between. It looked right and
+     felt like a hijack. Now the collapse and the walk round the diamond are
+     both scrubbed — but scrubbing a canvas straight off scrollY judders,
+     because a mouse wheel arrives in ~100px steps, not a line.
 
-  function lockScroll() {
-    if (locks++ === 0) {
-      lockY = window.scrollY;
-      addEventListener("wheel", eat, { passive: false });
-      addEventListener("touchmove", eat, { passive: false });
-      addEventListener("keydown", eatKeys, { passive: false });
-    }
-  }
-  function unlockScroll() {
-    if (locks > 0 && --locks === 0) {
-      removeEventListener("wheel", eat);
-      removeEventListener("touchmove", eat);
-      removeEventListener("keydown", eatKeys);
-      removeEventListener("reel:route", onRouteIntent);
-    }
-  }
+     So the drawn value chases the scrolled value with a time constant
+     instead of matching it. Discrete steps come out as a continuous curve,
+     and a flick keeps travelling for a beat after the fingers stop, which
+     is what preserves the rip-out-of-orbit feeling now that no clock is
+     driving it. Scroll back and it simply runs the other way — no special
+     case, because there is no longer any state to reverse. */
+  const TAU = 0.11;               // seconds to close ~63% of the remaining gap
+  let zS = 0, rollS = 0;
 
-  /* reversing is quicker than playing forward — going back should feel like
-     a rewind, not a re-watch */
-  function goCue(cue: Cue, target: number, now: number) {
-    if (cue.on || cue.v === target) return;
-    cue.on = true; cue.from = cue.v; cue.target = target; cue.t0 = now;
-    cue.dur = cue.ms * (target > cue.from ? 1 : 0.55);
-    lockScroll();
-    const guard = cue.dur + 400;
-    setTimeout(() => { if (cue.on) { cue.on = false; cue.v = cue.target; unlockScroll(); } }, guard);
-  }
-
-  function tickCue(cue: Cue, now: number) {
-    if (!cue.on) return;
-    const k = clamp01((now - cue.t0) / cue.dur);
-    cue.v = cue.from + (cue.target - cue.from) * ease(k);
-    if (k >= 1) { cue.v = cue.target; cue.on = false; unlockScroll(); }
+  function follow(cur: number, target: number, dt: number) {
+    if (reduced.matches || dt <= 0) return target;
+    const next = cur + (target - cur) * (1 - Math.exp(-dt / TAU));
+    /* Land exactly, and land soon. An exponential never actually arrives, so
+       without a deadband the last thousandth chatters forever and the frame
+       loop redraws a canvas nobody can tell has changed. A thousandth of the
+       collapse is under a pixel of globe. */
+    if (Math.abs(target - next) < 1e-3) return target;
+    /* quantise to the precision we publish, so sub-threshold jitter in the
+       scroll measurement can't keep re-triggering the redraw gate */
+    return Math.round(next * 1e4) / 1e4;
   }
 
   /* ── routes ─────────────────────────────────────────
@@ -1263,28 +1244,18 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       return;
     }
 
-    /* while a cue is playing the page is pinned — hold the scroll position
-       so masterProgress can't drift under us */
-    if (snap.on || run.on) window.scrollTo(0, lockY);
-
     const t = masterProgress();
 
-    /* cues fire forward past their mark and reverse back below it. The gap
-       between the two thresholds is hysteresis — without it, sitting right
-       on the line would ping-pong. RUN unwinds before SNAP does. */
-    if (run.v > 0 && t < RUN_T - 0.06)        goCue(run, 0, now);
-    else if (snap.v >= 1 && t >= RUN_T)       goCue(run, 1, now);
-    if (run.v === 0) {
-      if (snap.v > 0 && t < SNAP_T - 0.06)    goCue(snap, 0, now);
-      else if (t >= SNAP_T)                   goCue(snap, 1, now);
-    }
-    tickCue(snap, now);
-    tickCue(run,  now);
+    /* the collapse can't start until the globe has finished arriving in S2,
+       and the walk can't start until the ball has parked — both are
+       guaranteed by the gaps between the phases, not by any flag */
+    zS    = follow(zS,    seg(t, ...PHASE.snap), dt);
+    rollS = follow(rollS, seg(t, ...PHASE.run),  dt);
 
-    const z    = snap.v;
-    const roll = REST_T + (1 - REST_T) * run.v;
-    /* S4 only opens once the diamond has actually been run */
-    const out  = run.v >= 1 ? seg(t, ...PHASE.out) : 0;
+    const z    = zS;
+    const roll = REST_T + (1 - REST_T) * rollS;
+    /* S4 only opens once the diamond has actually been walked */
+    const out  = seg(t, ...PHASE.out);
 
     if (t !== lastT || z !== curZ || roll !== curRoll || out !== curOut) {
       curP    = seg(t, ...PHASE.p);
@@ -1335,7 +1306,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
         /* the "you are here" tag rides the parked ball and clears out the
            moment the descent starts */
         const [bx, by] = railAt(g, curRoll);
-        const showHere = parked * (1 - clamp01(run.v * 6));
+        const showHere = parked * (1 - clamp01(rollS * 6));
         /* park the tag on the side facing the middle of the diamond — the
            outside edge is where the step labels live */
         const inward = bx > W * 0.5;
@@ -1465,9 +1436,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       ro2.disconnect();
       ro.disconnect();
       document.removeEventListener("visibilitychange", onVis);
-      removeEventListener("wheel", eat);
-      removeEventListener("touchmove", eat);
-      removeEventListener("keydown", eatKeys);
+      removeEventListener("reel:route", onRouteIntent);
     },
   };
 }

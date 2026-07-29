@@ -28,9 +28,10 @@ import { usePathname, useRouter } from "next/navigation";
 const EXIT_MS = 300;
 
 /* Where the reel sits when you come back to it having never scrolled there
-   in this session — a fraction of the scroll track. 0.26 lands in S2, past
-   the intro and short of the S3 collapse at 0.34. */
-const REEL_S2 = 0.26;
+   in this session — a fraction of the scroll track. 0.23 sits in the S2
+   hold, past the arrival at 0.17 and clear of the S3 collapse at 0.30. Keep
+   it between those two; they live in PHASE in lib/reel/engine.ts. */
+const REEL_S2 = 0.23;
 
 /* Long enough for a smooth scroll to the top to settle before the page
    starts leaving. */
@@ -68,17 +69,39 @@ export function NavProvider({ children }: { children: ReactNode }) {
   const navigate = useCallback(
     (href: string) => {
       if (href === pathname) return;
-      scrollMemory.current[pathname] = window.scrollY;
-      setLeaving(true);
-      /* Tell the object where it is going now, rather than letting it find
-         out when the URL changes. The sequence is: page slides out WHILE the
-         globe shrinks, then the next page slides in — if the morph waited
-         for the route it would start late and land after the arrival. */
-      window.dispatchEvent(new CustomEvent("reel:route", { detail: href }));
-      if (timer.current) clearTimeout(timer.current);
-      /* scroll: false — Next would jump to the top on commit, undoing the
-         restore below before it has a chance to run */
-      timer.current = setTimeout(() => router.push(href, { scroll: false }), EXIT_MS);
+
+      const depart = (from: number) => {
+        scrollMemory.current[pathname] = from;
+        setLeaving(true);
+        /* Tell the object where it is going now, rather than letting it find
+           out when the URL changes. The sequence is: page slides out WHILE the
+           globe shrinks, then the next page slides in — if the morph waited
+           for the route it would start late and land after the arrival. */
+        window.dispatchEvent(new CustomEvent("reel:route", { detail: href }));
+        if (timer.current) clearTimeout(timer.current);
+        /* scroll: false — Next would jump to the top on commit, undoing the
+           restore below before it has a chance to run */
+        timer.current = setTimeout(() => router.push(href, { scroll: false }), EXIT_MS);
+      };
+
+      /* Leaving an inner page from halfway down slid the content sideways
+         from wherever it happened to be, which read as a jump cut. Ride to
+         the top first — on the work index that also walks the rail's ball
+         back to its first checkpoint, so the object departs from a settled
+         position rather than mid-track.
+
+         The reel is exempt: scrolling it to the top would rewind the whole
+         approach to S2 on the way out, which is the opposite of leaving
+         cleanly. Reduced motion skips the ride and just goes. */
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (pathname !== "/" && !reduced && window.scrollY > 8) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (timer.current) clearTimeout(timer.current);
+        timer.current = setTimeout(() => depart(0), TO_TOP_MS);
+        return;
+      }
+
+      depart(window.scrollY);
     },
     [pathname, router],
   );
