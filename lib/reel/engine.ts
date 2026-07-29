@@ -316,13 +316,17 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
      page, so nothing ever swallows a wheel event to play itself out. */
   const seg = (t: number, a: number, b: number) => clamp01((t - a) / (b - a));
   const PHASE = {
-    p:    [0.03, 0.17] as const,    // S1 → S2
+    p:    [0.03, 0.18] as const,    // S1 → S2
     /* The collapse out of orbit. Deliberately the shortest window on the
        track — the same journey over less scroll is what makes it read as a
-       rip into the galaxy rather than a slow deflation. */
-    snap: [0.30, 0.38] as const,    // S2 → S3, ending parked at "you are here"
-    run:  [0.45, 0.66] as const,    // the walk round the diamond, a beat per star
-    out:  [0.69, 0.96] as const,    // S3 → S4 — the parallax
+       rip into the galaxy rather than a slow deflation.
+       The holds either side of it are held short on purpose too. The move
+       itself was never the heavy part; 600px of dead S2 in front of it and
+       300px of dead park behind it were, because scrolling through nothing
+       is what makes a section feel like work. */
+    snap: [0.28, 0.345] as const,   // S2 → S3, ending parked at "you are here"
+    run:  [0.39, 0.62] as const,    // the walk round the diamond, a beat per star
+    out:  [0.655, 0.945] as const,  // S3 → S4 — the parallax
   };
 
   /* ── S3 rail ──────────────────────────────────────
@@ -1075,7 +1079,12 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
      is what preserves the rip-out-of-orbit feeling now that no clock is
      driving it. Scroll back and it simply runs the other way — no special
      case, because there is no longer any state to reverse. */
-  const TAU = 0.11;               // seconds to close ~63% of the remaining gap
+  /* Seconds to close ~63% of the remaining gap. This is the whole feel of
+     the thing: too low and a mouse wheel's ~100px steps show up as judder,
+     too high and the image visibly trails the finger, which reads as
+     dragging something heavy rather than steering it. 70ms still turns the
+     steps into a line and keeps hold of the object after a flick. */
+  const TAU = 0.07;
   let zS = 0, rollS = 0;
 
   function follow(cur: number, target: number, dt: number) {

@@ -68,8 +68,9 @@
    play on their own clocks with the page pinned; now they are scrubbed like
    everything else, so they need track to run on — hence 660 rather than 560.
    Phase boundaries live in lib/reel/engine.ts (PHASE); changing this number
-   rescales all of them at once. */
-.reel { position: relative; height: 660vh; }
+   rescales all of them at once — so it is the one knob for "the whole reel
+   is too long", and PHASE is the knob for "this one section drags". */
+.reel { position: relative; height: 620vh; }
 
 .viewport {
   position: sticky; top: 0;
