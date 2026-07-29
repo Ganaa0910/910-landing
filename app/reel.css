@@ -363,7 +363,10 @@ h1 { margin:0; }
    eyebrow barely moves, the headline more, the details most. That
    difference IS the parallax; nothing here is on a timer. */
 .s4 {
-  position:absolute; inset:0; z-index:6;
+  /* fixed, and a sibling of .viewport rather than a child — see the note in
+     components/reel/reel.tsx. Inside the sticky stage its z-index is sealed
+     into that stacking context and the canvas paints over it. */
+  position:fixed; inset:0; z-index:6;
   display:flex; align-items:center;
   padding: 0 clamp(20px, 6vw, 96px);
   pointer-events:none;
@@ -617,12 +620,24 @@ h1 { margin:0; }
    The canvas is outside this wrapper, so the object keeps rolling live
    across the gap instead of being snapshotted mid-flight. */
 .shell { position: relative; background: var(--paper); min-height: 100dvh; }
-.shell-inner {
-  animation: pageIn 460ms cubic-bezier(.16, 1, .3, 1) both;
-  will-change: transform, opacity;
-}
+
+/* `backwards`, not `both`, and no will-change — both of those turn this
+   element into a permanent stacking context, and that is not a cosmetic
+   detail here. The canvas is a root-level sibling at z-index 3, and the
+   reel's own layers deliberately straddle it: the S3 ground (0) and the
+   brand mark (1) paint under the object, the step labels and S2/S4 copy
+   (4–6) paint over it. A stacking context on this wrapper collapses all of
+   those into one box that loses to the canvas outright — which is invisible
+   through S1–S3, because the canvas is transparent there, and then eats
+   S4's headline and CTA whole the moment the sunset fills the frame.
+
+   `backwards` holds the `from` state only until the animation starts, so
+   once the page has landed there is no transform left and no context with
+   it. `forwards` on the exit is fine: that transform only exists while the
+   page is actually leaving. */
+.shell-inner { animation: pageIn 460ms cubic-bezier(.16, 1, .3, 1) backwards; }
 .shell.leaving .shell-inner {
-  animation: pageOut 300ms cubic-bezier(.7, 0, .84, 0) both;
+  animation: pageOut 300ms cubic-bezier(.7, 0, .84, 0) forwards;
 }
 
 @keyframes pageIn {

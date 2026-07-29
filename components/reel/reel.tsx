@@ -111,27 +111,38 @@ export function Reel() {
           </TransitionLink>
         </div>
 
-        {/* S4 */}
-        <div className="s4">
-          <div className="s4-inner">
-            <p className="eyebrow4 lyr-back">Contact</p>
-            <h2 className="lyr-mid">
-              Let&rsquo;s create
+      </div>
+
+      {/* S4 sits OUTSIDE the sticky viewport, and that placement is load
+          bearing. `position: sticky` opens a stacking context even at
+          z-index auto, so everything inside .viewport is sealed into one box
+          that the canvas — a root-level sibling at z-index 3 — paints
+          straight over. Harmless for S1–S3, where the canvas is transparent
+          around the copy. Fatal here, where it fills the frame with an
+          opaque sunset and takes the headline and the CTA with it.
+
+          Out here it is a plain fixed layer in the root stacking context, so
+          its z-index actually counts. Fixed rather than absolute because the
+          sticky viewport was the only thing pinning it to the screen. */}
+      <div className="s4">
+        <div className="s4-inner">
+          <p className="eyebrow4 lyr-back">Contact</p>
+          <h2 className="lyr-mid">
+            Let&rsquo;s create
+            <br />
+            something beautiful.
+          </h2>
+          <div className="lyr-front">
+            {/* no mailto here on purpose — /contact is the path that
+                actually works (form → /api/inquiry → Resend) */}
+            <p className="meta4">
+              Reply within 24 hours · Ulaanbaatar, UTC+8
               <br />
-              something beautiful.
-            </h2>
-            <div className="lyr-front">
-              {/* no mailto here on purpose — /contact is the path that
-                  actually works (form → /api/inquiry → Resend) */}
-              <p className="meta4">
-                Reply within 24 hours · Ulaanbaatar, UTC+8
-                <br />
-                Accepting projects — Q3 2026
-              </p>
-              <TransitionLink className="cta" href="/contact">
-                Start a project →
-              </TransitionLink>
-            </div>
+              Accepting projects — Q3 2026
+            </p>
+            <TransitionLink className="cta" href="/contact">
+              Start a project →
+            </TransitionLink>
           </div>
         </div>
       </div>

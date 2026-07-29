@@ -352,6 +352,17 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   ];
   const CHART_W = 0.6321, CHART_H = 0.9243;
 
+  /* How far a label block reaches from its star: the 52px stand-off in
+     LABEL_OFFSET plus the block's own height. Measured rather than assumed,
+     so editing the step copy can't silently push it off screen; the fallback
+     is what the current four blocks measure at. */
+  let labelReach = 178;
+  function measureLabelReach() {
+    let tallest = 0;
+    for (const el of stepEls) tallest = Math.max(tallest, el.offsetHeight);
+    if (tallest > 0) labelReach = 52 + tallest;
+  }
+
   /* one uniform scale for both axes — anything else distorts the shape */
   function starPx(st: StarSpec, W: number, H: number): Pt {
     const narrow = W <= 700;
@@ -359,7 +370,18 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
        the foot, which frees the asterism to be much bigger and sit higher */
     const k = narrow
       ? Math.min((W * 0.62) / CHART_W, (H * 0.44) / CHART_H)
-      : Math.min((W * 0.44) / CHART_W, (H * 0.57) / CHART_H);
+      : Math.min(
+          (W * 0.44) / CHART_W,
+          (H * 0.57) / CHART_H,
+          /* Third term: the labels above Cor Caroli and below Spica have to
+             fit too. Sizing the diamond off H alone works down to about a
+             880px viewport and then starts posting "04 Refine" off the top
+             edge and "Spica · α Virginis" off the bottom — which is most
+             laptops. Cap the scale so the outermost stars always clear their
+             own label block plus a margin. Above ~890px this term never
+             wins, so the tuned size is untouched on a large display. */
+          Math.max(H * 0.5 - (labelReach + 14), 40) / (CHART_H * 0.5),
+        );
     const midY = narrow ? H * 0.38 : H * 0.5;
     return [W * 0.5 + st.cx * k, midY + st.cy * k] as Pt;
   }
@@ -472,7 +494,10 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     return g.vertex[i];
   }
 
-  function layoutSteps() { /* positions are set per-frame from the geometry */ }
+  /* Positions are set per-frame from the geometry; the only thing that needs
+     doing up front is re-measuring how much room the label blocks want, which
+     changes with the width they wrap at. Called on mount and on resize. */
+  function layoutSteps() { measureLabelReach(); }
 
   /* where a label sits relative to its star */
   const LABEL_OFFSET = {

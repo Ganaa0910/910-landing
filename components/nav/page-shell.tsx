@@ -66,12 +66,20 @@ export function NavProvider({ children }: { children: ReactNode }) {
      left from — the "View works" CTA lives in S2. */
   const scrollMemory = useRef<Record<string, number>>({});
 
+  /* ...but only ever on the way BACK. This effect also runs on first mount,
+     so without this flag a cold visit to the home page got scrolled straight
+     into S2 — past the entire intro, which is the first thing anyone sees.
+     A hard load has no "where you were" to restore; leave the scroll where
+     the browser put it. */
+  const cameFromAnotherPage = useRef(false);
+
   const navigate = useCallback(
     (href: string) => {
       if (href === pathname) return;
 
       const depart = (from: number) => {
         scrollMemory.current[pathname] = from;
+        cameFromAnotherPage.current = true;
         setLeaving(true);
         /* Tell the object where it is going now, rather than letting it find
            out when the URL changes. The sequence is: page slides out WHILE the
@@ -109,6 +117,10 @@ export function NavProvider({ children }: { children: ReactNode }) {
   /* the new route has landed — drop the exit state so the entrance plays */
   useEffect(() => {
     setLeaving(false);
+
+    /* cold load: nothing to restore, and the reel must start at S1 so the
+       intro actually plays */
+    if (!cameFromAnotherPage.current) return;
 
     const remembered = scrollMemory.current[pathname];
     let tries = 0;
