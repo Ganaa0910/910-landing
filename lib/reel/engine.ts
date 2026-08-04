@@ -1064,41 +1064,21 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     markIntroPlayed();
   }
 
-  /* ── the follower ───────────────────────────────────
-     Scroll owns where the reel is; this owns how it gets there.
+  /* ── on smoothing ───────────────────────────────────
+     There used to be a per-value follower here: the drawn z and roll chased
+     their scroll-derived targets with a time constant, because scrubbing a
+     canvas straight off scrollY judders — a mouse wheel arrives in ~100px
+     lumps, not a line.
 
-     S2 → S3 used to be a timed cue that pinned the page for 2.8s and then
-     3.6s more, eating every wheel event in between. It looked right and
-     felt like a hijack. Now the collapse and the walk round the diamond are
-     both scrubbed — but scrubbing a canvas straight off scrollY judders,
-     because a mouse wheel arrives in ~100px steps, not a line.
+     lib/scroll/smooth.ts interpolates the scroll position itself now, which
+     is a strictly better place to do it. Everything downstream — this canvas
+     AND the DOM copy reading --p / --z / --out — comes off one already
+     smooth number, so they cannot drift apart. Keeping the follower as well
+     would stack a second lag on top and desync the object from the words
+     next to it, which is the thing that read as heavy in the first place.
 
-     So the drawn value chases the scrolled value with a time constant
-     instead of matching it. Discrete steps come out as a continuous curve,
-     and a flick keeps travelling for a beat after the fingers stop, which
-     is what preserves the rip-out-of-orbit feeling now that no clock is
-     driving it. Scroll back and it simply runs the other way — no special
-     case, because there is no longer any state to reverse. */
-  /* Seconds to close ~63% of the remaining gap. This is the whole feel of
-     the thing: too low and a mouse wheel's ~100px steps show up as judder,
-     too high and the image visibly trails the finger, which reads as
-     dragging something heavy rather than steering it. 70ms still turns the
-     steps into a line and keeps hold of the object after a flick. */
-  const TAU = 0.07;
-  let zS = 0, rollS = 0;
-
-  function follow(cur: number, target: number, dt: number) {
-    if (reduced.matches || dt <= 0) return target;
-    const next = cur + (target - cur) * (1 - Math.exp(-dt / TAU));
-    /* Land exactly, and land soon. An exponential never actually arrives, so
-       without a deadband the last thousandth chatters forever and the frame
-       loop redraws a canvas nobody can tell has changed. A thousandth of the
-       collapse is under a pixel of globe. */
-    if (Math.abs(target - next) < 1e-3) return target;
-    /* quantise to the precision we publish, so sub-threshold jitter in the
-       scroll measurement can't keep re-triggering the redraw gate */
-    return Math.round(next * 1e4) / 1e4;
-  }
+     So: nothing here interpolates. seg() straight off the scroll, and the
+     feel knob is LERP in lib/scroll/smooth.ts. */
 
   /* ── routes ─────────────────────────────────────────
      The canvas lives in the root layout, so it survives navigation. Each
@@ -1283,11 +1263,8 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     /* the collapse can't start until the globe has finished arriving in S2,
        and the walk can't start until the ball has parked — both are
        guaranteed by the gaps between the phases, not by any flag */
-    zS    = follow(zS,    seg(t, ...PHASE.snap), dt);
-    rollS = follow(rollS, seg(t, ...PHASE.run),  dt);
-
-    const z    = zS;
-    const roll = REST_T + (1 - REST_T) * rollS;
+    const z    = seg(t, ...PHASE.snap);
+    const roll = REST_T + (1 - REST_T) * seg(t, ...PHASE.run);
     /* S4 only opens once the diamond has actually been walked */
     const out  = seg(t, ...PHASE.out);
 
@@ -1340,7 +1317,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
         /* the "you are here" tag rides the parked ball and clears out the
            moment the descent starts */
         const [bx, by] = railAt(g, curRoll);
-        const showHere = parked * (1 - clamp01(rollS * 6));
+        const showHere = parked * (1 - clamp01(curRoll * 6));
         /* park the tag on the side facing the middle of the diamond — the
            outside edge is where the step labels live */
         const inward = bx > W * 0.5;

@@ -9,11 +9,17 @@ import {
 } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import { SmoothScroll } from "@/components/scroll/smooth-scroll";
 import { ReelCanvas } from "@/components/reel/reel-canvas";
 import { NavProvider, PageShell } from "@/components/nav/page-shell";
 import { SiteHeader } from "@/components/nav/site-header";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+/* Lenis's own stylesheet. Not optional: it releases the height clamp on
+   html/body that would otherwise cap the 620vh reel track, and stops native
+   scroll-behavior from fighting the interpolation. Imported from the package
+   so it tracks the version rather than drifting as a hand-copy. */
+import "lenis/dist/lenis.css";
 import "./reel.css";
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -251,6 +257,9 @@ export default function RootLayout({
         className={`${ibmPlexMono.variable} ${syne.variable} ${jetbrainsMono.variable} ${bebas.variable} ${anton.variable} ${blackOps.variable} ${christmasPipow.variable} antialiased`}
       >
         <NavProvider>
+          {/* before ReelCanvas: it has to advance the scroll position each
+              frame before the canvas reads it */}
+          <SmoothScroll />
           <ReelCanvas />
           <SiteHeader />
           <PageShell>{children}</PageShell>

@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { scrollPageTo } from "@/lib/scroll/smooth";
 
 /* Page transitions.
  *
@@ -116,7 +117,7 @@ export function NavProvider({ children }: { children: ReactNode }) {
          cleanly. Reduced motion skips the ride and just goes. */
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (pathname !== "/" && !reduced && window.scrollY > 8) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollPageTo(0);
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => depart(0), TO_TOP_MS);
         return;
@@ -141,11 +142,11 @@ export function NavProvider({ children }: { children: ReactNode }) {
 
     const place = () => {
       if (remembered != null) {
-        window.scrollTo(0, remembered);
+        scrollPageTo(remembered, { immediate: true });
         return;
       }
       if (pathname !== "/") {
-        window.scrollTo(0, 0);
+        scrollPageTo(0, { immediate: true });
         return;
       }
       /* first time back on the reel: wait for it to exist, then land in S2
@@ -156,7 +157,7 @@ export function NavProvider({ children }: { children: ReactNode }) {
         return;
       }
       const track = reel ? reel.offsetHeight - window.innerHeight : 0;
-      window.scrollTo(0, track > 0 ? track * REEL_S2 : 0);
+      scrollPageTo(track > 0 ? track * REEL_S2 : 0, { immediate: true });
     };
 
     frame = requestAnimationFrame(place);

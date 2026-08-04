@@ -743,10 +743,304 @@ h1 { margin:0; }
 .site-header.on-dark .hdr-cta:hover { color: #0a0a0a; }
 
 /* clear the bar */
-.work-page, .contact-page { padding-top: clamp(112px, 14vh, 168px); }
+.work-page, .contact-page, .case-study { padding-top: clamp(112px, 14vh, 168px); }
 
 @media (max-width: 640px) {
   .site-header { padding: 14px 20px; gap: 12px; }
   .hdr-cta { display: none; }          /* the page already ends in one */
   .hdr-mark { height: 34px; }          /* height, not width — see above */
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   /work/{slug} — the case studies.
+
+   Color is the ONLY thing that varies between them. Ground, ink and
+   accent arrive as --cs-* custom properties set inline on <main> from
+   the project's palette in lib/projects.ts; everything below — type,
+   rhythm, section shapes, shadows — is 910's and is shared. Adding a
+   case study should require no new CSS at all.
+
+   The fallbacks are the 910 shell's own values, so a page that forgets
+   its palette degrades to the site's look rather than to unstyled.
+   ══════════════════════════════════════════════════════════════════ */
+.case-study {
+  --cs-ground:    var(--paper);
+  --cs-ink:       var(--ink);
+  --cs-ink-2:     var(--ink-2);
+  --cs-ink-3:     var(--ink-3);
+  --cs-rule:      var(--rule);
+  --cs-accent:    var(--accent);
+  --cs-on-accent: var(--paper);
+
+  min-height: 100dvh;
+  background: var(--cs-ground);
+  color: var(--cs-ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  padding-inline: clamp(20px, 6vw, 96px);
+  padding-bottom: 0;
+}
+
+.cs-wrap { max-width: 1120px; margin: 0 auto; }
+
+/* ── hero ─────────────────────────────────────────── */
+.cs-eyebrow {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--cs-accent); margin: 0 0 22px;
+}
+.case-study h1 {
+  font-size: clamp(38px, 6.6vw, 88px); font-weight: 500;
+  line-height: .99; letter-spacing: -.055em; margin: 0 0 26px;
+  max-width: 20ch;
+}
+/* the one word the headline turns on */
+.case-study h1 i { font-style: normal; color: var(--cs-accent); }
+
+.cs-lede {
+  font-size: 14px; line-height: 1.8; color: var(--cs-ink-2);
+  max-width: 62ch; margin: 0 0 clamp(40px, 6vh, 64px);
+}
+
+.cs-meta {
+  display: flex; flex-wrap: wrap; gap: 22px 56px;
+  padding-bottom: clamp(40px, 7vh, 72px);
+  border-bottom: 1.5px solid var(--cs-rule);
+}
+.cs-meta span {
+  display: block; font-size: 10px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--cs-ink-3);
+}
+.cs-meta p { margin: 7px 0 0; font-size: 12.5px; color: var(--cs-ink-2); }
+.cs-meta p.live { color: var(--cs-accent); }
+
+/* ── sections ─────────────────────────────────────── */
+.cs-section { padding: clamp(56px, 9vh, 104px) 0 0; }
+
+.cs-shead { display: flex; align-items: baseline; gap: 16px; margin-bottom: 18px; }
+.cs-num {
+  font-size: 12px; font-weight: 600; letter-spacing: .1em;
+  color: var(--cs-accent);
+}
+.cs-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--cs-ink-3);
+}
+.case-study h2 {
+  font-size: clamp(27px, 4vw, 50px); font-weight: 500;
+  line-height: 1.06; letter-spacing: -.045em; margin: 0 0 26px;
+  max-width: 24ch;
+}
+.case-study h3 {
+  font-size: 15px; font-weight: 500; letter-spacing: -.02em;
+  margin: 0 0 8px;
+}
+.cs-section p {
+  font-size: 13.5px; line-height: 1.78; color: var(--cs-ink-2);
+  max-width: 62ch; margin: 0 0 16px;
+}
+.cs-section p:last-child { margin-bottom: 0; }
+
+/* opt-out for text inside cards, which sets its own size */
+.cs-card p, .cs-row p, .cs-stat p, .cs-frame p { max-width: none; }
+
+/* ── grids ────────────────────────────────────────── */
+.cs-grid { display: grid; gap: 14px; margin-top: 30px; }
+.cs-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.cs-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.cs-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.cs-stack { display: flex; flex-direction: column; gap: 14px; margin-top: 30px; }
+
+/* ── cards ────────────────────────────────────────── */
+.cs-card {
+  border: 1.5px solid var(--cs-rule);
+  padding: 20px;
+  transition: border-color .18s;
+}
+.cs-card:hover { border-color: var(--cs-ink-3); }
+.cs-kicker {
+  display: block; font-size: 9px; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--cs-accent); margin-bottom: 10px;
+}
+.cs-card h3 { color: var(--cs-ink); }
+.cs-card p { font-size: 12px; line-height: 1.7; color: var(--cs-ink-3); margin: 0; }
+
+/* directions that died — dimmed, and the kicker goes quiet rather than
+   red, because a whole grid of red kickers reads as an error state */
+.cs-card.killed { opacity: .62; }
+.cs-card.killed .cs-kicker { color: var(--cs-ink-3); }
+.cs-card.killed h3 { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* a numbered step — the process cards */
+.cs-step { font-size: 26px; font-weight: 500; letter-spacing: -.04em; color: var(--cs-accent); }
+
+/* ── image frames ─────────────────────────────────── */
+.cs-frame {
+  border: 1.5px solid var(--cs-rule);
+  transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.cs-frame:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 0 var(--cs-accent);
+}
+.cs-frame img { display: block; width: 100%; height: auto; }
+.cs-frame.fill img { height: 100%; object-fit: cover; }
+.cs-cap {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  border-top: 1.5px solid var(--cs-rule); padding: 11px 14px;
+}
+.cs-cap span { font-size: 11.5px; color: var(--cs-ink-3); }
+.cs-cap b {
+  font-size: 9px; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--cs-accent);
+}
+
+/* a bare grid of images that shares one caption bar underneath */
+.cs-group { border: 1.5px solid var(--cs-rule); }
+.cs-group > .cs-grid { gap: 0; margin: 0; }
+.cs-group > .cs-grid > * { border-right: 1.5px solid var(--cs-rule); }
+.cs-group > .cs-grid > *:last-child { border-right: 0; }
+.cs-group img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ── quotes ───────────────────────────────────────── */
+.cs-quote {
+  border-left: 2px solid var(--cs-accent);
+  padding-left: 24px; margin: 34px 0;
+}
+.cs-quote p {
+  font-size: clamp(17px, 2.2vw, 24px); font-weight: 500; line-height: 1.3;
+  letter-spacing: -.035em; color: var(--cs-ink); margin: 0 0 10px; max-width: 30ch;
+}
+.cs-quote cite {
+  font-style: normal; font-size: 11px; color: var(--cs-ink-3); line-height: 1.6;
+}
+/* the studio talking about its own reasoning, rather than the client */
+.cs-quote.self { border-left-color: var(--cs-ink-3); }
+.cs-quote.self p { font-size: 13.5px; font-weight: 400; line-height: 1.78; color: var(--cs-ink-2); max-width: 62ch; letter-spacing: 0; }
+
+/* ── color swatches ───────────────────────────────── */
+.cs-bigswatch { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; margin: 0 0 14px; border: 1.5px solid var(--cs-rule); }
+.cs-bigswatch div { aspect-ratio: 3 / 1; }
+
+.cs-swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.cs-swatch {
+  display: flex; align-items: center; gap: 11px;
+  border: 1.5px solid var(--cs-rule); padding: 8px 12px;
+}
+.cs-swatch i { display: block; width: 22px; height: 22px; flex: 0 0 auto; }
+.cs-swatch b { display: block; font-size: 11.5px; font-weight: 400; color: var(--cs-ink-2); }
+.cs-swatch code { display: block; font-size: 10px; color: var(--cs-ink-3); }
+
+/* ── tables ───────────────────────────────────────── */
+.cs-tablewrap { overflow-x: auto; margin-top: 30px; }
+.cs-table { width: 100%; border-collapse: collapse; text-align: left; }
+.cs-table th {
+  font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--cs-ink-3); padding: 0 24px 12px 0;
+  border-bottom: 1.5px solid var(--cs-rule); white-space: nowrap;
+}
+.cs-table td {
+  font-size: 12.5px; color: var(--cs-ink-3); padding: 13px 24px 13px 0;
+  border-bottom: 1px solid var(--cs-rule); vertical-align: top;
+}
+.cs-table td:first-child { color: var(--cs-ink-2); white-space: nowrap; }
+.cs-table td.k { color: var(--cs-accent); white-space: nowrap; }
+.cs-table tr:last-child td { border-bottom: 0; }
+
+/* ── rows (a labelled list) ───────────────────────── */
+.cs-row {
+  display: flex; flex-wrap: wrap; gap: 6px 26px;
+  border: 1.5px solid var(--cs-rule); padding: 18px 20px;
+}
+.cs-row b {
+  flex: 0 0 auto; font-size: 14px; font-weight: 500; letter-spacing: -.02em;
+  color: var(--cs-accent); min-width: 9ch;
+}
+.cs-row p { font-size: 12px; line-height: 1.7; color: var(--cs-ink-3); margin: 0; flex: 1 1 30ch; }
+
+/* ── outcome stats ────────────────────────────────── */
+.cs-stat {
+  border: 1.5px solid var(--cs-rule); padding: 22px 20px;
+  transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.cs-stat:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 0 var(--cs-accent);
+}
+.cs-stat b {
+  display: block; font-size: clamp(34px, 4.4vw, 52px); font-weight: 500;
+  line-height: 1; letter-spacing: -.05em; color: var(--cs-accent);
+}
+.cs-stat strong {
+  display: block; margin-top: 12px; font-size: 10px; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--cs-ink-2);
+}
+.cs-stat p { margin-top: 8px; font-size: 12px; line-height: 1.65; color: var(--cs-ink-3); }
+
+/* ── live demo frames ─────────────────────────────── */
+.cs-demo { border: 1.5px solid var(--cs-rule); margin-top: 30px; }
+.cs-demo-bar {
+  display: flex; align-items: center; gap: 14px;
+  border-bottom: 1.5px solid var(--cs-rule); padding: 10px 14px;
+}
+.cs-dots { display: flex; gap: 6px; flex: 0 0 auto; }
+.cs-dots i { display: block; width: 9px; height: 9px; background: var(--cs-rule); }
+.cs-demo-url { flex: 1; text-align: center; font-size: 10px; color: var(--cs-ink-3); }
+.cs-demo-tag {
+  flex: 0 0 auto; font-size: 9px; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--cs-accent);
+}
+.cs-demo iframe { display: block; width: 100%; border: 0; }
+.cs-demo-ph {
+  display: grid; place-items: center;
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--cs-ink-3);
+}
+
+/* ── notes ────────────────────────────────────────── */
+.cs-note {
+  margin-top: 16px; font-size: 11.5px; color: var(--cs-ink-3);
+}
+
+/* ── closing CTA + back ───────────────────────────── */
+.cs-tail {
+  margin-top: clamp(72px, 12vh, 128px);
+  padding: clamp(40px, 6vh, 64px) 0 clamp(48px, 7vh, 80px);
+  border-top: 1.5px solid var(--cs-rule);
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 26px; flex-wrap: wrap;
+}
+.cs-tail h2 { margin: 0; max-width: 16ch; }
+.cs-cta {
+  display: inline-block; flex: 0 0 auto;
+  background: var(--cs-accent); color: var(--cs-on-accent);
+  padding: 15px 30px;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  box-shadow: 5px 5px 0 0 var(--cs-ink);
+  transition: transform .15s, box-shadow .15s;
+}
+.cs-cta:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 var(--cs-ink); }
+
+.cs-back {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding-bottom: clamp(48px, 8vh, 88px);
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--cs-ink-3); transition: color .15s;
+}
+.cs-back:hover { color: var(--cs-accent); }
+.cs-back span { transition: transform .15s; }
+.cs-back:hover span { transform: translateX(-4px); }
+
+/* ── responsive ───────────────────────────────────── */
+@media (max-width: 900px) {
+  .cs-grid-3, .cs-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .cs-grid-2, .cs-grid-3, .cs-grid-4 { grid-template-columns: 1fr; }
+  .cs-meta { gap: 18px 32px; }
+  /* a lift you cannot hover is just a layout shift waiting to happen */
+  .cs-frame:hover, .cs-stat:hover { transform: none; box-shadow: none; }
+  .cs-group > .cs-grid > * { border-right: 0; border-bottom: 1.5px solid var(--cs-rule); }
+  .cs-group > .cs-grid > *:last-child { border-bottom: 0; }
+  .cs-tail { align-items: stretch; }
+  .cs-cta { text-align: center; }
 }
