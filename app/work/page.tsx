@@ -39,7 +39,13 @@ export default function WorkPage() {
         <CoverFlow
           projects={PROJECTS}
           header={
-          <header className="work-masthead">
+            /* keyed on purpose. It is rendered inside .work-stage alongside
+               the deck and the caption, which React treats as a list — and an
+               element created in one component and placed in another's list
+               with no key trips the missing-key warning. Nothing here is
+               reordered; the key exists to say "this is the same node every
+               render". */
+            <header key="masthead" className="work-masthead">
             <div>
               <p className="eyebrow">Work</p>
               {/* counted, not typed. This said "Four" while five were in
