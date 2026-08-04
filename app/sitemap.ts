@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { PROJECTS } from "@/lib/projects";
+import { PROJECTS, TOYS } from "@/lib/projects";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://910.studio";
@@ -25,6 +25,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     ...projectRoutes,
+    {
+      url: `${baseUrl}/toybox`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    ...TOYS.map((toy) => ({
+      url: `${baseUrl}/toybox/${toy.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),

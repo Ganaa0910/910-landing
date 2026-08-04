@@ -185,17 +185,40 @@ export function Table({
    immediately, which skips the exit animation and hard-cuts the page while
    the globe is still mid-morph. It fails silently — the link works, it just
    looks broken. */
-export function Tail({ headline = "Like what you see?" }: { headline?: string }) {
+export function Tail({
+  headline = "Like what you see?",
+  download,
+  backHref = "/work",
+  backLabel = "All work",
+}: {
+  headline?: string;
+  /* a toy closes with a download, not an enquiry — asking someone to start a
+     project at the end of a thing you gave away free reads as a bait */
+  download?: { href: string; label: string };
+  backHref?: string;
+  backLabel?: string;
+}) {
   return (
     <>
       <div className="cs-tail">
         <h2>{headline}</h2>
-        <TransitionLink className="cs-cta" href="/contact">
-          Start a project →
-        </TransitionLink>
+        {download ? (
+          <a
+            className="cs-cta dl"
+            href={download.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {download.label}
+          </a>
+        ) : (
+          <TransitionLink className="cs-cta" href="/contact">
+            Start a project →
+          </TransitionLink>
+        )}
       </div>
-      <TransitionLink className="cs-back" href="/work">
-        <span aria-hidden="true">←</span> All work
+      <TransitionLink className="cs-back" href={backHref}>
+        <span aria-hidden="true">←</span> {backLabel}
       </TransitionLink>
     </>
   );

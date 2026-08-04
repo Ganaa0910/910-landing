@@ -11,7 +11,16 @@ import { getProject } from "@/lib/projects";
 function backTarget(pathname: string): { href: string; label: string } | null {
   if (pathname === "/") return null;                       // the reel is the root
   if (pathname.startsWith("/work/")) return { href: "/work", label: "Work" };
+  if (pathname.startsWith("/toybox/")) return { href: "/toybox", label: "Toybox" };
   return { href: "/", label: "Home" };
+}
+
+/* a detail page under either section carries a palette; the indexes do not */
+function slugFrom(pathname: string): string | null {
+  for (const base of ["/work/", "/toybox/"]) {
+    if (pathname.startsWith(base)) return pathname.slice(base.length).split("/")[0];
+  }
+  return null;
 }
 
 export function SiteHeader() {
@@ -31,9 +40,7 @@ export function SiteHeader() {
      kept its 910-blue offset shadow, dropping the one colour that is supposed
      to mean "the studio" onto a page that is meant to be entirely the
      client's. Handing the bar the palette fixes both at once. */
-  const slug = pathname.startsWith("/work/")
-    ? pathname.slice("/work/".length).split("/")[0]
-    : null;
+  const slug = slugFrom(pathname);
   const palette = slug ? getProject(slug)?.palette : undefined;
 
   /* The wordmark answers the section. The work pages are studies, so the bar

@@ -1308,3 +1308,84 @@ h1 { margin:0; }
 @media (max-width: 900px) {
   .cs-dither { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   /toybox — things the studio built for itself and gives away.
+
+   Deliberately NOT reusing .work-item: lib/reel/engine.ts queries that
+   class document-wide to lay out the rail and count its checkpoints, so a
+   toy wearing it would be measured as a client project. Same tokens,
+   different names.
+   ══════════════════════════════════════════════════════════════════ */
+.toybox-page {
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  padding: clamp(112px, 14vh, 168px) clamp(20px, 6vw, 96px) 140px;
+}
+.toybox-page h1, .toybox-page h2, .toybox-page h3 {
+  font-family: var(--mono); font-weight: 500; letter-spacing: -.04em; color: inherit;
+}
+.toy-wrap { max-width: 1180px; margin: 0 auto; }
+.toybox-page .eyebrow {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 22px;
+}
+.toybox-page h1 {
+  font-size: clamp(34px, 5.6vw, 76px); font-weight: 500;
+  line-height: 1.02; letter-spacing: -.05em; margin: 0 0 20px;
+}
+.toybox-page h1 i { font-style: normal; color: var(--accent); }
+.toy-lede {
+  font-size: 13.5px; line-height: 1.8; color: var(--ink-2);
+  max-width: 54ch; margin: 0 0 clamp(56px, 8vh, 96px);
+}
+
+.toy-item {
+  display: grid; grid-template-columns: 1fr minmax(320px, 46%);
+  gap: clamp(24px, 4vw, 56px); align-items: center;
+  border-top: 1px solid var(--rule);
+  padding: clamp(32px, 5vh, 56px) 0;
+  text-decoration: none; color: inherit;
+}
+.toy-item:last-of-type { border-bottom: 1px solid var(--rule); }
+.toy-item h2 {
+  font-size: clamp(30px, 4.6vw, 60px); line-height: 1; letter-spacing: -.05em;
+  margin: 0 0 14px; transition: color .18s;
+}
+.toy-item:hover h2 { color: var(--accent); }
+.toy-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 18px;
+  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+}
+/* the whole point of the section */
+.toy-free { color: var(--accent); font-weight: 600; }
+.toy-desc { font-size: 13.5px; line-height: 1.75; color: var(--ink-2); max-width: 46ch; margin: 0 0 24px; }
+.toy-go {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-2); transition: color .18s;
+}
+.toy-item:hover .toy-go { color: var(--accent); }
+.toy-go span { transition: transform .18s; }
+.toy-item:hover .toy-go span { transform: translateX(6px); }
+
+.toy-shot {
+  border: 1.5px solid var(--rule); overflow: hidden; background: var(--rule);
+  transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.toy-shot img { display: block; width: 100%; height: auto; }
+.toy-item:hover .toy-shot {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 0 var(--accent);
+}
+
+@media (max-width: 820px) {
+  .toy-item { grid-template-columns: 1fr; }
+  .toy-item:hover .toy-shot { transform: none; box-shadow: none; }
+}
+
+/* a toy's own page closes with a download, not an enquiry */
+.cs-cta.dl { display: inline-flex; align-items: center; gap: 10px; }

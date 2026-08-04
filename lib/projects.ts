@@ -32,6 +32,12 @@ export interface Project {
   image: string;
   featured?: boolean;
   palette: ProjectPalette;
+  /* "work" is client work and lives on /work. "toy" is something the studio
+     built for itself and gives away — it lives in the toybox, has a download
+     rather than an enquiry, and must never appear in the client rack. */
+  kind?: "work" | "toy";
+  /* toys only */
+  href?: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -43,7 +49,7 @@ export const PROJECTS: Project[] = [
     scope: ["Research", "Design", "Custom Font", "Frontend", "Deploy"],
     description:
       "Cinematic portfolio for Mongolia's premier bronze sculptor. Custom typeface, bronze-derived palette, gallery experience.",
-    image: "/demos/juraan/assets/god-and-devil.jpg",
+    image: "/demos/juraan/assets/cover.jpg",
     featured: true,
     /* pulled from the site's own tokens — the accent is patinated bronze,
        the ground is foundry dark */
@@ -67,7 +73,7 @@ export const PROJECTS: Project[] = [
     scope: ["Design", "Bilingual Architecture", "Frontend", "Deploy"],
     description:
       "Bilingual home for Mongolia's traditional performing arts. Mongolian-first, nine disciplines, booking flow.",
-    image: "/demos/nair/assets/hero.png",
+    image: "/demos/nair/assets/cover.png",
     featured: true,
     /* The site itself is light — +layout.svelte paints #fff and builds every
        muted tone as an alpha of #06090c (.48 copy, .04/.08 surfaces, .16
@@ -94,7 +100,7 @@ export const PROJECTS: Project[] = [
     scope: ["Design", "Frontend", "Deploy"],
     description:
       "Portfolio for Mongolia's top jazz guitarist, built with no photography. Two temperatures, one grid.",
-    image: "/demos/uuyee/assets/hero.png",
+    image: "/demos/uuyee/assets/cover.png",
     featured: true,
     /* the site's own Mono Signal ground, with the Burning Sunset fire as
        the accent — the two modes the case study is about */
@@ -118,7 +124,7 @@ export const PROJECTS: Project[] = [
     scope: ["Design System", "Token Architecture", "Frontend"],
     description:
       "Design system and frontend for Mongolia's first AI-native capital markets intelligence platform.",
-    image: "/demos/cmm/assets/insights-dense.png",
+    image: "/demos/cmm/assets/cover.png",
     featured: true,
     /* the Dense direction's own tokens — brand purple on near-white, with
        orange carrying signal */
@@ -136,8 +142,42 @@ export const PROJECTS: Project[] = [
   },
 ];
 
+/* The toybox — things 910studio built for itself and gives away. Kept in the
+   same array so one palette lookup serves every page and SiteHeader, but
+   filtered apart everywhere they are listed: a free tool sitting in the
+   client rack reads as a project someone paid for. */
+export const TOYS: Project[] = [
+  {
+    slug: "pomo",
+    title: "pomo",
+    client: "910studio",
+    year: "2026",
+    scope: ["Product", "Rust / Tauri", "macOS", "Free forever"],
+    description:
+      "A notch-native pomodoro for macOS. Lives behind the MacBook notch and drops out like a Dynamic Island. Free, because charging for a countdown is a crime.",
+    image: "/demos/pomo/assets/cover.png",
+    kind: "toy",
+    href: "https://github.com/910studio/pomo",
+    /* the app's own cream / ink / rust. Its ink is 910's own #2B221F —
+       correct here, because this one IS ours. */
+    palette: {
+      mode: "light",
+      ground: "#F4EFE6",
+      ink: "#2B221F",
+      ink2: "rgba(43,34,31,.62)",
+      ink3: "rgba(43,34,31,.40)",
+      rule: "rgba(43,34,31,.14)",
+      accent: "#C24A30",
+      onAccent: "#F4EFE6",
+      signal: "#D98A2B",
+    },
+  },
+];
+
+const ALL = [...PROJECTS, ...TOYS];
+
 export function getProject(slug: string): Project | undefined {
-  return PROJECTS.find((p) => p.slug === slug);
+  return ALL.find((p) => p.slug === slug);
 }
 
 export function getFeaturedProjects(): Project[] {
