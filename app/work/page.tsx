@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { TransitionLink } from "@/components/nav/page-shell";
-import { PROJECTS } from "@/lib/projects";
+import Image from "next/image";
+import { PROJECTS, TOYS } from "@/lib/projects";
 import { CoverFlow } from "@/components/work/cover-flow";
 
 export const metadata: Metadata = {
@@ -44,6 +45,64 @@ export default function WorkPage() {
           </header>
           }
         />
+
+        {/* Second collection, under the deck. Client work and toys are
+            different things — one is commissioned, one is given away — so
+            they get different shapes rather than being shuffled into one
+            list: the deck up top, a plain read below.
+
+            These carry .toy-item and NOT .work-item, which matters more than
+            it looks. lib/reel/engine.ts queries .work-item document-wide to
+            lay out the object's rail and count its checkpoints, so a toy
+            wearing that class would be measured as a client project and put
+            a phantom stop on the rail. */}
+        <section className="work-toys">
+          <header className="work-toys-head">
+            <p className="eyebrow">Toybox</p>
+            <h2>
+              Tools we built for us. <i>Yours, free.</i>
+            </h2>
+            <p>
+              Things that started as something we needed and got finished
+              properly. No licence, no trial, no account.
+            </p>
+          </header>
+
+          {TOYS.map((toy) => (
+            <TransitionLink
+              key={toy.slug}
+              href={`/toybox/${toy.slug}`}
+              className="toy-item"
+            >
+              <div>
+                <h3>{toy.title}</h3>
+                <div className="toy-meta">
+                  <span className="toy-free">Free forever</span>
+                  <span>
+                    {toy.scope
+                      .filter((x) => x.toLowerCase() !== "free forever")
+                      .join(" · ")}
+                  </span>
+                  <span>{toy.year}</span>
+                </div>
+                <p className="toy-desc">{toy.description}</p>
+                <span className="toy-go">
+                  Read the build <span aria-hidden="true">→</span>
+                </span>
+              </div>
+
+              <div className="toy-shot">
+                <Image
+                  src={toy.image}
+                  alt={`${toy.title} — ${toy.description}`}
+                  width={1600}
+                  height={1000}
+                  sizes="(max-width: 820px) 100vw, 46vw"
+                />
+              </div>
+            </TransitionLink>
+          ))}
+        </section>
 
         <div className="work-tail">
           <p>More coming — we take on a handful of projects a year.</p>

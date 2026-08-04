@@ -659,6 +659,37 @@ h1 { margin:0; }
   .work-deck { perspective: none; }
 }
 
+/* ── the toybox, as a second collection under the deck ──
+   Client work is a deck you flick through; toys are a short read. Giving
+   them the same shape would say they are the same kind of thing. The item
+   styling is shared with /toybox itself — .toy-item and friends below — so
+   there is one place to change how a toy looks.
+
+   .work-page h2/h3 already neutralise the v1 base layer, so these inherit
+   colour correctly without their own reset. */
+.work-toys {
+  max-width: 1180px;
+  margin: clamp(56px, 9vh, 96px) auto 0;
+}
+.work-toys-head { margin-bottom: clamp(20px, 3vh, 34px); }
+.work-page .work-toys-head h2 {
+  font-size: clamp(24px, 3.4vw, 44px); font-weight: 500;
+  line-height: 1.05; letter-spacing: -.045em; margin: 0 0 12px;
+}
+.work-toys-head h2 i { font-style: normal; color: var(--accent); }
+.work-toys-head p {
+  font-size: 12.5px; line-height: 1.75; color: var(--ink-2);
+  max-width: 52ch; margin: 0;
+}
+/* the heading level differs from /toybox (h3 here, h2 there — this page
+   already owns an h1 and an h2) so the item rule has to cover both */
+.work-page .toy-item h3 {
+  font-size: clamp(28px, 4.2vw, 54px); font-weight: 500;
+  line-height: 1; letter-spacing: -.05em; margin: 0 0 14px;
+  transition: color .18s;
+}
+.work-page .toy-item:hover h3 { color: var(--accent); }
+
 .work-tail {
   margin-top: clamp(56px, 9vh, 104px);
   display: flex; align-items: center; justify-content: space-between;
