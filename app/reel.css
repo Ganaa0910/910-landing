@@ -671,13 +671,19 @@ h1 { margin:0; }
    shell so it stays put while pages move under it. */
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 8;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center;
   gap: 20px;
   padding: 18px clamp(20px, 6vw, 96px);
   background: var(--paper);
   border-bottom: 1px solid var(--rule);
 }
 .site-header a { text-decoration: none; color: inherit; }
+
+/* Equal halves either side of the mark, so the mark is on the middle of the
+   bar and not on the middle of whatever is left over. min-width:0 lets them
+   shrink instead of shoving it off-centre when the labels get long. */
+.hdr-slot { flex: 1 1 0; min-width: 0; display: flex; align-items: center; }
+.hdr-slot.end { justify-content: flex-end; }
 
 .hdr-back, .hdr-cta {
   display: inline-flex; align-items: center; gap: 8px;
@@ -689,13 +695,18 @@ h1 { margin:0; }
 .hdr-back:hover { color: var(--ink); }
 .hdr-back:hover span[aria-hidden] { transform: translateX(-4px); }
 
+/* logo.svg, not logo-header.svg: the latter is the "910studies" cut, and the
+   bar was reading a different name than the rest of the site. This is the
+   same file components/reel/brand-mark.tsx was generated from — its wordmark
+   path is byte-identical to the one S1 draws — so the header and the reel
+   cannot drift apart. Keep the aspect-ratio matched to its viewBox. */
 .hdr-mark {
   display: block; flex: 0 0 auto;
   width: clamp(104px, 12vw, 152px);
-  aspect-ratio: 475 / 140;
+  aspect-ratio: 439 / 140;
   background-color: var(--ink);
-  -webkit-mask: url("/logo-header.svg") no-repeat center / contain;
-          mask: url("/logo-header.svg") no-repeat center / contain;
+  -webkit-mask: url("/logo.svg") no-repeat center / contain;
+          mask: url("/logo.svg") no-repeat center / contain;
 }
 
 .site-header .hdr-cta {

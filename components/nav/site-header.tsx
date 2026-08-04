@@ -24,20 +24,32 @@ export function SiteHeader() {
   const dark = pathname.startsWith("/work/");
 
   return (
+    /* Three slots, not three items. The mark has to land on the middle of
+       the bar, and it only does that if whatever flanks it claims the same
+       width — space-between centres it in the space left over instead, which
+       pushed it 50px left of centre behind the wider CTA, and threw it 226px
+       right once the CTA hides itself under 640px. The slots hold their half
+       whether or not there is anything in them. They are wrappers rather
+       than flex on the links themselves so the clickable area stays the size
+       of the words, not half the header. */
     <header className={`site-header${dark ? " on-dark" : ""}`}>
-      <TransitionLink className="hdr-back" href={back.href}>
-        <span aria-hidden="true">←</span> {back.label}
-      </TransitionLink>
+      <div className="hdr-slot">
+        <TransitionLink className="hdr-back" href={back.href}>
+          <span aria-hidden="true">←</span> {back.label}
+        </TransitionLink>
+      </div>
 
       {/* painted via CSS mask rather than <img> so the same file can flip
           to paper on the case studies' dark ground */}
       <TransitionLink className="hdr-mark" href="/">
-        <span className="sr-only">910studies — home</span>
+        <span className="sr-only">910studio — home</span>
       </TransitionLink>
 
-      <TransitionLink className="hdr-cta" href="/contact">
-        Start a project
-      </TransitionLink>
+      <div className="hdr-slot end">
+        <TransitionLink className="hdr-cta" href="/contact">
+          Start a project
+        </TransitionLink>
+      </div>
     </header>
   );
 }
