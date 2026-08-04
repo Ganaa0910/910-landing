@@ -611,9 +611,13 @@ h1 { margin:0; }
 }
 .work-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-/* the front cover gets the brand shadow, so the eye knows which one is live
-   without having to work out which is least rotated */
-.work-item[aria-current="true"] .work-cover { box-shadow: 12px 12px 0 0 var(--accent); }
+/* The front cover is already the only one face-on and at full size, which
+   is plenty to read as the live one — it does not also need to be the only
+   blue thing on screen. It gets a deeper shadow instead, so it still sits
+   above the deck without competing with the artwork. */
+.work-item[aria-current="true"] .work-cover {
+  box-shadow: 14px 14px 0 0 rgba(43, 34, 31, .16);
+}
 
 /* ── the caption under the deck ── */
 .work-now { text-align: center; padding: 0 20px; }

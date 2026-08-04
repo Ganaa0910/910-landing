@@ -1143,9 +1143,22 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     const items = qa<HTMLElement>(".work-item");
     /* Runs with the deck, not across it. A column down the right edge was
        left over from the projects being a vertical list; against a
-       horizontal gallery it read as a second, unrelated axis. */
-    const half = Math.min(W * 0.30, 380);
-    const x0 = W * 0.5 - half, x1 = W * 0.5 + half;
+       horizontal gallery it read as a second, unrelated axis.
+
+       Its LENGTH comes from how many projects there are, not from a fixed
+       width. A rail sized to the viewport spaces four checkpoints a quarter
+       of the screen apart and would jam thirty of them into the same run —
+       the count is the one thing here that changes on its own, as work gets
+       added, so it is what the geometry hangs off. CHECK_PITCH is the room a
+       checkpoint would like; the clamp is what it actually gets once there
+       are enough of them to fill the screen, after which they tighten
+       instead of overflowing. */
+    const CHECK_PITCH = 96;
+    const span = Math.max(
+      190,
+      Math.min((items.length - 1) * CHECK_PITCH, Math.min(W * 0.74, 940)),
+    );
+    const x0 = W * 0.5 - span / 2, x1 = W * 0.5 + span / 2;
     const y = H - Math.min(64, Math.max(38, H * 0.062));
     if (items.length < 2) return { cx: (x0 + x1) / 2, cy: y, r: RAIL_BALL_R, y, x0, x1, p: 0 };
 
@@ -1183,25 +1196,37 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       ctx.restore();
     }
 
-    /* one checkpoint per project, lighting as it is reached */
+    /* One checkpoint per project, lighting as it is reached.
+     *
+     * Sized from the gap it actually got rather than from constants. Once
+     * the rail has hit its maximum length the checkpoints keep arriving and
+     * the gap keeps shrinking, so a fixed 26px star and a label every stop
+     * would end up a smear of overlapping marks. Below a legible gap the
+     * numbers drop out and only the marks are left — the rail's job at that
+     * point is "roughly where in the set am I", which it still does. */
+    const pitch = n > 1 ? (rp.x1 - rp.x0) / (n - 1) : rp.x1 - rp.x0;
+    const mark = Math.max(11, Math.min(26, pitch * 0.44));
+    const numbered = pitch >= 34;
+
     for (let i = 0; i < n; i++) {
       const f = n > 1 ? i / (n - 1) : 0.5;
       const x = lerp(rp.x0, rp.x1, f);
       const reached = rp.p >= f - 0.02;
       if (reached && starReady) {
-        const g = 26;
         ctx.globalAlpha = a;
-        ctx.drawImage(starBitmap(g), x - g / 2, rp.y - g / 2, g, g);
+        ctx.drawImage(starBitmap(Math.round(mark)), x - mark / 2, rp.y - mark / 2, mark, mark);
       } else {
+        const s = Math.max(5, mark * 0.35);
         ctx.globalAlpha = a * 0.5;
         ctx.strokeStyle = P.ink;
         ctx.lineWidth = 1.5;
         ctx.save();
         ctx.translate(x, rp.y);
         ctx.rotate((h1(i * 11.3) - 0.5) * 0.2);
-        ctx.strokeRect(-4.5, -4.5, 9, 9);
+        ctx.strokeRect(-s, -s, s * 2, s * 2);
         ctx.restore();
       }
+      if (!numbered) continue;
       ctx.globalAlpha = a * (reached ? 0.85 : 0.32);
       ctx.fillStyle = reached ? P.accent : P.ink;
       ctx.font = "600 9px ui-monospace, 'IBM Plex Mono', monospace";
