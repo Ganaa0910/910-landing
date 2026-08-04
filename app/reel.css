@@ -6,7 +6,8 @@
    element, so .step stays paper-on-ink while .s2 / .contact stay ink-on-paper. */
 .reel h1, .reel h2, .reel h3,
 .contact-page h1, .contact-page h2, .contact-page h3,
-.work-page h1, .work-page h2, .work-page h3 {
+.work-page h1, .work-page h2, .work-page h3,
+.case-study h1, .case-study h2, .case-study h3 {
   font-family: var(--mono);
   font-weight: 500;
   letter-spacing: -.04em;
@@ -695,18 +696,29 @@ h1 { margin:0; }
 .hdr-back:hover { color: var(--ink); }
 .hdr-back:hover span[aria-hidden] { transform: translateX(-4px); }
 
-/* logo.svg, not logo-header.svg: the latter is the "910studies" cut, and the
-   bar was reading a different name than the rest of the site. This is the
-   same file components/reel/brand-mark.tsx was generated from — its wordmark
-   path is byte-identical to the one S1 draws — so the header and the reel
-   cannot drift apart. Keep the aspect-ratio matched to its viewBox. */
+/* Two cuts of the same lockup — logo.svg is "910studio", logo-header.svg is
+   "910studies" — chosen per section in components/nav/site-header.tsx.
+   logo.svg is also what components/reel/brand-mark.tsx was generated from;
+   its wordmark path is byte-identical to the one S1 draws, so the bar and the
+   reel cannot drift apart.
+
+   Sized by HEIGHT, not width. The two cuts have different aspect ratios
+   (439:140 vs 475:140) because the word is longer, so a fixed width would
+   render the 910 grid ~8% smaller on the work pages and the mark would
+   visibly change size as you navigate. Fixing the height instead keeps the
+   squares identical and lets only the word run on. */
 .hdr-mark {
   display: block; flex: 0 0 auto;
-  width: clamp(104px, 12vw, 152px);
+  height: clamp(33px, 3.83vw, 48px);
   aspect-ratio: 439 / 140;
   background-color: var(--ink);
   -webkit-mask: url("/logo.svg") no-repeat center / contain;
           mask: url("/logo.svg") no-repeat center / contain;
+}
+.hdr-mark.studies {
+  aspect-ratio: 475 / 140;
+  -webkit-mask-image: url("/logo-header.svg");
+          mask-image: url("/logo-header.svg");
 }
 
 .site-header .hdr-cta {
@@ -736,5 +748,5 @@ h1 { margin:0; }
 @media (max-width: 640px) {
   .site-header { padding: 14px 20px; gap: 12px; }
   .hdr-cta { display: none; }          /* the page already ends in one */
-  .hdr-mark { width: 108px; }
+  .hdr-mark { height: 34px; }          /* height, not width — see above */
 }

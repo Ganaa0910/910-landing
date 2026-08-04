@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { TransitionLink } from "./page-shell";
+import { getProject } from "@/lib/projects";
 
 /* Where "back" goes, per route. An explicit destination rather than
  * history.back() — someone arriving from a shared link has no history to go
@@ -20,8 +21,23 @@ export function SiteHeader() {
      on top of it would be two logos arguing */
   if (!back) return null;
 
-  /* the case studies keep v1's dark art direction, so the bar inverts */
-  const dark = pathname.startsWith("/work/");
+  /* The bar inverts to match the ground the case study actually sits on —
+     and that ground is the client's, not ours, so it has to come from the
+     project's palette rather than from the path. Reading it off
+     `pathname.startsWith("/work/")` forced a dark bar onto every case study,
+     which was only ever right because every case study happened to be dark;
+     the first paper one put a black bar on a near-white page. */
+  const slug = pathname.startsWith("/work/")
+    ? pathname.slice("/work/".length).split("/")[0]
+    : null;
+  const dark = slug ? getProject(slug)?.palette.mode === "dark" : false;
+
+  /* The wordmark answers the section. The work pages are studies, so the bar
+     reads 910studies there — index and individual case study alike, since a
+     case study is the thing the pun is about. Everywhere else it is the
+     studio. Two cuts of the same lockup: identical 910 grid, different tail
+     on the word. */
+  const studies = pathname.startsWith("/work");
 
   return (
     /* Three slots, not three items. The mark has to land on the middle of
@@ -39,10 +55,11 @@ export function SiteHeader() {
         </TransitionLink>
       </div>
 
-      {/* painted via CSS mask rather than <img> so the same file can flip
-          to paper on the case studies' dark ground */}
-      <TransitionLink className="hdr-mark" href="/">
-        <span className="sr-only">910studio — home</span>
+      {/* painted via CSS mask rather than <img> so either cut can flip to
+          paper on the case studies' dark ground */}
+      <TransitionLink className={`hdr-mark${studies ? " studies" : ""}`} href="/">
+        {/* the accessible name follows what is actually on screen */}
+        <span className="sr-only">{studies ? "910studies" : "910studio"} — home</span>
       </TransitionLink>
 
       <div className="hdr-slot end">
