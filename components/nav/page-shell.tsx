@@ -111,10 +111,13 @@ export function NavProvider({ children }: { children: ReactNode }) {
         cameFromAnotherPage.current = true;
         setNavigated(true);
         setLeaving(true);
-        /* Tell the object where it is going now, rather than letting it find
-           out when the URL changes. The sequence is: page slides out WHILE the
-           globe shrinks, then the next page slides in — if the morph waited
-           for the route it would start late and land after the arrival. */
+        /* Tell the object where it is going NOW, rather than letting it find
+           out when the URL changes — the morph has to be well under way by
+           the time the page has finished leaving. The order it buys is: the
+           page goes, the object lands on the rail alone, then the work
+           arrives. The waiting is done by .await-object in app/reel.css; all
+           that happens here is starting the object early enough for there to
+           be something to wait for. */
         window.dispatchEvent(new CustomEvent("reel:route", { detail: href }));
         if (timer.current) clearTimeout(timer.current);
         /* scroll: false — Next would jump to the top on commit, undoing the
@@ -191,9 +194,17 @@ export function NavProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/* Routes the shared object actually travels to, and so has to be waited
+   for. Everywhere else it is simply hidden, and holding the entrance open
+   for a morph that is not happening would just be dead air. */
+const OBJECT_ROUTES = ["/work"];
+
 export function PageShell({ children }: { children: ReactNode }) {
   const { leaving, navigated } = useContext(NavContext);
   const pathname = usePathname();
+  /* not on a cold load: there is no outgoing page, so there is no sequence
+     to be second in */
+  const awaitObject = navigated && OBJECT_ROUTES.includes(pathname);
 
   return (
     <div className={`shell${leaving ? " leaving" : ""}`}>
@@ -201,7 +212,10 @@ export function PageShell({ children }: { children: ReactNode }) {
           `cold` on the very first mount: there is no page being transitioned
           from, and playing the entrance anyway drags the whole reel in from
           the right while S1's mark is still assembling itself. */}
-      <div className={`shell-inner${navigated ? "" : " cold"}`} key={pathname}>
+      <div
+        className={`shell-inner${navigated ? "" : " cold"}${awaitObject ? " await-object" : ""}`}
+        key={pathname}
+      >
         {children}
       </div>
     </div>

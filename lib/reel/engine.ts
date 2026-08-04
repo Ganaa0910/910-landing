@@ -1120,12 +1120,14 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
      on being drawn from this while it rolls across to the rail */
   let frozen = { p: 0, z: 0, roll: 0, out: 0 };
   let rollSpin = 0;   // extra rotation, driven by distance travelled
-  /* How long the object takes to fly between two routes' poses. Wants to
-     land with the incoming page rather than before it: the page is on screen
-     for --t-page-out then --t-page-in, about 1420ms end to end, so a 1050ms
-     morph left the globe parked and waiting for the last third of the
-     arrival. Sized to finish just under the page instead. */
-  const MORPH_MS = 1350;
+  /* How long the object takes to fly between two routes' poses.
+     Lands BEFORE the incoming page rather than with it, which is the whole
+     point of the sequence: the old page goes, the object becomes the thing
+     the new page is indexed by, and only then does the work arrive. The
+     budget is --t-page-out (the exit) plus --t-object-lead (the beat the
+     shell holds open for exactly this), so this has to finish inside their
+     sum or the projects start sliding in mid-flight. */
+  const MORPH_MS = 1040;
   let lastPose = { cx: 0, cy: 0, r: 0 };
 
   const RAIL_BALL_R = 13;
