@@ -1130,16 +1130,34 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
   const RAIL_BALL_R = 13;
 
-  /* where the work index wants the object: a vertical track down the right */
+  /* Where the work index wants the object: a vertical track down the right.
+   *
+   * How far through the collection we are comes from --work-p, which the
+   * gallery publishes every frame. It used to be derived here, from the
+   * vertical distance between the first and last .work-item — which only
+   * held while the projects were stacked down the page. They run
+   * horizontally now, so every card shares a top, the span is zero, and the
+   * indicator would sit at its first checkpoint forever. The page knows its
+   * own progress; this just reads it. */
   function railPose(W: number, H: number) {
     const items = qa<HTMLElement>(".work-item");
     const x = W - Math.min(56, Math.max(26, W * 0.035));
     const y0 = H * 0.20, y1 = H * 0.80;
     if (items.length < 2) return { cx: x, cy: (y0 + y1) / 2, r: RAIL_BALL_R, x, y0, y1, p: 0 };
-    const first = items[0].getBoundingClientRect();
-    const last = items[items.length - 1].getBoundingClientRect();
-    const span = last.top - first.top;
-    const p = span > 0 ? clamp01((H * 0.42 - first.top) / span) : 0;
+
+    const published = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--work-p"),
+    );
+    let p = Number.isFinite(published) ? clamp01(published) : 0;
+
+    /* fallback for a vertical list, and for the frame or two before the
+       gallery has mounted and published anything */
+    if (!Number.isFinite(published)) {
+      const first = items[0].getBoundingClientRect();
+      const last = items[items.length - 1].getBoundingClientRect();
+      const span = last.top - first.top;
+      p = span > 0 ? clamp01((H * 0.42 - first.top) / span) : 0;
+    }
     return { cx: x, cy: lerp(y0, y1, p), r: RAIL_BALL_R, x, y0, y1, p };
   }
 

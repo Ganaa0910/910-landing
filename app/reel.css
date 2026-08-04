@@ -504,19 +504,14 @@ h1 { margin:0; }
    rather than a grid: the work gets room instead of being tiled.
    ══════════════════════════════════════════════════════════════════ */
 .work-page {
-  --art-h: clamp(190px, 27vw, 360px);
   min-height: 100dvh;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--mono);
   -webkit-font-smoothing: antialiased;
-  /* The bottom padding is scroll runway, not decoration. Opening the last
-     case in the rack adds --art-h below a spine that already sits near the
-     foot of the page, and a page that ends there simply cannot scroll far
-     enough to bring it into the middle — the browser clamps the request and
-     the case stays half under the fold. So the page carries enough tail to
-     make centring reachable for every card, not just the ones near the top. */
-  padding: clamp(48px, 9vh, 104px) clamp(20px, 6vw, 96px) calc(var(--art-h) + 14vh);
+  /* the deck supplies its own scroll runway via .work-track, so this only
+     has to clear the header bar and give the tail some air */
+  padding: clamp(48px, 9vh, 104px) clamp(20px, 6vw, 96px) clamp(56px, 9vh, 104px);
 }
 .work-wrap { max-width: 1180px; margin: 0 auto; }
 
@@ -551,100 +546,120 @@ h1 { margin:0; }
   .work-lede { max-width: 46ch; }
 }
 
-/* ── the rack ──────────────────────────────────────
-   Cases filed in a drawer, seen straight on: spines flush in a ruled column,
-   and pulling one out slides its sleeve open and pushes the rest down. Flat,
-   no tilt and no perspective, because the rest of this site is orthographic.
+/* ── cover flow ─────────────────────────────────────
+   The deck is scrubbed by the page's vertical scroll — see
+   components/work/cover-flow.tsx — so the track below is the timeline and
+   the stage is what stays on screen while it runs. Same shape as the reel:
+   a tall element with a sticky child.
 
-   The collapse is a grid row going 0fr → 1fr rather than the obvious
-   negative margin. Overlapping cards by the height of their own artwork
-   works for every card except one — whichever end of the stack has nothing
-   stacked after it has no way to hide its sleeve, and sits permanently open
-   while the others stay filed. A row that collapses belongs to the card
-   itself, so all four behave the same and there is no magic number tying the
-   overlap to the art's height. */
-.work-stack {
-  --edge: 1.5px;
-  border: var(--edge) solid var(--ink);
+   Every transform is written per frame in JS rather than declared here.
+   Interpolating between covers means each one's rotation, depth and offset
+   depend on its distance from the front slot, which is a continuous number
+   this file has no way to see. */
+.work-track {
+  position: relative;
+  /* one screen to look at, plus a screen of travel per cover after the
+     first — enough scroll to reach each one without it feeling like work */
+  height: calc(100vh + (var(--covers) - 1) * 82vh);
+}
+.work-stage {
+  position: sticky; top: 0;
+  height: 100dvh;
+  display: grid;
+  /* masthead, deck, caption, dots — the deck takes whatever is left, so the
+     composition fits any viewport without the caption dropping off */
+  grid-template-rows: auto 1fr auto auto;
+  align-items: center;
+  overflow: hidden;
+  /* clears the fixed bar itself, because the page cannot: this is sticky at
+     top:0 and would otherwise slide underneath it */
+  padding-top: clamp(88px, 10.5vh, 116px);
+}
+.work-masthead { align-self: start; }
+
+.work-deck {
+  position: relative;
+  display: grid; place-items: center;
+  height: 100%;
+  /* the raked covers only read as raked with a camera on them; without this
+     rotateY is an affine squash and the deck looks like folded paper */
+  perspective: 1600px;
+  perspective-origin: 50% 46%;
 }
 
 .work-item {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 0fr;      /* spine, then the filed-away sleeve */
-  text-decoration: none; color: inherit;
-  background: var(--paper);
-  transition:
-    grid-template-rows .52s cubic-bezier(.16, 1, .3, 1),
-    transform .3s cubic-bezier(.16, 1, .3, 1),
-    box-shadow .3s cubic-bezier(.16, 1, .3, 1);
+  position: absolute;
+  display: block; text-decoration: none;
+  width: clamp(230px, 34vw, 460px);
+  transform-style: preserve-3d;
+  /* No transition. These are driven from the scroll frame by frame, and a
+     transition on top would fight the scrub — every cover would chase a
+     value that had already moved on, and the deck would swim behind the
+     page instead of tracking it. */
+  will-change: transform, opacity;
 }
-/* one rule between cases, none at the ends — the drawer supplies those */
-.work-item + .work-item { border-top: var(--edge) solid var(--ink); }
-
-/* Open. focus-visible as well as hover, or the rack is unusable from a
-   keyboard — the artwork would stay filed away for anyone tabbing through. */
-.work-item:hover,
-.work-item:focus-visible {
-  grid-template-rows: auto 1fr;
-  z-index: 3;                        /* so the shadow is not clipped by the next card */
-  transform: translate(-3px, -3px);
-  box-shadow: 8px 8px 0 0 var(--accent);
-}
-
-/* ── the spine: all that shows at rest ── */
-.work-spine {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  align-items: center;
-  gap: clamp(16px, 3vw, 40px);
-  padding: clamp(18px, 2.6vh, 28px) clamp(18px, 3vw, 34px);
-}
-.work-num {
-  font-size: 11px; font-weight: 600; letter-spacing: .2em;
-  color: var(--accent);
-}
-.work-name { display: block; min-width: 0; }
-.work-item h2 {
-  font-size: clamp(24px, 3.6vw, 46px); font-weight: 500;
-  line-height: 1; letter-spacing: -.045em; margin: 0;
-  transition: color .18s;
-}
-.work-item:hover h2,
-.work-item:focus-visible h2 { color: var(--accent); }
-.work-scope {
-  display: block; margin-top: 7px;
-  font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--ink-3);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.work-year {
-  font-size: 11px; letter-spacing: .12em; color: var(--ink-3);
-}
-.work-go {
-  font-size: 17px; color: var(--ink-3);
-  transition: transform .22s cubic-bezier(.16,1,.3,1), color .18s;
-}
-.work-item:hover .work-go,
-.work-item:focus-visible .work-go { color: var(--accent); transform: translateX(6px); }
-
-/* ── the sleeve: filed away until you pull it ── */
-/* No height of its own, on purpose. An explicit height on a grid item wins
-   over the track that contains it, so the sleeve would stay 360px tall
-   inside a 0fr row and simply overflow it — nothing would ever collapse.
-   The height comes off the image instead, which lets 1fr resolve to the
-   content and 0fr genuinely go to nothing. min-height:0 is what allows a
-   grid item to shrink below its content in the first place. */
-.work-art {
-  position: relative; display: block;
-  min-height: 0; overflow: hidden;
+.work-cover {
+  display: block; position: relative;
+  aspect-ratio: 16 / 10;
   background: var(--ink);
+  border: 1.5px solid var(--ink);
+  box-shadow: 10px 10px 0 0 rgba(43, 34, 31, .1);
+  overflow: hidden;
 }
-.work-art img {
-  display: block; width: 100%;
-  height: var(--art-h);
-  object-fit: cover;
+.work-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* the front cover gets the brand shadow, so the eye knows which one is live
+   without having to work out which is least rotated */
+.work-item[aria-current="true"] .work-cover { box-shadow: 12px 12px 0 0 var(--accent); }
+
+/* ── the caption under the deck ── */
+.work-now { text-align: center; padding: 0 20px; }
+.work-now-n {
+  font-size: 11px; font-weight: 600; letter-spacing: .2em;
+  color: var(--accent); margin: 0 0 10px;
 }
+.work-now-n span { color: var(--ink-3); font-weight: 400; }
+.work-page .work-now h2 {
+  font-size: clamp(26px, 4vw, 52px); font-weight: 500;
+  line-height: 1; letter-spacing: -.05em; margin: 0 0 12px;
+}
+.work-now-meta {
+  font-size: 10.5px; line-height: 1.9; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0 0 18px;
+}
+.work-now-go {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  border-bottom: 2px solid var(--accent); padding-bottom: 4px;
+}
+.work-now-go span { transition: transform .18s; }
+.work-now-go:hover span { transform: translateX(5px); }
+
+/* ── the dots ── */
+.work-dots {
+  display: flex; justify-content: center; gap: 10px;
+  padding: 22px 0 clamp(18px, 4vh, 40px);
+}
+.work-dots button {
+  width: 9px; height: 9px; padding: 0;
+  background: transparent; border: 1.5px solid var(--ink-3);
+  cursor: pointer; transition: background .18s, border-color .18s;
+}
+.work-dots button.on { background: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 700px) {
+  .work-item { width: clamp(210px, 66vw, 340px); }
+  .work-deck { perspective: 900px; }
+}
+
+/* Reduced motion still scrubs — it is the reader's own scroll — but the
+   raking is the part that reads as motion for its own sake, so the deck
+   flattens to a plain carousel. */
+@media (prefers-reduced-motion: reduce) {
+  .work-deck { perspective: none; }
+}
+
 .work-tail {
   margin-top: clamp(56px, 9vh, 104px);
   display: flex; align-items: center; justify-content: space-between;
@@ -662,15 +677,6 @@ h1 { margin:0; }
 @media (hover: none) {
   .work-item { grid-template-rows: auto 1fr; }
   .work-item:hover, .work-item:focus-visible { transform: none; box-shadow: none; }
-}
-
-@media (max-width: 640px) {
-  /* on .work-page, not .work-stack — the page's bottom runway is sized off
-     this too, and the two have to be reading the same number */
-  .work-page { --art-h: clamp(150px, 44vw, 240px); }
-  .work-spine { grid-template-columns: auto 1fr auto; gap: 14px; }
-  .work-go { display: none; }        /* the whole card is the target here */
-  .work-scope { display: none; }
 }
 
 /* the globe's third life — the vertical project index on /work */
@@ -848,9 +854,9 @@ h1 { margin:0; }
 
 /* clear the bar */
 .work-page, .contact-page, .case-study { padding-top: clamp(112px, 14vh, 168px); }
-/* the rack wants to start near the top, so this one clears the bar and not
-   much else — the other two are reading pages and keep their air */
-.work-page { padding-top: clamp(100px, 11vh, 126px); }
+/* the gallery's sticky stage clears the bar from the inside, so the page
+   itself must not add clearance on top of it */
+.work-page { padding-top: 0; }
 
 @media (max-width: 640px) {
   .site-header { padding: 14px 20px; gap: 12px; }
@@ -1201,15 +1207,36 @@ h1 { margin:0; }
   gap: 0; margin-top: 30px; border: 1.5px solid var(--cs-rule);
 }
 .cs-artrow > figure {
-  display: grid; place-items: center; gap: 14px;
-  padding: clamp(20px, 3vw, 34px) 14px;
+  display: grid; grid-template-rows: 1fr auto; gap: 20px;
+  place-items: center;
+  padding: clamp(26px, 3.4vw, 46px) clamp(14px, 2vw, 26px);
   border-right: 1.5px solid var(--cs-rule);
+  /* the drawings are hairline outlines; a faint accent wash under each one
+     gives the cell enough ground that the figure reads as a plate rather
+     than as a stray mark on the page */
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      color-mix(in srgb, var(--cs-accent) 9%, transparent), transparent 72%);
+  transition: background .25s;
 }
 .cs-artrow > figure:last-child { border-right: 0; }
-.cs-artrow img { display: block; width: 100%; max-width: 150px; height: auto; }
+.cs-artrow > figure:hover {
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      color-mix(in srgb, var(--cs-accent) 17%, transparent), transparent 76%);
+}
+.cs-artrow img {
+  display: block; width: auto; height: auto;
+  max-width: 100%; max-height: clamp(220px, 26vw, 340px);
+}
 .cs-artrow figcaption {
-  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--cs-ink-3); text-align: center;
+  font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--cs-ink-2); text-align: center;
+}
+.cs-artrow figcaption b { display: block; font-weight: 400; }
+.cs-artrow figcaption span {
+  display: block; margin-top: 5px; font-size: 9.5px;
+  letter-spacing: .14em; color: var(--cs-ink-3);
 }
 
 /* a solid statement band in the project's accent */
@@ -1250,17 +1277,40 @@ h1 { margin:0; }
    The client's own line art, sampled to a coarse grid and redrawn as dither
    squares — the same language as the 910 mark and the reel's globe.
 
-   z-index 0 with the content lifted to 1, NOT a negative z-index: negative
-   would put it behind .case-study's own background and it would vanish. It
-   is fixed rather than absolute so it holds still while the page scrolls
-   past, which is what makes it read as ambient rather than as a texture
-   glued to the top of the document. */
+   Scoped to the hero band, NOT the whole document. The first version was
+   position:fixed across the viewport, which meant every one of the page's
+   ten thousand pixels of copy scrolled over a field of dots — at any alpha
+   that is not ambient, it is noise behind body text. Here it lives in the
+   masthead only, where the layout actually has empty space.
+
+   Two masks, intersected: one ramps the field in across the right half so it
+   stays off the measure (the headline caps at 20ch, the lede at 62ch, so the
+   right side of the hero is empty), the other fades it out before the first
+   section starts.
+
+   z-index 0 with the content lifted to 1, NOT a negative z-index — negative
+   would drop it behind .case-study's own background and it would vanish. */
+.case-study { position: relative; }
 .cs-dither {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
-  height: 100%;
+  height: min(1180px, 132vh);
+  z-index: 0;
   pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0 46%, #000 82%),
+    linear-gradient(to bottom, transparent 0 36%, #000 62% 84%, transparent 98%);
+  mask-image:
+    linear-gradient(to right, transparent 0 46%, #000 82%),
+    linear-gradient(to bottom, transparent 0 36%, #000 62% 84%, transparent 98%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 .case-study > .cs-wrap { position: relative; z-index: 1; }
+
+/* on a phone the hero copy runs the full width, so there is no empty side
+   for the field to live in */
+@media (max-width: 900px) {
+  .cs-dither { display: none; }
+}

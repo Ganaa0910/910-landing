@@ -100,7 +100,7 @@ function sample(img: HTMLImageElement, cols: number, rows: number): Field {
 
 export function AmbientDither({
   sources,
-  opacity = 0.4,
+  opacity = 0.2,
 }: {
   sources: string[];
   opacity?: number;

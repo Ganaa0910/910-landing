@@ -35,11 +35,14 @@ const DISCIPLINES = [
   { file: "undesnii-khugjim", mn: "Үндэсний хөгжим", en: "National ensemble", note: "The full traditional orchestra — the largest configuration Nair books." },
 ];
 
+/* the four headline disciplines, as the client's own line drawings. w/h are
+   the source viewBoxes — they are tall portraits at wildly different ratios,
+   so they need their real proportions rather than a shared box. */
 const SILHOUETTES = [
-  { file: "throat", label: "Khöömii" },
-  { file: "morin-khuur", label: "Morin khuur" },
-  { file: "tsam", label: "Tsam" },
-  { file: "dancer", label: "Bujig" },
+  { file: "throat", label: "Khöömii", mn: "Хөөмий", w: 558, h: 1029 },
+  { file: "morin-khuur", label: "Morin khuur", mn: "Морин хуур", w: 741, h: 858 },
+  { file: "tsam", label: "Tsam", mn: "Цам", w: 1040, h: 1393 },
+  { file: "dancer", label: "Bujig", mn: "Бүжиг", w: 736, h: 858 },
 ];
 
 const MODES = [
@@ -205,23 +208,30 @@ export default function NairCaseStudy() {
           Mongolian client it is a direct link to the thing they already came for.
         </p>
 
-        <div className="cs-grid cs-grid-3">
-          {DISCIPLINES.map((d) => (
-            <figure key={d.file} className="cs-frame fill">
-              <Image src={`${IMG}/disciplines/${d.file}.png`} alt={`${d.en} — ${d.mn}`} width={422} height={240} />
-              <figcaption className="cs-cap">
-                <span>{d.mn}</span>
-                <b>{d.en}</b>
+        <div className="cs-artrow">
+          {SILHOUETTES.map((s) => (
+            <figure key={s.file}>
+              <Image
+                src={`${IMG}/art/${s.file}.svg`}
+                alt={`${s.label} — line illustration`}
+                width={s.w}
+                height={s.h}
+              />
+              <figcaption>
+                <b>{s.mn}</b>
+                <span>{s.label}</span>
               </figcaption>
             </figure>
           ))}
         </div>
 
         <div className="cs-stack">
-          {DISCIPLINES.slice(0, 4).map((d) => (
+          {DISCIPLINES.map((d) => (
             <div key={d.file} className="cs-row">
               <b>{d.en}</b>
-              <p>{d.note}</p>
+              <p>
+                <strong>{d.mn}.</strong> {d.note}
+              </p>
             </div>
           ))}
         </div>
