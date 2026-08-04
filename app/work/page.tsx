@@ -15,6 +15,14 @@ export const metadata: Metadata = {
   },
 };
 
+/* Spelled out, because "5 projects, all shipped" reads like a spec sheet.
+   Past twelve the digit is fine — by then it is a quantity, not a boast. */
+const WORDS = [
+  "No", "One", "Two", "Three", "Four", "Five", "Six",
+  "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+];
+const count = (n: number) => WORDS[n] ?? String(n);
+
 export default function WorkPage() {
   return (
     <main className="work-page">
@@ -34,8 +42,11 @@ export default function WorkPage() {
           <header className="work-masthead">
             <div>
               <p className="eyebrow">Work</p>
+              {/* counted, not typed. This said "Four" while five were in
+                  the list — the sort of thing nobody notices until a client
+                  does. */}
               <h1>
-                Four projects, <i>all shipped.</i>
+                {count(PROJECTS.length)} projects, <i>all shipped.</i>
               </h1>
             </div>
             <p className="work-lede">
