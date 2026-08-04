@@ -72,7 +72,7 @@ export default function PomoCaseStudy() {
 
       <div className="cs-bleed">
         <Image
-          src={`${IMG}/cover.png`}
+          src={`${IMG}/thumb.png`}
           alt="pomo expanded out of the notch — clock, weather and per-project notes"
           width={1600}
           height={1000}
