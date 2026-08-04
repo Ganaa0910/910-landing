@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { getProject, type Project } from "@/lib/projects";
 import { TransitionLink } from "@/components/nav/page-shell";
+import { AmbientDither } from "./ambient-dither";
 
 /* The frame every case study is built in. Server components — the pages are
  * static content, and only the demo frames need to be client islands.
@@ -12,9 +13,12 @@ import { TransitionLink } from "@/components/nav/page-shell";
 export function CaseStudy({
   slug,
   children,
+  ambient,
 }: {
   slug: string;
   children: ReactNode;
+  /* line art / motifs to run as the ambient dither field behind the page */
+  ambient?: string[];
 }) {
   const project = getProject(slug);
   if (!project) {
@@ -43,6 +47,7 @@ export function CaseStudy({
         } as CSSProperties
       }
     >
+      {ambient?.length ? <AmbientDither sources={ambient} /> : null}
       <div className="cs-wrap">{children}</div>
     </main>
   );

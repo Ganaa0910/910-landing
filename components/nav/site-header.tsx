@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { TransitionLink } from "./page-shell";
 import { getProject } from "@/lib/projects";
@@ -21,16 +22,19 @@ export function SiteHeader() {
      on top of it would be two logos arguing */
   if (!back) return null;
 
-  /* The bar inverts to match the ground the case study actually sits on —
-     and that ground is the client's, not ours, so it has to come from the
-     project's palette rather than from the path. Reading it off
-     `pathname.startsWith("/work/")` forced a dark bar onto every case study,
-     which was only ever right because every case study happened to be dark;
-     the first paper one put a black bar on a near-white page. */
+  /* On a case study the bar sits on the client's ground, so it takes the
+     client's colours — not just a light/dark flip.
+
+     Two things went wrong when it only flipped. The bar painted 910's paper
+     (#FBF9F6) against Uuye's (#F0EDE8) and its black against Nair's #06090C:
+     near-misses, which read as a mistake rather than as chrome. And the CTA
+     kept its 910-blue offset shadow, dropping the one colour that is supposed
+     to mean "the studio" onto a page that is meant to be entirely the
+     client's. Handing the bar the palette fixes both at once. */
   const slug = pathname.startsWith("/work/")
     ? pathname.slice("/work/".length).split("/")[0]
     : null;
-  const dark = slug ? getProject(slug)?.palette.mode === "dark" : false;
+  const palette = slug ? getProject(slug)?.palette : undefined;
 
   /* The wordmark answers the section. The work pages are studies, so the bar
      reads 910studies there — index and individual case study alike, since a
@@ -48,7 +52,21 @@ export function SiteHeader() {
        whether or not there is anything in them. They are wrappers rather
        than flex on the links themselves so the clickable area stays the size
        of the words, not half the header. */
-    <header className={`site-header${dark ? " on-dark" : ""}`}>
+    <header
+      className={`site-header${palette ? " on-project" : ""}`}
+      style={
+        palette
+          ? ({
+              "--hdr-bg": palette.ground,
+              "--hdr-ink": palette.ink,
+              "--hdr-ink-2": palette.ink2,
+              "--hdr-rule": palette.rule,
+              "--hdr-accent": palette.accent,
+              "--hdr-on-accent": palette.onAccent,
+            } as CSSProperties)
+          : undefined
+      }
+    >
       <div className="hdr-slot">
         <TransitionLink className="hdr-back" href={back.href}>
           <span aria-hidden="true">←</span> {back.label}

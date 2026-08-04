@@ -60,6 +60,57 @@ export const PROJECTS: Project[] = [
     },
   },
   {
+    slug: "nair",
+    title: "Nair Entertainment",
+    client: "Nair Entertainment",
+    year: "2026",
+    scope: ["Design", "Bilingual Architecture", "Frontend", "Deploy"],
+    description:
+      "Bilingual home for Mongolia's traditional performing arts. Mongolian-first, nine disciplines, booking flow.",
+    image: "/demos/nair/assets/hero.png",
+    featured: true,
+    /* The site itself is light — +layout.svelte paints #fff and builds every
+       muted tone as an alpha of #06090c (.48 copy, .04/.08 surfaces, .16
+       borders). #06090c is the INK, not the ground; counting hex frequency
+       reads it the wrong way round, because the ink appears far more often
+       than the background it sits on. Crimson is the deel silk. */
+    palette: {
+      mode: "light",
+      ground: "#FFFFFF",
+      ink: "#06090C",
+      ink2: "rgba(6,9,12,.62)",
+      ink3: "rgba(6,9,12,.40)",
+      rule: "rgba(6,9,12,.12)",
+      accent: "#9E1C21",
+      onAccent: "#FFFFFF",
+      signal: "#B32228",
+    },
+  },
+  {
+    slug: "uuyee",
+    title: "Uuye",
+    client: "Uitumen Bold (Uuye)",
+    year: "2026",
+    scope: ["Design", "Frontend", "Deploy"],
+    description:
+      "Portfolio for Mongolia's top jazz guitarist, built with no photography. Two temperatures, one grid.",
+    image: "/demos/uuyee/assets/hero.png",
+    featured: true,
+    /* the site's own Mono Signal ground, with the Burning Sunset fire as
+       the accent — the two modes the case study is about */
+    palette: {
+      mode: "light",
+      ground: "#F0EDE8",
+      ink: "#0A0A0A",
+      ink2: "rgba(10,10,10,.64)",
+      ink3: "rgba(10,10,10,.40)",
+      rule: "rgba(10,10,10,.14)",
+      accent: "#FF480F",
+      onAccent: "#F0EDE8",
+      signal: "#D4A024",
+    },
+  },
+  {
     slug: "cmm",
     title: "MarketIQ",
     client: "Capital Markets Mongolia",
