@@ -96,7 +96,7 @@ export default function WorkPage() {
                   src={toy.image}
                   alt={`${toy.title} — ${toy.description}`}
                   width={1600}
-                  height={1000}
+                  height={1100}
                   sizes="(max-width: 820px) 100vw, 46vw"
                 />
               </div>

@@ -75,7 +75,7 @@ export default function PomoCaseStudy() {
           src={`${IMG}/thumb.png`}
           alt="pomo expanded out of the notch — clock, weather and per-project notes"
           width={1600}
-          height={1000}
+          height={1100}
           priority
         />
         <div className="cs-cap">

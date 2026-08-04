@@ -174,7 +174,7 @@ export function CoverFlow({
                   src={project.image}
                   alt={`${project.title} — case study`}
                   width={1600}
-                  height={1000}
+                  height={1100}
                   sizes="(max-width: 700px) 66vw, 34vw"
                   priority={i < 2}
                 />
