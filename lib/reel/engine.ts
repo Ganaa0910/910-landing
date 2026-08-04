@@ -1141,9 +1141,13 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
    * own progress; this just reads it. */
   function railPose(W: number, H: number) {
     const items = qa<HTMLElement>(".work-item");
-    const x = W - Math.min(56, Math.max(26, W * 0.035));
-    const y0 = H * 0.20, y1 = H * 0.80;
-    if (items.length < 2) return { cx: x, cy: (y0 + y1) / 2, r: RAIL_BALL_R, x, y0, y1, p: 0 };
+    /* Runs with the deck, not across it. A column down the right edge was
+       left over from the projects being a vertical list; against a
+       horizontal gallery it read as a second, unrelated axis. */
+    const half = Math.min(W * 0.30, 380);
+    const x0 = W * 0.5 - half, x1 = W * 0.5 + half;
+    const y = H - Math.min(64, Math.max(38, H * 0.062));
+    if (items.length < 2) return { cx: (x0 + x1) / 2, cy: y, r: RAIL_BALL_R, y, x0, x1, p: 0 };
 
     const published = parseFloat(
       getComputedStyle(document.documentElement).getPropertyValue("--work-p"),
@@ -1158,7 +1162,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       const span = last.top - first.top;
       p = span > 0 ? clamp01((H * 0.42 - first.top) / span) : 0;
     }
-    return { cx: x, cy: lerp(y0, y1, p), r: RAIL_BALL_R, x, y0, y1, p };
+    return { cx: lerp(x0, x1, p), cy: y, r: RAIL_BALL_R, y, x0, x1, p };
   }
 
   function drawRail(ctx: CanvasRenderingContext2D, W: number, H: number, a: number) {
@@ -1167,13 +1171,13 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
     /* the track, in the same stamped squares as the constellation */
     ctx.fillStyle = P.ink;
-    for (let i = 0, y = rp.y0; y <= rp.y1; y += 9, i++) {
-      const passed = y <= rp.cy;
-      const jx = (h1(i * 1.7) - 0.5) * 1.6;
+    for (let i = 0, x = rp.x0; x <= rp.x1; x += 9, i++) {
+      const passed = x <= rp.cx;
+      const jy = (h1(i * 1.7) - 0.5) * 1.6;
       const sz = (passed ? 2.6 : 2.1) * (0.85 + h1(i * 5.1) * 0.3);
       ctx.globalAlpha = a * (passed ? 0.6 : 0.16);
       ctx.save();
-      ctx.translate(rp.x + jx, y);
+      ctx.translate(x, rp.y + jy);
       ctx.rotate((h1(i * 7.9) - 0.5) * 0.5);
       ctx.fillRect(-sz / 2, -sz / 2, sz, sz);
       ctx.restore();
@@ -1182,18 +1186,18 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     /* one checkpoint per project, lighting as it is reached */
     for (let i = 0; i < n; i++) {
       const f = n > 1 ? i / (n - 1) : 0.5;
-      const y = lerp(rp.y0, rp.y1, f);
+      const x = lerp(rp.x0, rp.x1, f);
       const reached = rp.p >= f - 0.02;
       if (reached && starReady) {
         const g = 26;
         ctx.globalAlpha = a;
-        ctx.drawImage(starBitmap(g), rp.x - g / 2, y - g / 2, g, g);
+        ctx.drawImage(starBitmap(g), x - g / 2, rp.y - g / 2, g, g);
       } else {
         ctx.globalAlpha = a * 0.5;
         ctx.strokeStyle = P.ink;
         ctx.lineWidth = 1.5;
         ctx.save();
-        ctx.translate(rp.x, y);
+        ctx.translate(x, rp.y);
         ctx.rotate((h1(i * 11.3) - 0.5) * 0.2);
         ctx.strokeRect(-4.5, -4.5, 9, 9);
         ctx.restore();
@@ -1203,7 +1207,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       ctx.font = "600 9px ui-monospace, 'IBM Plex Mono', monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(String(i + 1).padStart(2, "0"), rp.x, y + 20);
+      ctx.fillText(String(i + 1).padStart(2, "0"), x, rp.y + 21);
     }
     ctx.globalAlpha = 1;
   }

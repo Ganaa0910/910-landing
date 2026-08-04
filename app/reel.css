@@ -566,14 +566,17 @@ h1 { margin:0; }
   position: sticky; top: 0;
   height: 100dvh;
   display: grid;
-  /* masthead, deck, caption, dots — the deck takes whatever is left, so the
+  /* masthead, deck, caption — the deck takes whatever is left, so the
      composition fits any viewport without the caption dropping off */
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto 1fr auto;
   align-items: center;
   overflow: hidden;
   /* clears the fixed bar itself, because the page cannot: this is sticky at
      top:0 and would otherwise slide underneath it */
   padding-top: clamp(88px, 10.5vh, 116px);
+  /* and leaves the floor free for the object's rail, which is drawn on the
+     canvas underneath rather than laid out here */
+  padding-bottom: clamp(84px, 10vh, 112px);
 }
 .work-masthead { align-self: start; }
 
@@ -590,7 +593,7 @@ h1 { margin:0; }
 .work-item {
   position: absolute;
   display: block; text-decoration: none;
-  width: clamp(230px, 34vw, 460px);
+  width: clamp(300px, 44vw, 600px);
   transform-style: preserve-3d;
   /* No transition. These are driven from the scroll frame by frame, and a
      transition on top would fight the scrub — every cover would chase a
@@ -636,20 +639,12 @@ h1 { margin:0; }
 .work-now-go span { transition: transform .18s; }
 .work-now-go:hover span { transform: translateX(5px); }
 
-/* ── the dots ── */
-.work-dots {
-  display: flex; justify-content: center; gap: 10px;
-  padding: 22px 0 clamp(18px, 4vh, 40px);
-}
-.work-dots button {
-  width: 9px; height: 9px; padding: 0;
-  background: transparent; border: 1.5px solid var(--ink-3);
-  cursor: pointer; transition: background .18s, border-color .18s;
-}
-.work-dots button.on { background: var(--accent); border-color: var(--accent); }
+/* No dots. The object's rail runs along the bottom of the stage now and is
+   the position indicator; two of them arguing about where you are is worse
+   than either on its own. */
 
 @media (max-width: 700px) {
-  .work-item { width: clamp(210px, 66vw, 340px); }
+  .work-item { width: clamp(270px, 84vw, 440px); }
   .work-deck { perspective: 900px; }
 }
 
@@ -689,15 +684,10 @@ h1 { margin:0; }
   z-index: 3;
   pointer-events: none;
 }
-/* the copy already sits well inside 1180px, so the rail only needs
-   clearing on narrower screens */
-@media (max-width: 1400px) {
-  .work-page { padding-right: clamp(84px, 9vw, 130px); }
-}
-@media (max-width: 760px) {
-  .work-rail { display: none; }
-  .work-page { padding-right: clamp(20px, 6vw, 96px); }
-}
+/* The right-hand gutter that used to be reserved here is gone with the rail
+   that needed it: it ran down the right edge, and it runs along the bottom
+   now, where .work-stage's own padding-bottom keeps the floor clear at
+   every width. Nothing left to special-case. */
 
 /* ── page transitions ──────────────────────────────
    Content slides out to the left and the next page arrives from the right.

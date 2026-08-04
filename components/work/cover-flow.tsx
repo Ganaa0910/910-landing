@@ -78,7 +78,11 @@ export function CoverFlow({
       root.setProperty("--work-p", p.toFixed(4));
 
       const index = p * Math.max(0, n - 1);
-      const w = stage.clientWidth * 0.01 * coverW();
+      /* Measured, not recomputed. The cover width is a clamp() in the
+         stylesheet, so mirroring it here as a vw number would agree only in
+         the middle of the range and drift at both ends — and silently
+         disagree the next time either is retuned. */
+      const w = cardsRef.current[0]?.offsetWidth ?? 0;
 
       for (let i = 0; i < n; i++) {
         const el = cardsRef.current[i];
@@ -112,7 +116,6 @@ export function CoverFlow({
       }
     };
 
-    const coverW = () => (window.innerWidth <= 700 ? 66 : 34);
     raf = requestAnimationFrame(frame);
 
     return () => {
@@ -196,18 +199,6 @@ export function CoverFlow({
           <TransitionLink className="work-now-go" href={`/work/${current.slug}`}>
             Read the case study <span aria-hidden="true">→</span>
           </TransitionLink>
-        </div>
-
-        <div className="work-dots" role="presentation">
-          {projects.map((project, i) => (
-            <button
-              key={project.slug}
-              type="button"
-              className={i === active ? "on" : undefined}
-              aria-label={`Show ${project.title}`}
-              onClick={() => scrollToIndex(i)}
-            />
-          ))}
         </div>
       </div>
     </div>
