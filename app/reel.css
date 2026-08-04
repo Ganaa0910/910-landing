@@ -637,7 +637,24 @@ h1 { margin:0; }
    once the page has landed there is no transform left and no context with
    it. `forwards` on the exit is fine: that transform only exists while the
    page is actually leaving. */
-.shell-inner { animation: pageIn 460ms cubic-bezier(.16, 1, .3, 1) backwards; }
+/* Paced to sit with the rest of the page rather than against it. Everything
+   else here moves on a long clock now — the scroll is interpolated, the
+   Earth→Diamond glide runs 2.8s — and a 460/300ms page slide read as a snap
+   cut in the middle of that. Roughly doubled, and the exit eased more gently
+   in so it drifts off rather than yanking.
+
+   The exit duration lives HERE and nowhere else. The shell has to hold the
+   outgoing page on screen for exactly as long as this animation lasts before
+   committing the route, so page-shell.tsx reads it back off the custom
+   property instead of keeping its own copy to fall out of step with. */
+:root {
+  --t-page-out: 520ms;
+  --t-page-in:  900ms;
+}
+
+.shell-inner {
+  animation: pageIn var(--t-page-in) cubic-bezier(.16, 1, .3, 1) backwards;
+}
 
 /* A cold load is not a transition. Playing the entrance anyway slides the
    whole page in from the right for half a second — which on the home page
@@ -648,7 +665,7 @@ h1 { margin:0; }
    normally the first time you navigate away.) */
 .shell-inner.cold { animation: none; }
 .shell.leaving .shell-inner {
-  animation: pageOut 300ms cubic-bezier(.7, 0, .84, 0) forwards;
+  animation: pageOut var(--t-page-out) cubic-bezier(.4, 0, .7, .2) forwards;
 }
 
 @keyframes pageIn {

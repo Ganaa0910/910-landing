@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { scrollPageTo } from "@/lib/scroll/smooth";
+import { glidePageTo, scrollPageTo } from "@/lib/scroll/smooth";
 
 /* Page transitions.
  *
@@ -26,7 +26,19 @@ import { scrollPageTo } from "@/lib/scroll/smooth";
  * Transitions API: view transitions snapshot the document as an image, which
  * would freeze the globe mid-roll — the one thing that has to stay live. */
 
-const EXIT_MS = 300;
+/* How long to hold the outgoing page on screen before committing the route.
+   It has to equal the pageOut animation exactly — commit early and the page
+   vanishes mid-slide, commit late and it sits blank at the end of one — so
+   it is read back off the stylesheet that owns the animation rather than
+   copied here, where the two would silently drift the next time one is
+   retuned. The fallback only matters if the sheet has not parsed yet. */
+function exitMs(): number {
+  const v = getComputedStyle(document.documentElement)
+    .getPropertyValue("--t-page-out")
+    .trim();
+  const ms = v.endsWith("ms") ? parseFloat(v) : parseFloat(v) * 1000;
+  return Number.isFinite(ms) && ms > 0 ? ms : 520;
+}
 
 /* Where the reel sits when you come back to it having never scrolled there
    in this session — a fraction of the scroll track. 0.23 sits in the S2
@@ -34,9 +46,13 @@ const EXIT_MS = 300;
    it between those two; they live in PHASE in lib/reel/engine.ts. */
 const REEL_S2 = 0.23;
 
-/* Long enough for a smooth scroll to the top to settle before the page
-   starts leaving. */
-const TO_TOP_MS = 420;
+/* The ride to the top before an inner page leaves. Given an explicit
+   duration rather than left to the scroller's own pacing, because the wait
+   below has to match it: 420ms was a guess at how long an interpolated
+   scroll from an unknown position would take, and from far down the work
+   index it was not close. Now both come from one number. */
+const TO_TOP_S = 0.7;
+const TO_TOP_MS = TO_TOP_S * 1000;
 
 type NavContextValue = {
   navigate: (href: string) => void;
@@ -103,7 +119,7 @@ export function NavProvider({ children }: { children: ReactNode }) {
         if (timer.current) clearTimeout(timer.current);
         /* scroll: false — Next would jump to the top on commit, undoing the
            restore below before it has a chance to run */
-        timer.current = setTimeout(() => router.push(href, { scroll: false }), EXIT_MS);
+        timer.current = setTimeout(() => router.push(href, { scroll: false }), exitMs());
       };
 
       /* Leaving an inner page from halfway down slid the content sideways
@@ -117,7 +133,7 @@ export function NavProvider({ children }: { children: ReactNode }) {
          cleanly. Reduced motion skips the ride and just goes. */
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (pathname !== "/" && !reduced && window.scrollY > 8) {
-        scrollPageTo(0);
+        glidePageTo(0, TO_TOP_S) || scrollPageTo(0);
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => depart(0), TO_TOP_MS);
         return;

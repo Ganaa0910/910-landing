@@ -9,6 +9,8 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { glidePageTo } from "@/lib/scroll/smooth";
+
 export type ReelRoute = "reel" | "rail" | "hidden";
 export type ReelHandle = {
   /* called on every navigation; the object morphs toward the new pose
@@ -312,22 +314,44 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
   /* carve the master scroll into phases. the gaps between them are holds —
      each section gets a beat at rest instead of only existing in transit.
-     Every phase is scrubbed: the reader's scroll is the only clock on this
-     page, so nothing ever swallows a wheel event to play itself out. */
+     Every phase is scrubbed off the scroll position — nothing here runs on
+     its own clock, so nothing has to swallow a wheel event to finish. */
   const seg = (t: number, a: number, b: number) => clamp01((t - a) / (b - a));
   const PHASE = {
     p:    [0.03, 0.18] as const,    // S1 → S2
-    /* The collapse out of orbit. Deliberately the shortest window on the
-       track — the same journey over less scroll is what makes it read as a
-       rip into the galaxy rather than a slow deflation.
-       The holds either side of it are held short on purpose too. The move
-       itself was never the heavy part; 600px of dead S2 in front of it and
-       300px of dead park behind it were, because scrolling through nothing
-       is what makes a section feel like work. */
+    /* The collapse out of orbit. The holds either side of it are kept short
+       on purpose: the move was never the heavy part, 600px of dead S2 in
+       front of it and 300px of dead park behind it were, because scrolling
+       through nothing is what makes a section feel like work. */
     snap: [0.28, 0.345] as const,   // S2 → S3, ending parked at "you are here"
     run:  [0.39, 0.62] as const,    // the walk round the diamond, a beat per star
     out:  [0.655, 0.945] as const,  // S3 → S4 — the parallax
   };
+
+  /* ── Earth → the Diamond of Virgo, on a clock ──────
+     The one journey on this page that should not be paced by how hard
+     somebody happens to be pushing a wheel. Cross the line out of S2 and it
+     departs, then plays out over SNAP_SECONDS: cheap to trigger, long to
+     watch.
+
+     It is animated as a SCROLL, not as a separate timeline. The reel is
+     scrubbed end to end, so gliding the page from here to there animates the
+     collapse for free, arrives with the scroll position genuinely where the
+     picture says it is, and still unwinds if you scroll back out — there is
+     no second source of truth to fall out of step.
+
+     And it never locks. Lenis answers a user wheel by retargeting, so
+     touching the wheel mid-flight takes the page back. That is the whole
+     difference from the timed cue this replaces, which pinned the page for
+     2.8s and ate every event to protect its own animation. */
+  const SNAP_SECONDS = 2.8;
+  /* land inside the park hold, settled on "you are here" with the diamond
+     walk still ahead rather than already starting */
+  const SNAP_LAND = 0.37;
+  /* Starts true so it can only fire on a real downward crossing out of S2 —
+     otherwise booting or restoring a scroll position inside the collapse
+     would set it off on arrival. */
+  let snapFired = true;
 
   /* ── S3 rail ──────────────────────────────────────
      A switchback in normalised viewport coords — right, down, left, down,
@@ -1096,7 +1120,12 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
      on being drawn from this while it rolls across to the rail */
   let frozen = { p: 0, z: 0, roll: 0, out: 0 };
   let rollSpin = 0;   // extra rotation, driven by distance travelled
-  const MORPH_MS = 1050;
+  /* How long the object takes to fly between two routes' poses. Wants to
+     land with the incoming page rather than before it: the page is on screen
+     for --t-page-out then --t-page-in, about 1420ms end to end, so a 1050ms
+     morph left the globe parked and waiting for the last third of the
+     arrival. Sized to finish just under the page instead. */
+  const MORPH_MS = 1350;
   let lastPose = { cx: 0, cy: 0, r: 0 };
 
   const RAIL_BALL_R = 13;
@@ -1259,6 +1288,21 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     }
 
     const t = masterProgress();
+
+    /* Departure. Firing needs only that the reader crossed the line going
+       down; everything after that is the glide's business. Re-arms once they
+       are back up in S2, with a gap so sitting exactly on the line cannot
+       ping-pong. Reduced motion never arms it and scrubs the collapse by
+       hand instead. */
+    if (reduced.matches) {
+      snapFired = true;
+    } else if (!snapFired && t >= PHASE.snap[0] && t < PHASE.run[0]) {
+      snapFired = true;
+      const total = reel ? reel.offsetHeight - window.innerHeight : 0;
+      if (total > 0) glidePageTo(total * SNAP_LAND, SNAP_SECONDS);
+    } else if (snapFired && t < PHASE.snap[0] - 0.03) {
+      snapFired = false;
+    }
 
     /* the collapse can't start until the globe has finished arriving in S2,
        and the walk can't start until the ball has parked — both are

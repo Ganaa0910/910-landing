@@ -67,3 +67,29 @@ export function scrollPageTo(y: number, opts?: { immediate?: boolean }) {
   /* reduced motion, or before the singleton is up */
   window.scrollTo({ top: y, behavior: opts?.immediate ? "auto" : "smooth" });
 }
+
+/* Slow start, fast middle, long settle — a camera pulling off a planet and
+   easing into the constellation, rather than a linear pan. */
+const easeInOutCubic = (t: number) =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+/* Play a stretch of the page on a clock instead of on the wheel.
+ *
+ * The reel is scrubbed end to end, so "auto-play this transition" and "scroll
+ * the page through it" are the same sentence — animating the scroll position
+ * animates everything downstream for free, and scrolling back out still
+ * unwinds it, because no separate state was created to get out of sync.
+ *
+ * Crucially this does NOT lock anything. Lenis handles a user wheel by
+ * retargeting from its current target, so touching the wheel mid-glide simply
+ * takes the scroll back. That is the difference between a transition that
+ * plays for you and the old timed cue that played AT you: this one hands over
+ * the moment you disagree with it.
+ *
+ * Returns false if there is no instance to drive — reduced motion, or before
+ * mount — so the caller can leave the scrub alone. */
+export function glidePageTo(y: number, seconds: number): boolean {
+  if (!lenis) return false;
+  lenis.scrollTo(y, { duration: seconds, easing: easeInOutCubic });
+  return true;
+}
