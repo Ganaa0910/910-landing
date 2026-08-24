@@ -3,7 +3,19 @@
    shadows are shared, and live in the .case-study block in app/reel.css.
    These palettes are the single source of truth: the case study page reads
    them into --cs-* custom properties, and SiteHeader reads `mode` to know
-   which way to invert the bar. */
+   which way to invert the bar.
+   ────────────────────────────────────────────────────────────────────
+   ADDING A CASE STUDY — the whole checklist:
+     1. `pnpm new-case <slug> "<Title>"` — scaffolds app/work/<slug>/page.tsx
+        and public/demos/<slug>/assets/
+     2. Drop your thumb at public/demos/<slug>/assets/thumb.png
+     3. Paste the generated entry into PROJECTS below.
+   A palette is OPTIONAL. Omit it and the page falls back to 910's own look;
+   when you have the client's colours, it is one call:
+     palette({ mode: "dark", ground: "#000040", accent: "#FFD700" })
+   ground + accent are all you need — ink, the translucent ramp (ink2/ink3/
+   rule) and onAccent derive automatically. Pass ink/signal/onAccent to
+   override. */
 export interface ProjectPalette {
   /* drives the header bar inversion — light ground gets the paper bar,
      dark ground gets the inverted one */
@@ -22,6 +34,45 @@ export interface ProjectPalette {
   signal?: string;
 }
 
+/* What you write. Three colours and a mode; everything else derives. */
+export type PaletteSpec = {
+  mode: "light" | "dark";
+  ground: string;
+  ink?: string;
+  accent?: string;
+  onAccent?: string;
+  signal?: string;
+};
+
+function alpha(hex: string, a: number): string {
+  let h = hex.replace("#", "");
+  if (h.length === 3)
+    h = h
+      .split("")
+      .map((c) => c + c)
+      .join("");
+  const n = parseInt(h, 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+}
+
+const NINE_TEN = { ink: "#2B221F", accent: "#2660E8" };
+
+export function palette(spec: PaletteSpec): ProjectPalette {
+  const dark = spec.mode === "dark";
+  const ink = spec.ink ?? (dark ? "#FAFAFA" : NINE_TEN.ink);
+  return {
+    mode: spec.mode,
+    ground: spec.ground,
+    ink,
+    ink2: alpha(ink, 0.62),
+    ink3: alpha(ink, 0.4),
+    rule: alpha(ink, 0.14),
+    accent: spec.accent ?? NINE_TEN.accent,
+    onAccent: spec.onAccent ?? spec.ground,
+    ...(spec.signal ? { signal: spec.signal } : {}),
+  };
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -31,10 +82,11 @@ export interface Project {
   description: string;
   image: string;
   featured?: boolean;
-  palette: ProjectPalette;
+  /* optional — omit for 910's own look while a page is being drafted */
+  palette?: ProjectPalette;
   /* "work" is client work and lives on /work. "toy" is something the studio
-     built for itself and gives away — it lives in the toybox, has a download
-     rather than an enquiry, and must never appear in the client rack. */
+      built for itself and gives away — it lives in the toybox, has a download
+      rather than an enquiry, and must never appear in the client rack. */
   kind?: "work" | "toy";
   /* toys only */
   href?: string;
@@ -53,17 +105,13 @@ export const PROJECTS: Project[] = [
     featured: true,
     /* pulled from the site's own tokens — the accent is patinated bronze,
        the ground is foundry dark */
-    palette: {
+    palette: palette({
       mode: "dark",
-      ground: "#0A0A0A",
+      ground: "#0E0906",
       ink: "#E5E5E5",
-      ink2: "rgba(229,229,229,.62)",
-      ink3: "rgba(229,229,229,.38)",
-      rule: "rgba(229,229,229,.14)",
       accent: "#D4AF7A",
-      onAccent: "#0A0A0A",
       signal: "#CD7F32",
-    },
+    }),
   },
   {
     slug: "nair",
@@ -75,22 +123,16 @@ export const PROJECTS: Project[] = [
       "Bilingual home for Mongolia's traditional performing arts. Mongolian-first, nine disciplines, booking flow.",
     image: "/demos/nair/assets/thumb.png",
     featured: true,
-    /* The site itself is light — +layout.svelte paints #fff and builds every
-       muted tone as an alpha of #06090c (.48 copy, .04/.08 surfaces, .16
-       borders). #06090c is the INK, not the ground; counting hex frequency
-       reads it the wrong way round, because the ink appears far more often
-       than the background it sits on. Crimson is the deel silk. */
-    palette: {
+    /* The site itself is light — #06090c is the INK, not the ground; counting
+       hex frequency reads it the wrong way round, because the ink appears far
+       more often than the background it sits on. Crimson is the deel silk. */
+    palette: palette({
       mode: "light",
       ground: "#FFFFFF",
       ink: "#06090C",
-      ink2: "rgba(6,9,12,.62)",
-      ink3: "rgba(6,9,12,.40)",
-      rule: "rgba(6,9,12,.12)",
       accent: "#9E1C21",
-      onAccent: "#FFFFFF",
       signal: "#B32228",
-    },
+    }),
   },
   {
     slug: "uuyee",
@@ -104,17 +146,52 @@ export const PROJECTS: Project[] = [
     featured: true,
     /* the site's own Mono Signal ground, with the Burning Sunset fire as
        the accent — the two modes the case study is about */
-    palette: {
+    palette: palette({
       mode: "light",
       ground: "#F0EDE8",
       ink: "#0A0A0A",
-      ink2: "rgba(10,10,10,.64)",
-      ink3: "rgba(10,10,10,.40)",
-      rule: "rgba(10,10,10,.14)",
       accent: "#FF480F",
-      onAccent: "#F0EDE8",
       signal: "#D4A024",
-    },
+    }),
+  },
+  {
+    slug: "somegorillas",
+    title: "Some Gorillas",
+    client: "Some Gorillas — collaboration",
+    year: "2025",
+    scope: ["Design", "Frontend integration", "Development"],
+    description:
+      "An NFT project that makes you play before it pitches. A loader you have to open, a drag-swap puzzle, and a working gorilla language.",
+    image: "/demos/somegorillas/assets/thumb.png",
+    featured: true,
+    /* banana on grape-dark — the project's own --accent-primary and body ground */
+    palette: palette({
+      mode: "dark",
+      ground: "#160E1F",
+      ink: "#FAFAFA",
+      accent: "#F5BA31",
+      signal: "#A638E7",
+    }),
+  },
+  {
+    slug: "hemibros",
+    title: "HemiBros",
+    client: "HemiBros / Numadlabs",
+    year: "2025",
+    scope: ["Design", "Frontend", "Deploy"],
+    description:
+      "A community-driven NFT project on Hemi, built as a Windows 98 desktop — because the community it wanted was the one the early internet used to have.",
+    image: "/demos/hemibros/assets/thumb.png",
+    featured: true,
+    /* #000040 — the deep navy every casino surface is painted on. Gold is
+       the jackpot colour, silver the Win98 chrome. */
+    palette: palette({
+      mode: "dark",
+      ground: "#000040",
+      ink: "#FFFFFF",
+      accent: "#FFD700",
+      signal: "#C0C0C0",
+    }),
   },
   {
     slug: "cmm",
@@ -128,17 +205,13 @@ export const PROJECTS: Project[] = [
     featured: true,
     /* the Dense direction's own tokens — brand purple on near-white, with
        orange carrying signal */
-    palette: {
+    palette: palette({
       mode: "light",
-      ground: "#FAFAFD",
+      ground: "#F4F2FB",
       ink: "#0C0A1D",
-      ink2: "rgba(12,10,29,.66)",
-      ink3: "rgba(12,10,29,.42)",
-      rule: "rgba(12,10,29,.14)",
       accent: "#3E149C",
-      onAccent: "#FAFAFD",
       signal: "#FCA311",
-    },
+    }),
   },
 ];
 
@@ -158,19 +231,14 @@ export const TOYS: Project[] = [
     image: "/demos/pomo/assets/thumb.png",
     kind: "toy",
     href: "https://github.com/910studio/pomo",
-    /* the app's own cream / ink / rust. Its ink is 910's own #2B221F —
-       correct here, because this one IS ours. */
-    palette: {
+    /* the app's own cream / rust */
+    palette: palette({
       mode: "light",
-      ground: "#F4EFE6",
+      ground: "#F7EFDF",
       ink: "#2B221F",
-      ink2: "rgba(43,34,31,.62)",
-      ink3: "rgba(43,34,31,.40)",
-      rule: "rgba(43,34,31,.14)",
       accent: "#C24A30",
-      onAccent: "#F4EFE6",
       signal: "#D98A2B",
-    },
+    }),
   },
 ];
 

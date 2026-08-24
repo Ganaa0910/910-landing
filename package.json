@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "new-case": "node scripts/new-case.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",

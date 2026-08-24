@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "MarketIQ — Case Study",
+  description:
+    "How 910studio designed and built the Dense direction for Mongolia's first AI-native capital markets intelligence platform.",
+  openGraph: {
+    title: "MarketIQ — 910 Case Study",
+    description:
+      "Designing Mongolia's first AI-native capital markets platform. From workshop to Dense direction to production.",
+  },
+};
+
 import Image from "next/image";
 import {
   CaseStudy,
@@ -6,7 +19,6 @@ import {
   Section,
   Stats,
   Swatches,
-  Table,
   Tail,
 } from "@/components/case-study/shell";
 import { DemoFrame } from "@/components/case-study/demo-frame";
@@ -50,13 +62,6 @@ const TOKENS = [
   ["--shadow-*", "rgba(62,20,156,x)", "Brand-tinted shadows — even elevation carries identity"],
 ] as const;
 
-const STACK = [
-  ["Framework", "Next.js 16", "App Router, server components by default. The data is the product; ship it rendered."],
-  ["UI", "React 19", "Server Components for every entity view — no client bundle for reading data."],
-  ["Styling", "Tailwind v4", "@theme tokens map 1:1 onto the Dense design system. One source of truth."],
-  ["Auth", "Clerk", "Middleware marks the public surface; protected pages call auth.protect() server-side."],
-  ["Structure", "Domain folders", "content / directory / entity / events / feed / insights / landing / layout / ui."],
-] as const;
 
 const DOMAINS = [
   { name: "Insights", detail: "Research index and article reader. Long-form market analysis with source formatting and contributor attribution." },
@@ -64,7 +69,7 @@ const DOMAINS = [
   { name: "Feed", detail: "Aggregated market news with per-item detail views. The Yahoo Finance role, done in Dense." },
   { name: "Events", detail: "Upcoming and past events, speaker profiles, session detail. Four route shapes on one system." },
   { name: "Contributors", detail: "Analyst and author profiles linking back to their published research." },
-  { name: "Account", detail: "Tier state, profile, and access management. Gated behind Clerk." },
+  { name: "Account", detail: "Tier state, profile and access management. The gate everything else defers to." },
 ];
 
 const OUTCOMES = [
@@ -81,11 +86,10 @@ export default function CMMCaseStudy() {
         Designing Mongolia&apos;s first <i>AI-native</i> capital markets platform
       </h1>
       <p className="cs-lede">
-        Capital Markets Mongolia needed an intelligence platform that could serve
-        institutional desks and first-time investors from the same product. 910studio
-        designed MarketIQ — from initial exploration, through a client workshop that
-        killed four directions, to a Dense design system now carrying eighteen routes
-        in production.
+        CMM needed an intelligence platform serving institutional desks and first-time
+        investors from the same product. We designed MarketIQ — from exploration, through
+        a workshop that killed four directions, to a Dense system now carrying eighteen
+        routes in production.
       </p>
 
       <div className="cs-meta">
@@ -93,16 +97,13 @@ export default function CMMCaseStudy() {
         <Meta label="executor" value="910studio" />
         <Meta label="timeline" value="9 weeks" />
         <Meta label="scope" value="Design System, Token Architecture, Frontend" />
-        <Meta label="stack" value="Next.js 16 / React 19 / Tailwind v4 / Clerk" />
       </div>
 
       <Section num="01" label="The Challenge" title="No Bloomberg for Mongolia. No AlphaSense. Nothing.">
         <p>
           Mongolia&apos;s capital markets are growing fast — mining IPOs, foreign
-          investment, cross-border deals — but the entire ecosystem runs on PDFs, email
-          chains and Yahoo Finance tabs. There is no centralised intelligence platform.
-          No entity database. No research hub. CMM, the country&apos;s leading capital
-          markets advisory, wanted to build one from scratch.
+          investment, cross-border deals — and the whole ecosystem runs on PDFs, email chains
+          and Yahoo Finance tabs. No entity database. No research hub.
         </p>
         <p>
           The problem isn&apos;t &quot;build a website.&quot; It&apos;s building
@@ -115,8 +116,8 @@ export default function CMMCaseStudy() {
 
       <Section num="02" label="Phase 1 — Exploration" title="Building the visual vocabulary">
         <p>
-          Before touching a single component we mapped the landscape: moodboards,
-          typography pairings, colour systems and early component explorations.
+          Before any component: moodboards, typography pairings, colour systems, early
+          component explorations.
         </p>
 
         <DemoFrame
@@ -155,8 +156,8 @@ export default function CMMCaseStudy() {
 
       <Section num="03" label="Discovery" title="How finance platforms earn trust">
         <p>
-          We studied platforms across the density spectrum. The key insight: data
-          density is a feature, not a problem, when the visual hierarchy is right.
+          We studied platforms across the density spectrum. The insight: density is a
+          feature, not a problem, when the hierarchy is right.
         </p>
         <div className="cs-grid cs-grid-3">
           {REFS.map((r) => (
@@ -171,10 +172,9 @@ export default function CMMCaseStudy() {
 
       <Section num="04" label="Client Workshop" title="The client chose Dense">
         <p>
-          We ran a structured workshop with CMM&apos;s leadership and put three complete
-          directions in front of them: Editorial, Dense and Polished. They chose Dense
-          without hesitation. Finance professionals gravitate toward information
-          density — the thing we had assumed we would need to argue them out of.
+          Three complete directions in front of CMM&apos;s leadership: Editorial, Dense,
+          Polished. They chose Dense without hesitation — the thing we assumed we&apos;d have
+          to argue them out of.
         </p>
 
         <Quote cite="Client mandate — CMM leadership workshop, March 2026">
@@ -210,10 +210,9 @@ export default function CMMCaseStudy() {
 
       <Section num="06" label="Design Philosophy" title="Western structure meets Eastern density">
         <p>
-          The client specifically asked for a blend of Western and Eastern UI. Western
-          finance platforms prioritise whitespace and hierarchy; Eastern platforms pack
-          information and use colour as a navigation system. Dense lives at the
-          intersection.
+          The client asked for a blend of Western and Eastern UI. Western finance
+          prioritises whitespace and hierarchy; Eastern platforms pack information and use
+          colour to navigate. Dense lives at the intersection.
         </p>
         <div className="cs-grid cs-grid-2">
           <div className="cs-card">
@@ -235,9 +234,9 @@ export default function CMMCaseStudy() {
 
       <Section num="07" label="The Dense Direction" title="Bloomberg conviction, CMM identity">
         <p>
-          Dense packs maximum information per pixel without sacrificing readability. 4px
-          radii. 12px grid gaps. Compact 34px buttons. Every surface carries the brand
-          through purple-tinted shadows and lavender headers.
+          Dense packs maximum information per pixel without losing readability. 4px radii,
+          12px grid gaps, compact 34px buttons. Every surface carries the brand through
+          purple-tinted shadows and lavender headers.
         </p>
         <Swatches colors={COLORS} />
         <DemoFrame
@@ -254,15 +253,14 @@ export default function CMMCaseStudy() {
           token and every surface updates — which is what made the jump from prototype
           to eighteen production routes survivable.
         </p>
-        <Table head={["Token", "Value", "Why"]} rows={TOKENS} />
       </Section>
 
       <Section num="09" label="Production" title="From chosen direction to shipped product">
         <p>
-          Dense stopped being a prototype. The design system now backs a live Next.js 16
-          application: 67 components organised into nine domain folders, server
-          components by default, and Clerk middleware marking the public surface while
-          protected pages call <code>auth.protect()</code> server-side.
+          Dense stopped being a prototype. The design system now backs a live application:
+          67 components organised into nine domains, rendered on the server by default,
+          with the public surface and the gated surface separated at the edge rather
+          than checked page by page.
         </p>
         <div className="cs-grid cs-grid-3">
           {DOMAINS.map((d) => (
@@ -273,7 +271,6 @@ export default function CMMCaseStudy() {
             </div>
           ))}
         </div>
-        <Table head={["Layer", "Choice", "Why"]} rows={STACK} />
         <DemoFrame
           src="/demos/cmm/demo-pages/insights-index.html#dense"
           label="Insights Index"
@@ -283,9 +280,8 @@ export default function CMMCaseStudy() {
 
       <Section num="10" label="Access Architecture" title="One Dense system, three access tiers">
         <p>
-          The Dense direction scales across three user tiers. Same brand, same tokens —
-          information access increases as users commit. What began as a design decision
-          is now enforced in middleware.
+          Dense scales across three tiers. Same brand, same tokens — access increases as
+          users commit. What began as a design decision is now enforced at the edge.
         </p>
         <div className="cs-grid cs-grid-3">
           <div className="cs-card">
@@ -296,7 +292,7 @@ export default function CMMCaseStudy() {
           <div className="cs-card">
             <span className="cs-kicker">Registered tier</span>
             <h3>Registered</h3>
-            <p>Full entity profiles, basic charts, financial summaries. Clerk session required.</p>
+            <p>Full entity profiles, basic charts, financial summaries. Sign-in required.</p>
           </div>
           <div className="cs-card">
             <span className="cs-kicker">Premium tier</span>
@@ -308,9 +304,9 @@ export default function CMMCaseStudy() {
 
       <Section num="11" label="Outcome" title="Shipped.">
         <p>
-          From a blank brief to a production direction in three weeks, and from that
-          direction to a live platform. A structured workshop validated Dense; a
-          complete token system made it survive contact with eighteen routes.
+          Blank brief to production direction in three weeks, and from there to a live
+          platform. The workshop validated Dense; the token system made it survive contact
+          with eighteen routes.
         </p>
         <Stats items={OUTCOMES} />
       </Section>

@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Uuye — Case Study",
+  description:
+    "How 910studio built a portfolio for Mongolia's top jazz guitarist with no photography — typography, a 3px rule and geometry generated in the browser.",
+  openGraph: {
+    title: "Uuye — 910 Case Study",
+    description:
+      "A portfolio that changes temperature when the music starts. Two palettes, one grid, zero stock photography.",
+  },
+};
+
 import Image from "next/image";
 import {
   CaseStudy,
@@ -46,14 +59,6 @@ const COMPONENTS = [
   { name: "Nav", detail: "Four anchors, hover-invert, no transition — it snaps, like a switch rather than a fade." },
 ];
 
-const STACK = [
-  ["Framework", "SvelteKit", "One page, eight components. A guitarist's site should not ship an app framework's runtime."],
-  ["Runtime", "Svelte 5 runes", "$state drives the gate's unlock, shake and collapse states with no store boilerplate."],
-  ["Styling", "Tailwind v4", "@theme inline maps the two modes onto the same token names, so one class set serves both."],
-  ["Borders", "--border-w: 3px", "A single token. Every rule, frame and button on the site reads from it."],
-  ["Texture", "SVG feTurbulence", "Film grain generated in CSS as a data URI — no image request, no repeating tile seam."],
-  ["Deploy", "Vercel", "Static output, edge delivered."],
-] as const;
 
 const OUTCOMES = [
   { num: "2", label: "Modes, one grid", desc: "Mono Signal and Burning Sunset share every measurement — only temperature changes." },
@@ -70,17 +75,16 @@ export default function UuyeeCaseStudy() {
       </h1>
       <p className="cs-lede">
         Uitumen Bold — Uuye — is Mongolia&apos;s top jazz guitarist, and had no press
-        kit, no photography and no brand. 910studio built him a site out of the only
-        materials available: typography, a 3px rule and generated geometry. Then split it
-        in two, so the page runs cold like a specification sheet until you reach the
-        performance section, where it catches fire.
+        kit, no photography, no brand. We built him a site out of the only materials
+        available: typography, a 3px rule and generated geometry. Then split it in two, so
+        it runs cold like a spec sheet until the performance section, where it catches
+        fire.
       </p>
 
       <div className="cs-meta">
         <Meta label="client" value="Uitumen Bold (Uuye)" />
         <Meta label="executor" value="910studio (solo)" />
         <Meta label="scope" value="Design, Frontend, Deploy" />
-        <Meta label="stack" value="SvelteKit / Svelte 5 / Tailwind v4 / Vercel" />
         <Meta label="live" value="uuyee-portfolio.vercel.app" live />
       </div>
 
@@ -94,31 +98,27 @@ export default function UuyeeCaseStudy() {
 
       <Section num="01" label="The Brief" title="A musician with a career and no assets">
         <p>
-          Jazz and soul, based in Ulaanbaatar, playing bars at home and stages abroad.
-          What did not exist: photography we could licence, a logo, a colour, a press
-          kit, or any prior site. The usual move here is stock imagery and a big
-          background photo of someone else&apos;s guitar.
+          Jazz and soul, playing bars at home and stages abroad. What didn&apos;t exist:
+          photography we could licence, a logo, a colour, a press kit, any prior site. The
+          usual move is stock imagery and a big photo of someone else&apos;s guitar.
         </p>
         <p>
-          We took the opposite position. If there are no images, stop pretending there
-          are — build the whole thing out of type, rules and geometry, and let the
-          absence of photography read as a decision rather than a gap.
+          We took the opposite position. If there are no images, stop pretending — build it
+          from type, rules and geometry, and let the absence read as a decision.
         </p>
       </Section>
 
       <Section num="02" label="The Split" title="One site, two temperatures">
         <p>
-          A musician&apos;s site has two jobs that pull in opposite directions. The
-          catalogue side wants to be legible and cold — dates, track counts, credits. The
-          performance side wants to be warm, loud and a bit overwhelming.
+          A musician&apos;s site has two jobs pulling opposite ways. The catalogue wants to
+          be cold and legible — dates, track counts, credits. The performance wants to be
+          warm and a bit overwhelming.
         </p>
         <p>
-          So the page does both, in sequence. It opens in <strong>Mono Signal</strong>:
-          paper, black ink, 3px rules, construction marks in the corners, numbered
-          sections. Then a transition strip hands over to{" "}
-          <strong>Burning Sunset</strong> — the same grid at the same measurements, with
-          the temperature inverted to warm dark and fire orange. Coming out the other
-          side, another strip hands it back.
+          So it does both, in sequence. It opens in <strong>Mono Signal</strong> — paper,
+          black ink, 3px rules, numbered sections. A transition strip hands over to{" "}
+          <strong>Burning Sunset</strong>: same grid, same measurements, temperature
+          inverted. Another strip hands it back.
         </p>
         <div className="cs-modes">
           <div className="cs-mode" style={{ background: "#F0EDE8", color: "#0A0A0A" }}>
@@ -166,10 +166,9 @@ export default function UuyeeCaseStudy() {
 
       <Section num="03" label="Colour System" title="Two palettes, identical geometry">
         <p>
-          Both modes map onto the same token names through Tailwind&apos;s{" "}
-          <code>@theme inline</code>, so a component does not know which mode it is in —
-          it asks for the foreground colour and gets whichever one is current. Nothing
-          about the layout changes across the hinge. Only the temperature does.
+          Both modes map onto the same token names, so a component never knows which one
+          it is in. Nothing about the layout changes across the hinge. Only the
+          temperature.
         </p>
 
         <p className="cs-note">Mono Signal — the catalogue</p>
@@ -186,11 +185,10 @@ export default function UuyeeCaseStudy() {
 
       <Section num="04" label="Typography" title="Three faces, and a 3px rule holding it together">
         <p>
-          With no imagery, type carries the whole identity. The wordmark runs at{" "}
-          <code>clamp(80px, 14vw, 180px)</code> — big enough that on a phone it is the
-          entire screen. Everything else is small, wide-tracked and uppercase, so the
-          contrast between the name and the information around it does the work a photo
-          would normally do.
+          With no imagery, type carries the identity. The wordmark runs at{" "}
+          <code>clamp(80px, 14vw, 180px)</code> — on a phone it is the entire screen.
+          Everything else is small, wide-tracked and uppercase, so the contrast does the
+          work a photo would.
         </p>
         <Table head={["Role", "Face", "Usage"]} rows={TYPE} />
         <p className="cs-note">
@@ -219,33 +217,26 @@ export default function UuyeeCaseStudy() {
 
       <Section num="05" label="Generated Geometry" title="The artwork is drawn in the browser">
         <p>
-          The hero&apos;s interference figure is not an image. It is overlapping ellipses
-          rendered as SVG, so it is sharp at any size, costs one request less than a
-          photograph, and can be re-tuned by changing a number instead of reopening a
-          design file.
+          The hero&apos;s interference figure is not an image — overlapping ellipses drawn
+          as SVG, sharp at any size, re-tunable by changing a number.
         </p>
         <p>
-          The listening gate does the same thing in reverse: on mount it generates 25
-          concentric ellipses, each with its radius scaled and its vertical ratio driven
-          by a sine wave, so the rings read as a waveform seen from above rather than as
-          a target. Film grain is generated too — an <code>feTurbulence</code> filter
-          inlined as a data URI, which means no image request and no visible tile seam.
+          The gate does it in reverse: on mount it generates 25 concentric ellipses, each
+          scaled and shaped by a sine wave, so the rings read as a waveform from above rather
+          than a target.
         </p>
       </Section>
 
       <Section num="06" label="The Gate" title="Some of the catalogue is locked on purpose">
         <p>
-          Unreleased work needed somewhere to live that was neither public nor private.
-          The discography lists it — title, year, track count — and marks it
-          password-protected, so the existence of the record is part of the story while
-          the record itself stays shut.
+          Unreleased work needed somewhere neither public nor private. The discography
+          lists it — title, year, track count — and marks it password-protected, so the
+          record&apos;s existence is part of the story while the record stays shut.
         </p>
         <p>
-          Entering a code either collapses the wave field and reveals the album, or
-          shakes the field for 1.2 seconds and resets. No modal, no error page, no
-          navigation — the failure state is a physical reaction in the thing you were
-          already looking at. Uuye hands codes out himself; they are not on the site, and
-          they are not in this case study.
+          A code either collapses the wave field and reveals the album, or shakes it for
+          1.2 seconds and resets. No modal, no error page — the failure is a physical
+          reaction in the thing you were looking at. Uuye hands the codes out himself.
         </p>
         <div className="cs-bleed">
           <Image src={`${IMG}/listen.png`} alt="The listening corner — LOCKED over a generated wave field, with the code entry beside it" width={1500} height={950} />
@@ -264,8 +255,8 @@ export default function UuyeeCaseStudy() {
 
       <Section num="07" label="Components" title="Eight pieces, each doing one job">
         <p>
-          A single page, but not a single file. The site is eight components, and the two
-          that matter most are the ones that generate their own artwork.
+          One page, eight components. The two that matter most generate their own
+          artwork.
         </p>
         <div className="cs-grid cs-grid-2">
           {COMPONENTS.map((c) => (
@@ -278,21 +269,12 @@ export default function UuyeeCaseStudy() {
         </div>
       </Section>
 
-      <Section num="08" label="Stack" title="What a one-page site actually needs">
-        <p>
-          Svelte 5&apos;s runes handle the only real interactivity on the site — the
-          gate&apos;s unlock, shake and collapse states — in a handful of lines and
-          without a store. Everything else is static output on the edge.
-        </p>
-        <Table head={["Layer", "Choice", "Why"]} rows={STACK} />
-      </Section>
 
       <Section num="09" label="Outcome" title="Shipped. No photographs required.">
         <p>
-          A working portfolio for a musician who arrived with nothing to put in one:
-          catalogue, listening corner, contact routes and a live site that credits the
-          studio in its own footer. Built out of type, a 3px rule and geometry drawn at
-          runtime.
+          A working portfolio for a musician who arrived with nothing to put in one —
+          catalogue, listening corner, contact routes, and a live site that credits the
+          studio in its own footer.
         </p>
         <Stats items={OUTCOMES} />
       </Section>

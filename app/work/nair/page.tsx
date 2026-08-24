@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nair Entertainment — Case Study",
+  description:
+    "How 910studio built a bilingual site for Mongolia's traditional performing arts — Mongolian-first, with locale-prefixed routes rather than a translation toggle.",
+  openGraph: {
+    title: "Nair Entertainment — 910 Case Study",
+    description:
+      "A heritage arts agency that speaks Mongolian first. Bilingual architecture, nine disciplines, SvelteKit and Paraglide.",
+  },
+};
+
 import Image from "next/image";
 import {
   CaseStudy,
@@ -6,7 +19,6 @@ import {
   Section,
   Stats,
   Swatches,
-  Table,
   Tail,
 } from "@/components/case-study/shell";
 
@@ -48,21 +60,13 @@ const SILHOUETTES = [
 const MODES = [
   { name: "Coming soon", detail: "A holding page the client can switch to before a season opens, without a redeploy." },
   { name: "Maintenance", detail: "A dedicated route for planned downtime rather than a broken page or a bare 500." },
-  { name: "Error", detail: "A branded +error boundary — a failure that still looks like the company it belongs to." },
+  { name: "Error", detail: "A branded failure state — an error that still looks like the company it belongs to." },
   { name: "llms.txt", detail: "A machine-readable summary endpoint, so models describing the company get it from the source." },
 ];
 
-const STACK = [
-  ["Framework", "SvelteKit 2", "File-based routing across four content types, with server loads per route."],
-  ["Runtime", "Svelte 5 runes", "$state / $derived throughout. Fine-grained reactivity, no virtual DOM."],
-  ["i18n", "Paraglide JS 2", "Compiled messages — the unused locale never reaches the client."],
-  ["Styling", "Tailwind v4", "@theme tokens, plus forms and typography plugins for the long-form pages."],
-  ["Motion", "View Transitions API", "Native cross-document morphs, tuned rather than reimplemented in JS."],
-  ["Deploy", "adapter-vercel", "Edge delivery, per-route server loads, preview builds for client review."],
-] as const;
 
 const OUTCOMES = [
-  { num: "2", label: "Languages, neither second", desc: "Mongolian and English are peers — locale-prefixed routes, compiled messages, no toggle-in-the-corner." },
+  { num: "2", label: "Languages, neither second", desc: "Mongolian and English are peers — two real URLs, both indexable, no toggle-in-the-corner." },
   { num: "9", label: "Disciplines catalogued", desc: "Each art form gets its own route, its own imagery and its own path into the booking flow." },
   { num: "14", label: "Route shapes", desc: "Home, events, seasonal, programmes, services, disciplines, ordering — plus the operational modes." },
 ];
@@ -84,17 +88,16 @@ export default function NairCaseStudy() {
         A heritage arts agency that speaks <i>Mongolian first</i>
       </h1>
       <p className="cs-lede">
-        Nair Entertainment books Mongolia&apos;s traditional performing arts — throat
-        singing, long song, masked ritual dance, the horsehead fiddle. Their audience is
-        split between Mongolian clients booking a wedding and foreign clients booking a
-        gala. 910studio built the site so neither one is reading a translation.
+        Nair books Mongolia&apos;s traditional performing arts — throat singing, long
+        song, masked ritual dance. Their audience splits between Mongolian clients
+        booking a wedding and foreign clients booking a gala. We built it so neither is
+        reading a translation.
       </p>
 
       <div className="cs-meta">
         <Meta label="client" value="Nair Entertainment" />
         <Meta label="executor" value="910studio" />
         <Meta label="scope" value="Design, Bilingual Architecture, Frontend, Deploy" />
-        <Meta label="stack" value="SvelteKit 2 / Svelte 5 / Paraglide / Vercel" />
         <Meta label="live" value="nair-final.vercel.app" live />
       </div>
 
@@ -109,31 +112,28 @@ export default function NairCaseStudy() {
       <Section num="01" label="The Brief" title="Two audiences, one company, no shared default language">
         <p>
           Nair sells the same nine art forms to two very different buyers. A Mongolian
-          client booking a wedding blessing knows what a yörööl is and needs to know who
-          is free in October. A foreign client booking a gala has heard of throat singing,
-          has never heard of tsam, and needs the category explained before a price means
-          anything.
+          client booking a blessing knows what a yörööl is and needs to know who&apos;s free
+          in October. A foreign client has heard of throat singing, never of tsam, and needs
+          the category explained before a price means anything.
         </p>
         <p>
-          Most bilingual sites in this market build in English and bolt Mongolian on —
-          which reads, to a Mongolian client, exactly like what it is. The brief was to
-          make both languages first-class, and to make the heritage feel expensive rather
-          than folkloric.
+          Most bilingual sites here build in English and bolt Mongolian on — which reads,
+          to a Mongolian client, exactly like what it is.
         </p>
       </Section>
 
       <Section num="02" label="Language Architecture" title="Mongolian isn't the translation. It's the default.">
         <p>
-          The site runs on Paraglide with locale-prefixed routes — <code>/mn</code> and{" "}
+          The site is built on locale-prefixed routes — <code>/mn</code> and{" "}
           <code>/en</code> are peers, both real URLs, both indexable. Around 250 message
           keys cover navigation, the discipline catalogue, the booking flow and the
-          seasonal programming. Paraglide compiles them, so a visitor on the Mongolian
-          site never downloads the English strings.
+          seasonal programming, and they are compiled at build time — so a visitor on the
+          Mongolian site never downloads a single English string.
         </p>
         <p>
-          The visible default is Mongolian: the language control offers <em>EN</em> as
-          the thing you switch to, not the state you are in. A one-word decision that
-          tells a local client whose site this is.
+          The visible default is Mongolian: the control offers <em>EN</em> as the thing you
+          switch to, not the state you&apos;re in. One word that tells a local client whose
+          site this is.
         </p>
 
         <div className="cs-grid cs-grid-2">
@@ -164,12 +164,9 @@ export default function NairCaseStudy() {
 
       <Section num="03" label="Colour System" title="Deel crimson on white, ink built from one value">
         <p>
-          The palette comes off the performers. The ensemble wears deep red silk deels, so
-          crimson carries every interactive state and nothing else competes with it. The
-          ground stays white and the entire grey scale is built as alphas of a single
-          near-black — <code>rgba(6,9,12,.48)</code> for copy, <code>.04</code> and{" "}
-          <code>.08</code> for surfaces, <code>.16</code> for borders. No second neutral,
-          so nothing on the page can drift warm or cool away from the red.
+          The palette comes off the performers — deep red silk deels. Crimson carries every
+          interactive state and nothing competes. The greys are alphas of one near-black, so
+          nothing can drift warm or cool away from the red.
         </p>
         <div className="cs-bigswatch">
           <div style={{ background: "#9E1C21" }} />
@@ -181,18 +178,13 @@ export default function NairCaseStudy() {
 
       <Section num="04" label="Identity Motifs" title="The line art runs behind everything, dithered">
         <p>
-          Each headline discipline has a drawn silhouette — a tsam mask, a fiddle, a
-          dancer&apos;s posture. Rather than framing them as a row of icons, they run
-          behind this page as an ambient field: sampled onto a coarse grid and redrawn as
-          dither squares, cross-fading from one motif to the next.
+          Each headline discipline has a drawn silhouette — a tsam mask, a fiddle, a dancer.
+          Rather than framing them as icons, they run behind this page as an ambient field:
+          sampled to a grid and redrawn as dither squares, cross-fading.
         </p>
         <p>
-          That is the same construction as the 910 mark and the reel&apos;s globe, so the
-          client&apos;s artwork arrives as texture that belongs to this site instead of
-          as clip art dropped into it. It is drawn in the project&apos;s accent, holds an
-          ordered Bayer threshold rather than random noise so the figure stays legible
-          while it drifts, and stops moving entirely under{" "}
-          <code>prefers-reduced-motion</code>.
+          Same construction as the 910 mark and the reel&apos;s globe, so the artwork arrives
+          as texture belonging here rather than clip art dropped in.
         </p>
         <p className="cs-note">
           Look past the text — {SILHOUETTES.map((s) => s.label).join(", ")} and the full
@@ -202,10 +194,9 @@ export default function NairCaseStudy() {
 
       <Section num="05" label="Content Spine" title="Nine disciplines, each a real destination">
         <p>
-          The disciplines are the product. Each gets its own route, its own imagery and
-          its own path into the booking flow, rather than sitting as a line item on a
-          services page. For a foreign client this is the explanatory layer; for a
-          Mongolian client it is a direct link to the thing they already came for.
+          The disciplines are the product. Each gets its own route, imagery and path into
+          booking rather than a line item on a services page. For a foreign client that is
+          the explanatory layer; for a Mongolian client it is a direct link.
         </p>
 
         <div className="cs-artrow">
@@ -239,10 +230,9 @@ export default function NairCaseStudy() {
 
       <Section num="06" label="Motion" title="We tuned the browser's transitions instead of rebuilding them">
         <p>
-          Navigation uses the native View Transitions API rather than a JS animation
-          layer. The defaults are too quick to read as deliberate, so the morph is
-          stretched to 420ms on a <code>cubic-bezier(.32,.72,0,1)</code> curve — a long
-          ease-out that decelerates into place instead of snapping.
+          Navigation uses native view transitions rather than a JS animation layer. The
+          defaults are too quick to read as deliberate, so the morph is stretched to 420ms on
+          a long ease-out that decelerates into place instead of snapping.
         </p>
         <p>
           Under <code>prefers-reduced-motion</code> the same transitions collapse to 1ms.
@@ -256,10 +246,9 @@ export default function NairCaseStudy() {
 
       <Section num="07" label="Booking" title="From a discipline to a dated enquiry">
         <p>
-          Every discipline, event and seasonal programme funnels into one ordering route
-          with a server-side load. The form asks the questions that actually determine a
-          quote in this business — which art form, what kind of event, what date — rather
-          than a generic contact box that guarantees a second email.
+          Everything funnels into one ordering route. The form asks what actually determines
+          a quote — which art form, what event, what date — rather than a contact box that
+          guarantees a second email.
         </p>
         <div className="cs-grid cs-grid-3">
           <figure className="cs-frame">
@@ -288,9 +277,9 @@ export default function NairCaseStudy() {
 
       <Section num="08" label="Operational Modes" title="The states most sites only discover in production">
         <p>
-          A seasonal business needs to go quiet without looking broken. The site ships
-          with its off-states designed rather than defaulted, so the client can change the
-          public face of the company without calling anyone.
+          A seasonal business needs to go quiet without looking broken. The off-states are
+          designed rather than defaulted, so the client can change the public face of the
+          company without calling anyone.
         </p>
         <div className="cs-grid cs-grid-2">
           {MODES.map((m) => (
@@ -303,21 +292,12 @@ export default function NairCaseStudy() {
         </div>
       </Section>
 
-      <Section num="09" label="Stack" title="Why SvelteKit and compiled messages">
-        <p>
-          A bilingual content site is exactly the case where a compiled i18n layer pays
-          for itself — the alternative ships both dictionaries to every visitor forever.
-          Svelte 5&apos;s runes keep the interactive pieces reactive without a client-side
-          framework runtime sitting under static content.
-        </p>
-        <Table head={["Layer", "Choice", "Why"]} rows={STACK} />
-      </Section>
 
       <Section num="10" label="Outcome" title="Shipped, in two languages, neither of them second.">
         <p>
-          Nair now has a digital home that treats its own market as the primary audience
-          and international clients as equally served — not a Mongolian company presenting
-          itself in English with a toggle in the corner.
+          Nair now has a home that treats its own market as the primary audience and
+          international clients as equally served — not a Mongolian company presenting itself
+          in English with a toggle in the corner.
         </p>
         <Stats items={OUTCOMES} />
       </Section>

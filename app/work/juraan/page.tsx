@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Juraan — Case Study",
+  description:
+    "How 910studio designed and built a portfolio for Mongolia's premier bronze sculptor. From bronze research to custom font to cinematic web.",
+  openGraph: {
+    title: "Juraan — 910 Case Study",
+    description:
+      "Portfolio site for Mongolian bronze sculptor Juraan. Custom font, bronze-derived palette, cinematic scroll experience.",
+  },
+};
+
 import Image from "next/image";
 import {
   CaseStudy,
@@ -57,16 +70,6 @@ const PAGES = [
   { name: "Contact", detail: "Form with subject selector, studio information, Viber integration. Background texture overlay." },
 ];
 
-const TECH_STACK = [
-  ["Framework", "SvelteKit", "Minimal JS overhead. A sculptor's site does not need React's weight."],
-  ["Styling", "Tailwind v4", "Utility-first with @theme tokens. Fast iteration, zero naming debates."],
-  ["Scroll", "Lenis", "Smooth scroll that feels physical — it matches the tactility of bronze."],
-  ["Typography", "CSS clamp()", "Fluid scaling. Hero runs clamp(3rem, 8vw, 6rem). Zero breakpoints."],
-  ["Images", "OptimizedImage", "Desktop and mobile variants via <picture>. Different crops per viewport."],
-  ["Animation", "IntersectionObserver", "Stagger-reveal on gallery items. No animation library needed."],
-  ["Deploy", "Vercel", "Edge delivery via adapter-vercel. Preview deploys for client review."],
-] as const;
-
 const OUTCOMES = [
   { num: "37+", label: "Sculptures catalogued", desc: "The full bronze collection with multi-angle photography, dimensions and materials." },
   { num: "5", label: "Pages shipped", desc: "Homepage, gallery, God & Devil, about and contact — each with its own layout treatment." },
@@ -81,34 +84,29 @@ export default function JuraanCaseStudy() {
         We studied bronze <i>to design pixels</i>
       </h1>
       <p className="cs-lede">
-        An award-winning Mongolian sculptor with four decades of bronze work and zero
-        online presence. 910studio took this from blank canvas to shipped product —
-        researching the lost-wax casting process to derive the palette, drawing a custom
-        typeface, engineering a seven-layer vignette, and building a gallery experience
-        that makes a screen feel like a dark room full of bronze. Solo execution, design
-        to deploy.
+        An award-winning Mongolian sculptor with four decades of bronze work and no
+        online presence. We researched the lost-wax casting process to derive the
+        palette, drew a custom typeface, and built a gallery experience that makes a
+        screen feel like a dark room full of bronze. Solo, design to deploy.
       </p>
 
       <div className="cs-meta">
         <Meta label="client" value="Juraan (Lkhagvasuren Nyamkhuu)" />
         <Meta label="executor" value="910studio (solo)" />
         <Meta label="scope" value="Research, Design, Custom Font, Frontend, Deploy" />
-        <Meta label="stack" value="SvelteKit / Tailwind / Lenis / Vercel" />
         <Meta label="live" value="juraan.com" live />
       </div>
 
       <Section num="01" label="The Brief" title="The client had 37 years of work. We had zero references.">
         <p>
-          No existing brand. No style guide. No moodboard. No previous website. A
-          sculptor with Government Palace commissions, Noma Concours awards and solo
-          exhibitions across four countries had never been represented digitally. We
-          were starting from the material itself.
+          No brand. No style guide. No moodboard. No previous site. A sculptor with
+          Government Palace commissions, Noma Concours awards and solo exhibitions in four
+          countries had never been represented digitally.
         </p>
         <p>
-          The challenge wasn&apos;t &quot;build a portfolio.&quot; It was working out
-          how to make a screen carry the weight of bronze — the warmth of patina, the
-          darkness of a foundry, the scale of a 115cm Pegasus. A template would insult
-          the work. Every design decision had to be derived from the medium.
+          The job wasn&apos;t &quot;build a portfolio.&quot; It was making a screen carry
+          the weight of bronze — patina, foundry dark, a 115cm Pegasus. A template would
+          insult the work.
         </p>
 
         <div className="cs-grid cs-grid-4">
@@ -137,10 +135,8 @@ export default function JuraanCaseStudy() {
 
       <Section num="02" label="Our Process" title="We studied bronze casting before opening Figma">
         <p>
-          The first move wasn&apos;t wireframes — it was research. We followed the
-          lost-wax casting process end to end, not for content but to extract a design
-          language from the material. Every colour, texture and mood decision on the
-          site traces back to how bronze is physically made.
+          The first move wasn&apos;t wireframes. We followed the lost-wax process end to
+          end — not for content, but to take the design language off the material.
         </p>
         <div className="cs-grid cs-grid-3">
           {RESEARCH.map((r) => (
@@ -158,10 +154,9 @@ export default function JuraanCaseStudy() {
 
       <Section num="03" label="Colour System" title="We reverse-engineered the palette from physical bronze">
         <p>
-          With zero brand assets to work from, the entire colour system came out of the
-          casting environment. Near-black maps to the foundry. Bronze Light is fresh
-          patina; Bronze Dark is aged oxidation. Even the text colours reference smoke
-          and ash. This isn&apos;t a picked palette — it&apos;s a discovered one.
+          With no brand assets, the colour system came out of the casting environment.
+          Near-black is the foundry. Bronze Light is fresh patina, Bronze Dark is aged
+          oxidation. Not a picked palette — a discovered one.
         </p>
         <div className="cs-bigswatch">
           <div style={{ background: "#D4AF7A" }} />
@@ -173,10 +168,8 @@ export default function JuraanCaseStudy() {
 
       <Section num="04" label="Typography" title="We designed a typeface that exists nowhere else">
         <p>
-          No existing font carried the right weight, so we drew one. The Juraan display
-          typeface was made from scratch for this project — not licensed, not sourced,
-          not on Google Fonts. It is used only for the hero and key headers. One weight,
-          one purpose: presence.
+          No existing font carried the right weight, so we drew one. Not licensed, not
+          Google Fonts. Hero and key headers only. One weight, one purpose: presence.
         </p>
 
         <FontShowcase />
@@ -191,11 +184,9 @@ export default function JuraanCaseStudy() {
 
       <Section num="05" label="Design Direction" title="We built a gallery, not a website">
         <p>
-          The core decision: this should feel like walking into a gallery at night, not
-          like browsing a web page. Near-black backgrounds became gallery walls, layered
-          vignettes became dramatic lighting, and film grain supplied analogue texture.
-          Sculptures emerge from darkness — grayscale by default, colour on hover. The
-          metaphor drives every technical choice.
+          It should feel like a gallery at night, not a web page. Near-black walls,
+          layered vignettes as lighting, film grain for texture. Sculptures emerge from
+          darkness — grayscale by default, colour on hover.
         </p>
         <div className="cs-grid cs-grid-2">
           <div className="cs-card">
@@ -223,10 +214,9 @@ export default function JuraanCaseStudy() {
 
       <Section num="06" label="Feature Build" title="We gave the signature piece its own layout system">
         <p>
-          The God and Devil duality is the client&apos;s signature work and deserved more
-          than a gallery card. It got a dedicated page: Devil left, Buddha right,
-          narrative centre, with a unified radial vignette compositing both figures into
-          one frame. The structure mirrors the theme — two equal halves, no hierarchy.
+          The signature work deserved more than a gallery card. Devil left, Buddha right,
+          narrative centre, one radial vignette compositing both into a single frame. Two
+          equal halves, no hierarchy — the structure is the concept.
         </p>
 
         <div className="cs-group">
@@ -248,11 +238,9 @@ export default function JuraanCaseStudy() {
 
       <Section num="07" label="Editorial Grid" title="We shot the exhibition, then designed around it">
         <p>
-          The 2024 solo exhibition gave us real content to work with. The homepage
-          carries an editorial photo grid — a 12-column layout with intentional
-          asymmetry. Hero shot at eight columns, side stack at four, bottom row split
-          between a portrait pair and a wide composition. Not a photo dump; structured
-          storytelling.
+          The 2024 solo exhibition gave us real content. A 12-column editorial grid with
+          intentional asymmetry — hero at eight columns, side stack at four. Not a photo
+          dump.
         </p>
         <div className="cs-group">
           <div className="cs-grid cs-grid-2">
@@ -270,11 +258,9 @@ export default function JuraanCaseStudy() {
 
       <Section num="08" label="Content System" title="We catalogued 37+ sculptures into a bento grid">
         <p>
-          Each sculpture needed multi-angle photography, material data and dimensions,
-          organised so it doesn&apos;t bore you by piece twelve. The bento grid runs six
-          size variations — hero pieces take 2×3 cells, smaller works fill the rhythm.
-          The pattern repeats without repetition, and IntersectionObserver staggers the
-          reveals so the gallery unfolds as you scroll.
+          Each piece needed multi-angle photography, materials and dimensions, organised
+          so it doesn&apos;t bore you by piece twelve. Six size variations, staggered
+          reveals on scroll.
         </p>
         <div className="cs-grid cs-grid-4">
           {SCULPTURES.map((s) => (
@@ -295,9 +281,8 @@ export default function JuraanCaseStudy() {
 
       <Section num="09" label="Delivery" title="Five pages shipped, each with a unique layout">
         <p>
-          Five pages, all sharing the dark gallery system but each with its own layout
-          treatment. The constraint: no two pages should feel the same, and all of them
-          should feel like they belong together.
+          Five pages on one dark gallery system. The constraint: no two should feel the
+          same, all should feel related.
         </p>
         <div className="cs-stack">
           {PAGES.map((p) => (
@@ -309,23 +294,12 @@ export default function JuraanCaseStudy() {
         </div>
       </Section>
 
-      <Section num="10" label="Stack" title="Why we chose SvelteKit over Next.js for this one">
-        <p>
-          A sculptor&apos;s portfolio doesn&apos;t need React&apos;s runtime weight.
-          SvelteKit for minimal JS overhead, Lenis for physically smooth scroll, Tailwind
-          v4 for fast iteration with @theme tokens, fluid type via clamp() with zero
-          breakpoint overrides, and custom Svelte actions for the stagger-reveal gallery.
-        </p>
-        <Table head={["Layer", "Choice", "Why"]} rows={TECH_STACK} />
-      </Section>
 
-      <Section num="11" label="Outcome" title="Shipped. One person. Design to deploy.">
+      <Section num="10" label="Outcome" title="Shipped. One person. Design to deploy.">
         <p>
-          From zero brand assets to a live cinematic portfolio: material research, colour
-          extraction, custom font design, seven-layer vignette engineering, the bento
-          gallery system, the cinematic split, the editorial grid, fluid typography,
-          responsive optimisation and deployment — all executed solo. The client now has
-          a permanent digital gallery.
+          Zero brand assets to a live cinematic portfolio — material research, colour
+          extraction, a custom typeface, the vignette system, the bento gallery, the
+          cinematic split, the editorial grid. All executed solo.
         </p>
         <Stats items={OUTCOMES} />
       </Section>

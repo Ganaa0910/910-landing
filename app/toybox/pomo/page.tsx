@@ -31,15 +31,6 @@ const KEYS = [
   ["⌃⌥K", "Peek", "Pull it out without the mouse."],
 ] as const;
 
-const STACK = [
-  ["Shell", "Tauri 2 (Rust)", "~9MB and it sips battery. An Electron pomodoro ships a browser to count to twenty-five."],
-  ["UI", "React 19 + Vite", "The panel is small and mostly static — React is here for the editor, not the timer."],
-  ["Editor", "TipTap / ProseMirror", "WYSIWYG in the widget, plain Markdown on disk. Nothing is trapped in the app."],
-  ["Window", "macos-private-api", "Required to sit behind the notch and paint over other apps' fullscreen Spaces."],
-  ["Shortcuts", "global-shortcut", "A hover widget can never hold key focus, so every binding is system-wide."],
-  ["Drag", "tauri-plugin-drag", "Real drag-out to Finder, Slack or an upload field — not a copy-path button."],
-  ["Weather", "Open-Meteo", "Located by IP, no key, no account."],
-] as const;
 
 const OUTCOMES = [
   { num: "9MB", label: "Installed size", desc: "A native binary. The comparable Electron build starts around 150MB before you write a feature." },
@@ -55,17 +46,14 @@ export default function PomoCaseStudy() {
         Charging for a countdown is <i>a crime</i>
       </h1>
       <p className="cs-lede">
-        The market is full of beautiful pomodoro apps that want your card details
-        to count to twenty-five. So we built our own — first as a terminal app,
-        because we like the terminal, and then as something that lives behind the
-        MacBook notch and drops out like a Dynamic Island. It is free, it will
-        stay free, and this is how it got here.
+        The market is full of beautiful pomodoro apps that want your card details to
+        count to twenty-five. So we built our own. It started in the terminal and
+        ended up behind the MacBook notch. It is free and will stay free.
       </p>
 
       <div className="cs-meta">
         <Meta label="what" value="Notch-native pomodoro for macOS" />
         <Meta label="by" value="910studio" />
-        <Meta label="stack" value="Tauri 2 / Rust / React 19 / TipTap" />
         <Meta label="price" value="Free forever" live />
         <Meta label="source" value="github.com/910studio/pomo" live />
       </div>
@@ -86,16 +74,13 @@ export default function PomoCaseStudy() {
 
       <Section num="01" label="The Problem" title="Some of them look great. That's not worth a subscription.">
         <p>
-          There is no shortage of pomodoro apps, and a few of them are genuinely
-          well designed. That is the frustrating part. Good design is being used
-          to justify a price on a countdown with cute features — and a countdown
-          is not a product you should have to rent.
+          A few of them are genuinely well designed. That is the frustrating part —
+          good design being used to justify renting a countdown.
         </p>
         <p>
-          What we actually wanted did not exist at any price: work-cycle tracking,
-          a UI worth looking at, a mode for when something drags you off-task, and
-          notes living in the same place as the timer. Every tool solved one of
-          those and sent you elsewhere for the rest.
+          What we wanted did not exist at any price: cycle tracking, a mode for when
+          something drags you off-task, and notes in the same place as the timer.
+          Every tool solved one and sent you elsewhere for the rest.
         </p>
         <Quote cite="The brief, in full">
           It is fucking stupid to pay just for a countdown app with cute features.
@@ -104,16 +89,10 @@ export default function PomoCaseStudy() {
 
       <Section num="02" label="v1 — Terminal" title="It started in the terminal, on purpose">
         <p>
-          The first version was a Python TUI — an anime tamagotchi pomodoro with
-          sync tracking and daily docs, living in a spare terminal window. That
-          was not a shortcut. The terminal was chosen for power efficiency, and
-          because we like how the terminal looks; a pixel timer among monospace
-          text felt right rather than like a compromise.
-        </p>
-        <p>
-          It also solved the desktop problem. The whole point was to avoid a mess
-          of floating windows, and a terminal tab is a window you already have
-          open.
+          v1 was a Python TUI — an anime tamagotchi pomodoro with sync tracking and
+          daily docs, in a spare terminal window. Chosen for power efficiency, and
+          because a pixel timer among monospace text looked right. It also solved the
+          desktop problem: a terminal tab is a window you already have open.
         </p>
       </Section>
 
@@ -154,18 +133,15 @@ export default function PomoCaseStudy() {
 
       <Section num="04" label="v2 — The Notch" title="The one piece of screen you already ignore">
         <p>
-          Every Mac has a strip of dead pixels at the top that no app is allowed to
-          use. It is always visible, never in the way, and you have already trained
-          yourself not to look at it. That is the ideal home for something you want
-          glanceable but not present.
+          Every Mac has a strip of dead pixels no app is allowed to use. Always visible,
+          never in the way, and you have already trained yourself not to look at it. Ideal for
+          something you want glanceable but not present.
         </p>
         <p>
-          By default pomo hides behind the notch showing only the time. Hover it and
-          the card stretches out — the container animates its size while the content
-          scales into place, Dynamic Island style. Move away and it tucks back. When
-          a work or break block ends it peeks out on its own for a few seconds
-          instead of firing a notification banner. That is the fix for v1&apos;s
-          second problem: the app shows itself rather than interrupting you.
+          By default it hides behind the notch showing only the time. Hover and the card
+          stretches out, Dynamic Island style. When a block ends it peeks out on its own for a
+          few seconds instead of firing a banner — which fixes v1&apos;s second problem: the
+          app shows itself rather than interrupting you.
         </p>
         <div className="cs-grid cs-grid-2">
           <figure className="cs-frame">
@@ -187,67 +163,52 @@ export default function PomoCaseStudy() {
 
       <Section num="05" label="Sync Mode" title="A timer that doesn't lie about your focus">
         <p>
-          A pomodoro that keeps counting while a colleague is at your desk is
-          recording fiction. Sync mode is a count-up interruption timer: hit{" "}
-          <code>⌃⌥S</code> when something pulls you off-task and the pomodoro stops
-          pretending. What you get at the end of the day is the honest number.
+          A pomodoro that keeps counting while a colleague is at your desk is recording
+          fiction. <code>⌃⌥S</code> starts a count-up interruption timer, so the day
+          ends on the honest number.
         </p>
         <p>
-          While in sync mode you can record a voice memo — a chunky pixel spectrum
-          dances with your voice, the file saves to <code>~/.pomo/memos/</code>, a ▶
-          chip drops into the active project note, and it plays back in the widget.
-          The interruption gets captured instead of evaporating.
+          In sync mode you can record a voice memo. A pixel spectrum dances with your
+          voice, it saves to <code>~/.pomo/memos/</code>, and a ▶ chip drops into the
+          active note. The interruption gets captured instead of evaporating.
         </p>
       </Section>
 
       <Section num="06" label="Notes" title="Rich in the widget, plain Markdown on disk">
         <p>
-          Notes are per project, because the whole reason this exists is juggling
-          several at once. The editor is TipTap/ProseMirror with bold, highlight,
-          headings, checkboxes and nested lists — but what lands on disk is plain{" "}
-          <code>.md</code>.
-        </p>
-        <p>
-          WYSIWYG where you are typing, plain text everywhere else: Raycast, git,
-          your actual editor. Nothing is trapped in the app, which matters more for
-          a free tool than a paid one — if we stop shipping it tomorrow, your notes
-          are still just files.
+          Notes are per project, because the reason this exists is juggling several at
+          once. Rich text where you type — bold, headings, checkboxes, nested lists —
+          and plain <code>.md</code> on disk. Nothing is trapped in the app. If we stop
+          shipping it tomorrow, your notes are still just files.
         </p>
       </Section>
 
       <Section num="07" label="Drop Shelf" title="A file shelf in the dead pixels">
         <p>
-          Drag any file onto the widget and it stashes as a pixelated preview chip —
-          a QuickLook thumbnail downscaled until it matches the rest of the art.
-          Drag it back out into Finder, Slack or an upload field and a copy is
-          delivered. It is ephemeral by design: nothing is stored and the shelf
-          clears on quit.
+          Drag a file onto the widget and it stashes as a pixelated preview chip. Drag
+          it back out into Finder or Slack and a copy is delivered. Nothing is stored;
+          the shelf clears on quit.
         </p>
         <p>
-          The launch animation samples whatever is behind the notch and adjusts its
-          doodle lines to stay visible against any wallpaper. Nobody asked for that.
-          It is a toy — that is the point.
+          The launch animation samples whatever is behind the notch so its doodle lines
+          stay visible on any wallpaper. Nobody asked for that. It is a toy.
         </p>
       </Section>
 
       <Section num="08" label="Keyboard" title="Every binding is system-wide, by necessity">
         <p>
-          A widget that appears on hover can never hold keyboard focus, so ordinary
-          shortcuts are impossible. Every core action is registered as a global{" "}
-          <code>⌃⌥</code> hotkey and works from whatever app you are actually in —
-          which is the correct behaviour anyway for something you are not supposed
-          to look at.
+          A widget that appears on hover can never hold keyboard focus, so every core
+          action is a global <code>⌃⌥</code> hotkey. Correct behaviour anyway for
+          something you are not supposed to look at.
         </p>
         <Table head={["Key", "Action", "Why"]} rows={KEYS} />
       </Section>
 
       <Section num="09" label="Design" title="Cream, ink, rust, and the Minecraft typeface">
         <p>
-          Pixel-art icon set, hard cartoon shadows, zero border radius on anything
-          that matters. The ink is 910studio&apos;s own <code>#2B221F</code> — this
-          one is ours, so it wears the studio&apos;s colours rather than a
-          client&apos;s. Rust carries every active state, amber the warnings, sage
-          the completions.
+          Pixel icons, hard cartoon shadows, zero radius. The ink is 910studio&apos;s
+          own <code>#2B221F</code> — this one is ours, so it wears the studio&apos;s
+          colours. Rust for active, amber for warnings, sage for done.
         </p>
         <div className="cs-bigswatch">
           <div style={{ background: "#C24A30" }} />
@@ -257,23 +218,13 @@ export default function PomoCaseStudy() {
         <Swatches colors={PALETTE} />
       </Section>
 
-      <Section num="10" label="Stack" title="Rust, because it's a countdown">
-        <p>
-          The joke writes itself: the reason the market&apos;s pomodoro apps feel
-          heavy is that many of them ship a browser to render a number. Tauri puts
-          the UI in the system webview and the logic in Rust, and the whole app
-          comes out around 9MB.
-        </p>
-        <Table head={["Layer", "Choice", "Why"]} rows={STACK} />
-      </Section>
 
       <Section num="11" label="Free" title="No licence, no trial, no account.">
         <p>
-          It ships as an unsigned <code>.dmg</code>, so macOS calls it damaged on
-          first open — it isn&apos;t, that is Gatekeeper flagging an unsigned
-          download. One <code>xattr -cr</code> and it opens normally, and the
-          one-line installer does that for you. Paying Apple ninety-nine dollars a
-          year to distribute a free countdown would be its own kind of crime.
+          It ships unsigned, so macOS calls it damaged on first open. One{" "}
+          <code>xattr -cr</code> fixes it, and the installer does that for you. Paying
+          Apple ninety-nine dollars a year to give away a countdown would be its own
+          kind of crime.
         </p>
         <Stats items={OUTCOMES} />
       </Section>
