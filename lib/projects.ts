@@ -30,7 +30,7 @@ export interface ProjectPalette {
   accent: string;
   /* text on accent fills */
   onAccent: string;
-  /* optional second brand color — CMM's orange, Uuyee's amber */
+  /* optional second brand color — CMM's yellow, Uuyee's amber */
   signal?: string;
 }
 
@@ -218,22 +218,22 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "cmm",
-    title: "MarketIQ",
+    title: "CMM",
     client: "Capital Markets Mongolia",
     year: "2026",
     scope: ["Design System", "Token Architecture", "Frontend"],
     description:
-      "Design system and frontend for Mongolia's first AI-native capital markets intelligence platform.",
+      "Design system and frontend for Capital Markets Mongolia: research, a company directory and the bond market on one platform.",
     image: "/demos/cmm/assets/thumb.png",
     featured: true,
-    /* the Dense direction's own tokens — brand purple on near-white, with
-       orange carrying signal */
+    /* the v2 "Electric Violet" tokens — the landing page's lilac paper and
+       violet-black ink under the #824BFF brand, with the pale yellow signal */
     palette: palette({
       mode: "light",
-      ground: "#F4F2FB",
-      ink: "#0C0A1D",
-      accent: "#3E149C",
-      signal: "#FCA311",
+      ground: "#F9F6FF",
+      ink: "#201C2B",
+      accent: "#824BFF",
+      signal: "#FFFB8A",
     }),
   },
 ];

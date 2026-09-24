@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Merriweather } from "next/font/google";
 import { CaseStudy, Meta, Tail } from "@/components/case-study/shell";
 import { Beat, Pair, Palette, Shot, Specimen } from "@/components/case-study/showcase";
 import { ShareStory } from "@/components/case-study/share-story";
 
 export const metadata: Metadata = {
-  title: "MarketIQ — Case Study",
+  title: "Capital Markets Mongolia — Case Study",
   description:
-    "Mongolia's first AI-native capital markets platform, in a deep violet and a Dense system built for bankers and first-time investors alike.",
+    "Mongolia's capital markets platform, rebuilt in electric violet: square corners, a true-grey ground and a Merriweather voice over Inter.",
   openGraph: {
-    title: "MarketIQ — 910 Case Study",
+    title: "Capital Markets Mongolia — 910 Case Study",
     description:
-      "Bloomberg conviction, CMM identity. The Dense direction for Mongolia's first AI-native capital markets platform.",
+      "Bloomberg conviction, CMM identity. Electric violet, square corners, one set of tokens across the whole platform.",
   },
 };
 
-/* the client's heading face, loaded here so the specimen is the real thing */
-const jakarta = Plus_Jakarta_Sans({ weight: ["700"], subsets: ["latin"] });
+/* the client's headline face, loaded here so the specimen is the real thing */
+const merriweather = Merriweather({ weight: ["700"], subsets: ["latin"] });
 
 const IMG = "/demos/cmm/assets";
 
@@ -31,16 +31,16 @@ export default function CMMCaseStudy() {
 
       <div className="cs-meta">
         <Meta label="client" value="Capital Markets Mongolia" />
-        <Meta label="product" value="MarketIQ" />
+        <Meta label="product" value="capitalmarkets.mn" />
         <Meta label="scope" value="Design System, Frontend" />
         <Meta label="year" value="2026" />
       </div>
 
-      <ShareStory slug="cmm" title="MarketIQ — a 910studio case study" />
+      <ShareStory slug="cmm" title="Capital Markets Mongolia — a 910studio case study" />
 
       <Shot
-        src={`${IMG}/entity-dense.png`}
-        alt="A MarketIQ company profile in the Dense direction"
+        src={`${IMG}/v2-home.png`}
+        alt="The capitalmarkets.mn landing page: Merriweather headline, electric violet accent"
         width={2880}
         height={1800}
         priority
@@ -55,39 +55,41 @@ export default function CMMCaseStudy() {
 
       <Palette
         chips={[
-          { name: "Brand violet", val: "#3E149C", w: 3 },
-          { name: "Violet light", val: "#6B4CC0", w: 1.5 },
-          { name: "Signal", val: "#FCA311", w: 1.2 },
-          { name: "Night", val: "#0C0A1D", w: 1.5 },
-          { name: "Ground", val: "#FAFAFD" },
-          { name: "Up", val: "#059669", w: 0.8 },
-          { name: "Down", val: "#DC2626", w: 0.8 },
+          { name: "Electric violet", val: "#824BFF", w: 3 },
+          { name: "Violet 950", val: "#2A1071", w: 1.5 },
+          { name: "Lilac", val: "#D5BEFF", w: 1.2 },
+          { name: "Signal", val: "#FFFB8A", w: 1 },
+          { name: "Ink", val: "#0A0A0A", w: 1.5 },
+          { name: "Paper", val: "#FAFAFA" },
         ]}
       />
 
       <Beat n="02" label="The idea">
-        We put three directions in front of their leadership, and they picked
-        Dense straight away: 4px corners, tight grids and 38px table rows, with a
-        deep violet carried all the way down into the shadows. You get
-        Bloomberg-level density, but it still looks like CMM.
+        The first system was a deep, dense violet. When CMM rebranded to electric
+        violet we didn&apos;t repaint it, we merged it: two ramps, neutral and
+        violet, declared once and pointed at by everything. The ground went from
+        lilac-tinted grey to a true grey so the violet reads as the brand instead
+        of as a tint. Corners went square and shadows went flat.
       </Beat>
 
       <Specimen
-        face={jakarta.style.fontFamily}
-        name="Plus Jakarta Sans — headings"
+        face={merriweather.style.fontFamily}
+        name="Merriweather — headlines, Inter — everything else"
         role="Typeface"
-        sample="Erdene Resource Development"
+        sample="Mongolia, globally connected"
       />
 
       <Pair>
-        <Image src={`${IMG}/insights-dense.png`} alt="The MarketIQ insights index" width={2880} height={1800} />
-        <Image src={`${IMG}/design-system.png`} alt="The Dense design system" width={2880} height={1800} />
+        <Image src={`${IMG}/v2-entity.png`} alt="A CMM directory profile for Golomt Bank" width={2880} height={1800} />
+        <Image src={`${IMG}/v2-bonds.png`} alt="The Mongolia international bonds market page" width={2880} height={1800} />
       </Pair>
 
       <Beat n="03" label="The result">
-        Dense is the production system now: 67 components and eighteen live routes,
-        all running on one set of tokens. Institutional desks and retail investors
-        use the same product, and paying more just unlocks more of it.
+        Every page on capitalmarkets.mn runs on the same twenty-two values:
+        insights, the company directory, the bond market, events and the
+        Mongolia Investment Forum. The serif is the landing page&apos;s voice
+        and Inter carries every table, so a banker reading a repayment ladder
+        and an investor reading a guide are in the same product.
       </Beat>
 
       <Tail />
