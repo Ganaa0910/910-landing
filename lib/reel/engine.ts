@@ -2,14 +2,16 @@
  *
  * One canvas carries a single object the length of the page: globe (S1/S2)
  * → bearing on a constellation rail (S3) → back to globe, dived into, and
- * out the other side as a sunrise (S4). Ported from the standalone
- * prototype in v2-moodboard/s1-hero.html; the render maths is unchanged.
+ * out the other side as a sunrise (S4). Ported from the standalone v2
+ * prototype (removed; see git history) — the render maths is unchanged.
  *
  * Everything is scoped to the mounted root so React can tear it down. */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { glidePageTo } from "@/lib/scroll/smooth";
+import { onFrame } from "@/lib/frame/ticker";
+import { getWorkProgress } from "@/lib/scroll/work-progress";
 
 export type ReelRoute = "reel" | "rail" | "hidden";
 export type ReelHandle = {
@@ -319,13 +321,12 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   const seg = (t: number, a: number, b: number) => clamp01((t - a) / (b - a));
   const PHASE = {
     p:    [0.03, 0.18] as const,    // S1 → S2
-    /* The collapse out of orbit. The holds either side of it are kept short
-       on purpose: the move was never the heavy part, 600px of dead S2 in
-       front of it and 300px of dead park behind it were, because scrolling
-       through nothing is what makes a section feel like work. */
-    snap: [0.28, 0.345] as const,   // S2 → S3, ending parked at "you are here"
-    run:  [0.39, 0.62] as const,    // the walk round the diamond, a beat per star
-    out:  [0.655, 0.945] as const,  // S3 → S4 — the parallax
+    /* The collapse out of orbit. Wide enough that a hand scrub reads as the
+       same move the autoplay plays — when it was squeezed into 6.5% of
+       track the manual version was a flick, not a transition. */
+    snap: [0.26, 0.365] as const,   // S2 → S3, ending parked at "you are here"
+    run:  [0.41, 0.63] as const,    // the walk round the diamond, a beat per star
+    out:  [0.665, 0.945] as const,  // S3 → S4 — the parallax
   };
 
   /* ── Earth → the Diamond of Virgo, on a clock ──────
@@ -347,7 +348,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   const SNAP_SECONDS = 2.8;
   /* land inside the park hold, settled on "you are here" with the diamond
      walk still ahead rather than already starting */
-  const SNAP_LAND = 0.37;
+  const SNAP_LAND = 0.382;
   /* Starts true so it can only fire on a real downward crossing out of S2 —
      otherwise booting or restoring a scroll position inside the collapse
      would set it off on arrival. */
@@ -541,6 +542,9 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     /* the route morph flies the object between poses; when set, it wins over
        whatever the scroll would have chosen */
     poseOverride?: { cx: number; cy: number; r: number },
+    /* stop after computing the pose (and publishing lastPose) without
+       rendering — lets a morph frame learn its target for free */
+    poseOnly = false,
   ) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const W = cv.clientWidth, H = cv.clientHeight;
@@ -613,6 +617,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     /* the pose is published so a route change can pick the object up
        exactly where it is rather than guessing */
     lastPose = { cx, cy, r: R };
+    if (poseOnly) return;
 
     /* the sky comes up with the dark ground, behind everything else, and
        smears radially away from the globe while the warp is running */
@@ -1056,7 +1061,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   }
 
   /* The intro is a first-impression, not a toll gate. Navigating to /work
-     and back remounts this component, which would replay all 6.8s of it —
+     and back remounts this component, which would replay all 6.5s of it —
      so it runs once per session and lands settled after that. */
   const INTRO_KEY = "910-intro-played";
   function introAlreadyPlayed(): boolean {
@@ -1132,15 +1137,13 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
   const RAIL_BALL_R = 13;
 
-  /* Where the work index wants the object: a vertical track down the right.
+  /* Where the work index wants the object: a rail along the foot.
    *
-   * How far through the collection we are comes from --work-p, which the
-   * gallery publishes every frame. It used to be derived here, from the
-   * vertical distance between the first and last .work-item — which only
-   * held while the projects were stacked down the page. They run
-   * horizontally now, so every card shares a top, the span is zero, and the
-   * indicator would sit at its first checkpoint forever. The page knows its
-   * own progress; this just reads it. */
+   * How far through the collection we are comes from the work-progress
+   * store (lib/scroll/work-progress.ts), which the gallery publishes every
+   * frame. Deriving it here from card geometry only worked while the
+   * projects were stacked vertically; the page knows its own progress, so
+   * this just reads it. */
   function railPose(W: number, H: number) {
     const items = qa<HTMLElement>(".work-item");
     /* Runs with the deck, not across it. A column down the right edge was
@@ -1164,19 +1167,10 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     const y = H - Math.min(64, Math.max(38, H * 0.062));
     if (items.length < 2) return { cx: (x0 + x1) / 2, cy: y, r: RAIL_BALL_R, y, x0, x1, p: 0 };
 
-    const published = parseFloat(
-      getComputedStyle(document.documentElement).getPropertyValue("--work-p"),
-    );
-    let p = Number.isFinite(published) ? clamp01(published) : 0;
-
-    /* fallback for a vertical list, and for the frame or two before the
-       gallery has mounted and published anything */
-    if (!Number.isFinite(published)) {
-      const first = items[0].getBoundingClientRect();
-      const last = items[items.length - 1].getBoundingClientRect();
-      const span = last.top - first.top;
-      p = span > 0 ? clamp01((H * 0.42 - first.top) / span) : 0;
-    }
+    const published = getWorkProgress();
+    /* p is 0 only for the frame or two before the gallery mounts and
+       publishes — the deck then owns the number for the whole route */
+    const p = clamp01(published ?? 0);
     return { cx: lerp(x0, x1, p), cy: y, r: RAIL_BALL_R, y, x0, x1, p };
   }
 
@@ -1241,24 +1235,26 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
   /* ── frame loop ───────────────────────────────────── */
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  /* primary input is a finger — Lenis leaves touch momentum alone
+     (smooth.ts syncTouch:false), so an autoplayed glide would drag
+     window.scrollTo against the OS. Touch scrubs the collapse instead. */
+  const coarse = window.matchMedia("(pointer: coarse)");
 
-  let inView = true, last = 0, raf = 0, dirty = true;
+  let inView = true, dirty = true;
   let lastT = -1;
+  /* the shared ticker's unsubscribe handle; non-null while running */
+  let unsubFrame: (() => void) | null = null;
 
   const requestDraw = () => { dirty = true; };
 
   let curP = 0, curZ = 0, curRoll = 0, curOut = 0;
 
-  function frame(now: number) {
-    raf = requestAnimationFrame(frame);
-
+  function frame(now: number, dt: number) {
     /* The canvas deliberately survives navigation, which puts it outside
        React's lifecycle. Relying on a usePathname effect to tell it where
        it is proved unreliable under StrictMode's mount/unmount/mount, so
        it reads the URL itself. One string compare a frame. */
     if (location.pathname !== currentPath) setRoute(location.pathname);
-    const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
-    last = now;
 
     if (morphPending) { morphT0 = now; morphPending = false; }
 
@@ -1342,14 +1338,17 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
        down; everything after that is the glide's business. Re-arms once they
        are back up in S2, with a gap so sitting exactly on the line cannot
        ping-pong. Reduced motion never arms it and scrubs the collapse by
-       hand instead. */
-    if (reduced.matches) {
+       hand instead — and neither does touch, whose momentum the glide would
+       fight for ownership of the scrollbar.
+       The window ends at SNAP_LAND, not at the walk: past that point a glide
+       could only travel backwards, yanking the reader up to "arrive". */
+    if (reduced.matches || coarse.matches) {
       snapFired = true;
-    } else if (!snapFired && t >= PHASE.snap[0] && t < PHASE.run[0]) {
+    } else if (!snapFired && t >= PHASE.snap[0] && t < SNAP_LAND) {
       snapFired = true;
       const total = reel ? reel.offsetHeight - window.innerHeight : 0;
       if (total > 0) glidePageTo(total * SNAP_LAND, SNAP_SECONDS);
-    } else if (snapFired && t < PHASE.snap[0] - 0.03) {
+    } else if (snapFired && t < PHASE.snap[0] - 0.01) {
       snapFired = false;
     }
 
@@ -1380,15 +1379,16 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
         const g = railGeom(W, H);
 
         /* the steps surface as the ball parks, then each comes to full as
-           its own star is reached — the list reads as a map first and a
-           progress indicator second */
-        const parked = clamp01((curZ - 0.6) / 0.4);
+            its own star is reached — the list reads as a map first and a
+            progress indicator second. The ramp starts late in the collapse
+            (z > 0.85): nothing ghosts in while the warp is still ripping. */
+        const parked = clamp01((curZ - 0.85) / 0.15);
         const narrow = W <= 700;
         if (narrow) {
           /* one block at the foot showing whichever star the ball is on —
              four labels around a 1.46:1 diamond is unreadable at this width */
           let active = 0;
-          for (let i = 0; i < 4; i++) if (curRoll >= checkpointT(g, i) - 0.03) active = i;
+          for (let i = 0; i < 4; i++) if (curRoll >= checkpointT(g, i) - 0.01) active = i;
           stepEls.forEach((el, i) => {
             el.style.opacity = String(i === active ? parked : 0);
             el.style.left = el.style.top = "";
@@ -1396,7 +1396,9 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
         } else {
           stepEls.forEach((el, i) => {
             const st = STARS[i];
-            const hit = clamp01((curRoll - (checkpointT(g, i) - 0.04)) / 0.05);
+            /* ramp straddles arrival — half-lit as the ball reaches the
+               star, full just after, so label and ball fire together */
+            const hit = clamp01((curRoll - (checkpointT(g, i) - 0.02)) / 0.04);
             const a = Math.max(parked * 0.30, hit);
             const off = LABEL_OFFSET[st.side];
             const [sx, sy] = starPx(st, W, H);
@@ -1447,10 +1449,10 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
     if (dirty || morphFrom) {
       if (morphFrom) {
-        /* draw once to learn where the scroll wants the object, then draw
-           again at the blended pose — cheap, and avoids duplicating the
-           whole pose calculation out here */
-        draw(canvas, curP, curZ, curRoll, now / 1000, curOut);
+        /* compute where the scroll wants the object WITHOUT rendering it —
+           poseOnly stops at the pose maths and skips the full draw, which
+           used to run twice per morph frame */
+        draw(canvas, curP, curZ, curRoll, now / 1000, curOut, undefined, true);
         const target = lastPose;
         poseOverride = {
           cx: lerp(morphFrom.cx, target.cx, morph),
@@ -1463,8 +1465,14 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     }
   }
 
-  function start() { if (!raf && inView) { last = 0; raf = requestAnimationFrame(frame); } }
-  function stop()  { cancelAnimationFrame(raf); raf = 0; }
+  function start() {
+    /* priority 20: after Lenis advanced scroll (0) and the cover flow
+       published progress (10), so every value read this frame is current */
+    if (!unsubFrame && inView) unsubFrame = onFrame(frame, 20);
+  }
+  function stop() {
+    if (unsubFrame) { unsubFrame(); unsubFrame = null; }
+  }
 
   /* the canvas is always mounted, so it is what we watch — the reel root
      comes and goes with the route */

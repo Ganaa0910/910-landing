@@ -1,0 +1,136 @@
+/* ══════════════════════════════════════════════════════════════════
+   UUYE — component replicas.
+
+   Values copied out of uuyee-portfolio/src, so these render at 1:1 the way
+   they render on the live site. Sources per block:
+
+     .uu-rule     src/app.css                       --border-w, and the 23
+                                                    hardcoded 3px borders
+     .uu-chip     src/lib/components/PerformanceZone.svelte
+     .uu-nav      src/lib/components/Nav.svelte     .hover-invert
+     .uu-gate     src/lib/components/Gate.svelte
+
+   Same two dependencies as the Nair replicas:
+
+   1. Every selector is prefixed `.uu `, putting it at (0,2,0), which outranks
+      reel.css's `.cs-section p` at (0,1,1). Without it a replica <p> silently
+      renders at the case study's 13.5px instead of its own size.
+   2. The element wears `.replica` alongside `.uu`, which exempts the subtree
+      from the global `border-radius: 0 !important` in globals.css. Uuye has
+      no radii at all — every corner is square by design — but the exemption
+      still matters for the pieces that borrow a pill shape.
+   ══════════════════════════════════════════════════════════════════ */
+
+.uu {
+  --paper: #f0ede8;
+  --ink: #0a0a0a;
+  --surface: #e6e2dc;
+  --elevated: #dbd6cf;
+  --muted: #999690;
+  --fire: #ff480f;
+  --amber: #d4a024;
+  --afterglow: #f5e6d3;
+  --warm-surface: #1a1410;
+  --warm-elevated: #2a2018;
+  /* declared in the client's :root and referenced nowhere in the build. Here
+     it is wired up, which is the point the sheet makes about it. */
+  --border-w: 3px;
+
+  --display: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --body: var(--font-space-mono), "Space Mono", ui-monospace, monospace;
+
+  color: var(--ink);
+  font-family: var(--body);
+  text-align: left;
+}
+/* globals.css @layer base sets every heading to Syne 800 by tag name, which
+   beats inheritance. `.uu` itself must stay out of this list or it would
+   override its own font-family declaration above. */
+.uu * { font-family: inherit; }
+
+.uu .uu-display { font-family: var(--display); font-weight: 700; }
+
+/* ── the 3px rule ──────────────────────────────────
+   One width, every divider. On the live site it is written out 23 times; the
+   token exists but nothing reads it. */
+.uu .uu-rule {
+  border: var(--border-w) solid var(--ink);
+  background: var(--paper);
+  padding: 18px 20px;
+}
+.uu .uu-rule--split { border-width: 0 0 var(--border-w) 0; padding: 14px 0; }
+
+/* ── nav link ──────────────────────────────────────
+   hover-invert with `transition: none` — the one interaction on the site
+   that is deliberately not animated. */
+.uu .uu-nav {
+  display: inline-flex; align-items: center;
+  padding: 10px 18px;
+  font-family: var(--display);
+  font-weight: 700; font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink); background: transparent;
+  transition: none;
+}
+.uu .uu-nav[data-state="hover"] { background: var(--ink); color: var(--paper); }
+
+/* ── mode chip ─────────────────────────────────────
+   The badge the performance zone prints on itself. */
+.uu .uu-chip {
+  display: inline-flex; align-items: center;
+  padding: 6px 16px;
+  font-family: var(--display);
+  font-weight: 700; font-size: 10px;
+  letter-spacing: .15em; text-transform: uppercase;
+  background: var(--fire); color: var(--ink);
+}
+.uu .uu-chip--mono { background: var(--ink); color: var(--paper); }
+
+/* ── the two grounds ───────────────────────────────
+   Not a theme swap. Mono Signal is :root; the warm set is a parallel group of
+   tokens the performance zone paints on itself. */
+.uu .uu-ground {
+  display: flex; flex-direction: column; gap: 14px;
+  min-height: 168px;
+  padding: 22px;
+  border: var(--border-w) solid var(--ink);
+}
+.uu .uu-ground--mono { background: var(--paper); color: var(--ink); }
+.uu .uu-ground--sunset {
+  background: var(--warm-surface); color: var(--afterglow);
+  border-color: var(--warm-elevated);
+}
+.uu .uu-ground b {
+  font-family: var(--display); font-weight: 700;
+  font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
+}
+/* :not(.uu-chip) matters — a bare `.uu-ground span` is (0,2,1) and outranks
+   `.uu-chip` at (0,2,0), so the chip nested inside a ground box rendered at
+   this 11px instead of its own 10px. */
+.uu .uu-ground > span:not(.uu-chip) { font-size: 11px; line-height: 1.7; opacity: .72; }
+.uu .uu-ground code { font-size: 10px; letter-spacing: .06em; opacity: .55; }
+
+/* ── generated geometry ────────────────────────────
+   The ring fields, rebuilt from the client's own five lines of maths. Both
+   the hero figure and the gate come out of the same generator; only the
+   constants differ. Deterministic — no randomness anywhere in it — which is
+   why they can be redrawn here exactly. */
+.uu .uu-field {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 300px;
+  overflow: hidden;
+}
+.uu .uu-field--mono { background: var(--paper); }
+.uu .uu-field--gate { background: var(--ink); }
+.uu .uu-field svg { display: block; width: 100%; height: 100%; }
+
+/* ── waveform bars ─────────────────────────────────
+   The rhythm device between sections. scaleY 0.6 to 1.3, alternating. */
+.uu .uu-bars { display: flex; align-items: flex-end; gap: 4px; height: 46px; }
+.uu .uu-bars i {
+  display: block; width: 4px; height: 100%;
+  background: var(--ink);
+  transform-origin: bottom;
+}

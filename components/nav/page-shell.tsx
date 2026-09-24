@@ -126,16 +126,20 @@ export function NavProvider({ children }: { children: ReactNode }) {
       };
 
       /* Leaving an inner page from halfway down slid the content sideways
-         from wherever it happened to be, which read as a jump cut. Ride to
-         the top first — on the work index that also walks the rail's ball
-         back to its first checkpoint, so the object departs from a settled
-         position rather than mid-track.
+          from wherever it happened to be, which read as a jump cut. Ride to
+          the top first.
 
-         The reel is exempt: scrolling it to the top would rewind the whole
-         approach to S2 on the way out, which is the opposite of leaving
-         cleanly. Reduced motion skips the ride and just goes. */
+          The reel is exempt: scrolling it to the top would rewind the whole
+          approach to S2 on the way out, which is the opposite of leaving
+          cleanly. /work is exempt for the same class of reason — there the
+          scroll position IS the gallery state, so riding to top visibly
+          rewinds the cover flow through every project before the exit
+          plays, and recording 0 in scrollMemory loses the reader's place in
+          the rack for the trip back.
+          Reduced motion skips the ride and just goes. */
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (pathname !== "/" && !reduced && window.scrollY > 8) {
+      const noRide = pathname === "/" || pathname === "/work";
+      if (!noRide && !reduced && window.scrollY > 8) {
         glidePageTo(0, TO_TOP_S) || scrollPageTo(0);
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => depart(0), TO_TOP_MS);

@@ -43,7 +43,11 @@ function sample(img: HTMLImageElement, cols: number, rows: number): Field {
   off.height = rows;
   const ctx = off.getContext("2d", { willReadFrequently: true });
   const data = new Float32Array(cols * rows);
-  if (!ctx) return { w: cols, h: rows, data };
+  /* cols/rows come from clientWidth, which is 0 whenever the field is not
+     laid out — and it is display:none under 900px. A zero-sized canvas makes
+     getImageData below throw IndexSizeError, which surfaced as an unhandled
+     rejection on every case study opened at a phone width. */
+  if (!ctx || cols < 1 || rows < 1) return { w: cols, h: rows, data };
 
   /* contain, so a tall mask and a wide illustration both land inside the
      grid at their own proportions instead of being stretched to it */

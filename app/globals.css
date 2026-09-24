@@ -119,8 +119,17 @@
     text-decoration: none;
   }
 
-  /* Brutalist: no border-radius anywhere */
-  *, *::before, *::after {
+  /* Brutalist: no border-radius anywhere.
+
+     Except inside .replica. A case study that rebuilds a client's components
+     is showing THEIR system, and this rule was silently flattening every one
+     of them — including the sheet whose whole argument is the client's radius
+     ladder. The !important is in a layer, so an unlayered override cannot win
+     against it (important declarations reverse layer order and unlayered
+     important ranks lowest); the exclusion has to live here. */
+  *:not(.replica, .replica *),
+  *:not(.replica, .replica *)::before,
+  *:not(.replica, .replica *)::after {
     border-radius: 0 !important;
   }
 

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TransitionLink, useTransitionNav } from "@/components/nav/page-shell";
 import { glidePageTo } from "@/lib/scroll/smooth";
+import { onFrame } from "@/lib/frame/ticker";
+import { publishWorkProgress, resetWorkProgress } from "@/lib/scroll/work-progress";
 import type { Project } from "@/lib/projects";
 
 /* Cover flow.
@@ -65,17 +67,15 @@ export function CoverFlow({
     const stage = stageRef.current;
     if (!track || !stage) return;
 
-    const root = document.documentElement.style;
-    let raf = 0;
     let lastActive = -1;
 
     const frame = () => {
-      raf = requestAnimationFrame(frame);
-
       const len = track.offsetHeight - window.innerHeight;
       const p = len > 0 ? Math.min(1, Math.max(0, -track.getBoundingClientRect().top / len)) : 0;
-      /* the object on the right reads this — see railPose in lib/reel/engine.ts */
-      root.setProperty("--work-p", p.toFixed(4));
+      /* the object on the right reads this — see railPose in lib/reel/engine.ts.
+         Direct store, priority 10: after Lenis advanced scroll (0), before
+         the engine draws (20), so both sides of the handoff see one frame. */
+      publishWorkProgress(p);
 
       const index = p * Math.max(0, n - 1);
       /* Measured, not recomputed. The cover width is a clamp() in the
@@ -105,7 +105,7 @@ export function CoverFlow({
         el.style.opacity = far > FADE_AT ? "0" : String(Math.min(1, (FADE_AT - far) / 0.8));
         /* only the front cover should be clickable — the ones raked away are
            mostly edge-on and would swallow clicks meant for the middle */
-        el.style.pointerEvents = far < 0.5 ? "auto" : far > FADE_AT ? "none" : "auto";
+        el.style.pointerEvents = far > FADE_AT ? "none" : "auto";
         el.setAttribute("aria-current", far < 0.5 ? "true" : "false");
       }
 
@@ -116,11 +116,11 @@ export function CoverFlow({
       }
     };
 
-    raf = requestAnimationFrame(frame);
+    const stop = onFrame(frame, 10);
 
     return () => {
-      cancelAnimationFrame(raf);
-      root.removeProperty("--work-p");
+      stop();
+      resetWorkProgress();
     };
   }, [n]);
 
@@ -169,7 +169,12 @@ export function CoverFlow({
                 else scrollToIndex(i);
               }}
             >
-              <span className="work-cover">
+              <span
+                className="work-cover"
+                /* render order drives the entrance stagger — see .work-cover
+                   in app/reel.css */
+                style={{ "--i": i } as CSSProperties}
+              >
                 <Image
                   src={project.image}
                   alt={`${project.title} — case study`}

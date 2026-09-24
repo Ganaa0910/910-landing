@@ -33,9 +33,10 @@ export default function WorkPage() {
 
             .work-item has to stay on the covers: lib/reel/engine.ts counts
             them for the indicator's checkpoints. Its POSITION now comes from
-            --work-p, which the gallery publishes — a horizontal row gives
-            every card the same top, so the old vertical measurement would
-            read a span of zero and park the object forever. */}
+            the work-progress store, which the gallery publishes — a
+            horizontal row gives every card the same top, so the old vertical
+            measurement would read a span of zero and park the object
+            forever. */}
         <CoverFlow
           projects={PROJECTS}
           header={

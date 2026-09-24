@@ -5,10 +5,10 @@ import { startSmoothScroll } from "@/lib/scroll/smooth";
 
 /* Renders nothing; it exists to own the smooth-scroll instance's lifetime.
  *
- * Mounted ABOVE <ReelCanvas /> in the root layout on purpose. Both run a rAF
- * loop, and this one has to advance the scroll position before the canvas
- * reads it, or the object is drawing one frame behind the page. Mounting
- * first puts its callback first in the queue. */
+ * Lenis subscribes to the shared ticker at priority 0, so it advances the
+ * scroll before every other subscriber reads it — see lib/frame/ticker.ts.
+ * The old guarantee ("mount me above ReelCanvas so my rAF callback registers
+ * first") was a coincidence of React mount order, not a contract. */
 export function SmoothScroll() {
   useEffect(() => startSmoothScroll(), []);
   return null;

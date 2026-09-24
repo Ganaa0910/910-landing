@@ -1,0 +1,371 @@
+/* ══════════════════════════════════════════════════════════════════
+   NAIR — component replicas.
+
+   Not screenshots of the client's UI. The UI, rebuilt: every value below is
+   copied out of nair-final/src, so these render at 1:1 in the browser the
+   same way they render on nair.mn. A reader can inspect them.
+
+   Sources, per block:
+     .nr-btn      src/lib/components/Header.svelte
+     .nr-opt      src/lib/components/OrderForm.svelte  .opt
+     .nr-field    src/lib/components/OrderForm.svelte  .order__label / __hint-block / __input
+     .nr-cal      src/lib/components/OrderForm.svelte  .cal
+     .nr-note     src/lib/components/OrderForm.svelte  .order__note
+     .nr-program  src/lib/components/service/ProgramList.svelte
+
+   TWO THINGS EVERY RULE HERE DEPENDS ON:
+
+   1. Every selector is prefixed `.nr `, putting it at (0,2,0). reel.css
+      styles `.cs-section p` at 13.5px/1.78 with specificity (0,1,1), which
+      outranks a bare single-class rule — so an unprefixed .nr-program__title
+      silently rendered at 13.5px instead of 20px and the card came out 4px
+      short of its real height. A blanket reset cannot fix this: to outrank
+      .cs-section p it would also have to outrank the component rules it is
+      meant to defer to.
+
+   2. The element wears `.replica` alongside `.nr`, which is what exempts the
+      subtree from the global `border-radius: 0 !important` in globals.css.
+   ══════════════════════════════════════════════════════════════════ */
+
+.nr {
+  --ink: #06090c;
+  --crimson: #9e1c21;
+  --ground: #f9f9fb;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  color: var(--ink);
+  text-align: left;
+}
+/* globals.css @layer base forces every heading to Syne 800 by tag name, which
+   beats inheritance, so descendants have to be told to inherit explicitly.
+
+   `.nr` must NOT be in this selector list: it has the same specificity as the
+   rule above and comes later, so including it set the root itself to inherit
+   and every replica fell back to the case study's IBM Plex Mono. */
+.nr * { font-family: inherit; }
+
+/* ── the padding reveal ────────────────────────────
+   Any replica marked [data-pad] draws its own content box. What sits between
+   that outline and the element's edge IS the padding, at scale, which is the
+   whole reason to rebuild rather than screenshot. */
+.nr [data-pad] { position: relative; }
+.nr [data-pad]::after {
+  content: "";
+  position: absolute;
+  inset: var(--pt) var(--pr) var(--pb) var(--pl);
+  box-shadow: 0 0 0 1px var(--crimson);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── header buttons ────────────────────────────────
+   padding is 12px 16px 12px 14px: the 14 pulls the left edge in under the
+   icon so the optical gap matches the 16 on the right. */
+.nr .nr-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 16px 12px 14px;
+  --pt: 12px; --pr: 16px; --pb: 12px; --pl: 14px;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600; line-height: 16px; letter-spacing: .28px;
+  outline-offset: -1px;
+  white-space: nowrap;
+}
+.nr .nr-btn svg { flex: none; width: 16px; height: 16px; }
+.nr .nr-btn--primary {
+  background: var(--ink); color: #fff;
+  outline: 1px solid rgba(255, 255, 255, .24);
+  box-shadow: 0 2px 24px rgba(6, 9, 12, .32);
+}
+.nr .nr-btn--primary[data-state="hover"] {
+  background: #1a1f24;
+  box-shadow: 0 2px 32px rgba(6, 9, 12, .48);
+}
+.nr .nr-btn--secondary {
+  background: rgba(6, 9, 12, .04); color: var(--ink);
+  outline: 1px solid rgba(6, 9, 12, .04);
+}
+.nr .nr-btn--secondary[data-state="hover"] {
+  background: rgba(6, 9, 12, .08);
+  outline-color: rgba(6, 9, 12, .16);
+}
+
+/* ── choice row ────────────────────────────────────
+   The form's primary control. Selection is the one place crimson is allowed
+   to fill rather than tint. */
+.nr .nr-opts { display: flex; flex-direction: column; gap: 10px; }
+.nr .nr-opt {
+  position: relative;
+  /* a real option row is block-level. Left to shrink-wrap, the three state
+     specimens come out three different widths and stop being comparable. */
+  width: 100%; max-width: 320px;
+  display: flex; flex-direction: row; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  --pt: 14px; --pr: 18px; --pb: 14px; --pl: 18px;
+  background: var(--ground);
+  border-radius: 12px;
+  outline: 1px solid rgba(6, 9, 12, .08);
+  outline-offset: -1px;
+}
+.nr .nr-opt[data-state="hover"] { outline-color: rgba(6, 9, 12, .2); }
+.nr .nr-opt[data-state="selected"] {
+  background: rgba(158, 28, 33, .04);
+  outline: 2px solid var(--crimson);
+  outline-offset: -2px;
+  box-shadow: 0 4px 16px rgba(158, 28, 33, .12);
+}
+.nr .nr-opt[data-state="focus"] { outline: 3px solid var(--ink); outline-offset: 2px; }
+.nr .nr-opt__dot {
+  flex: none;
+  display: grid; place-items: center;
+  width: 22px; height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  outline: 1px solid rgba(6, 9, 12, .2);
+  outline-offset: -1px;
+}
+/* the selected radio is a crimson disc with a white ring punched into it by
+   an inset shadow, rather than a child element that has to stay centred */
+.nr .nr-opt[data-state="selected"] .nr-opt__dot {
+  background: var(--crimson);
+  outline-color: var(--crimson);
+  box-shadow: inset 0 0 0 4px #fff;
+}
+.nr .nr-opt__label {
+  flex: 1 1 auto; min-width: 0;
+  font-size: 15px; font-weight: 500; line-height: 22px; letter-spacing: .3px;
+}
+
+/* ── field ─────────────────────────────────────────
+   Label, hint, control. The hint's negative top margin is the detail worth
+   drawing: see the comment quoted on the sheet. */
+.nr .nr-field { display: flex; flex-direction: column; gap: 12px; }
+.nr .nr-field__label {
+  font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: .28px;
+}
+.nr .nr-field__req { color: var(--crimson); margin-left: 2px; }
+.nr .nr-field__hint {
+  margin: -6px 0 0; max-width: none;
+  color: rgba(6, 9, 12, .56);
+  font-size: 13px; font-weight: 400; line-height: 19px; letter-spacing: .26px;
+}
+.nr .nr-field__input {
+  display: block; width: 100%;
+  padding: 14px 16px;
+  --pt: 14px; --pr: 16px; --pb: 14px; --pl: 16px;
+  background: var(--ground);
+  border: 1px solid rgba(6, 9, 12, .08);
+  border-radius: 12px;
+  font-size: 16px; line-height: 24px; letter-spacing: .32px;
+  color: rgba(6, 9, 12, .4);
+}
+.nr .nr-field__input[data-state="focus"] {
+  background: #fff;
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 4px rgba(158, 28, 33, .1);
+  color: var(--ink);
+}
+
+/* ── calendar ──────────────────────────────────────
+   The Зурхай picker. Days come from a scrape of the only machine-readable
+   Mongolian lunar-calendar source that exists; the grid is August 2026
+   exactly as the live form draws it. */
+.nr .nr-cal {
+  background: var(--ground);
+  border-radius: 12px;
+  outline: 1px solid rgba(6, 9, 12, .06);
+  outline-offset: -1px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 372px;
+}
+.nr .nr-cal__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: .28px;
+}
+.nr .nr-cal__nav {
+  display: grid; place-items: center;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(6, 9, 12, .04);
+  color: rgba(6, 9, 12, .48);
+  font-size: 12px;
+}
+.nr .nr-cal__weekdays,
+.nr .nr-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.nr .nr-cal__wd {
+  text-align: center;
+  color: rgba(6, 9, 12, .48);
+  font-size: 11px; font-weight: 600; line-height: 16px;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.nr .nr-cal__day {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 500; letter-spacing: .28px;
+}
+.nr .nr-cal__day--auspicious { font-weight: 700; }
+.nr .nr-cal__day--disabled { color: rgba(6, 9, 12, .24); }
+.nr .nr-cal__day--hover { background: rgba(6, 9, 12, .06); }
+.nr .nr-cal__day--active {
+  background: var(--crimson);
+  color: #fff; font-weight: 700;
+  box-shadow: 0 4px 12px rgba(158, 28, 33, .32);
+}
+.nr .nr-cal__marks {
+  position: absolute; bottom: 4px; left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 3px;
+}
+.nr .nr-cal__mark {
+  display: inline-block; width: 5px; height: 5px;
+  border-radius: 999px; background: var(--crimson); flex: none;
+}
+/* Балжинням reads as a ring, Дашням as a disc. A day can be both, and the
+   day that is carries one of each, which is why they had to be two shapes
+   rather than two colours. */
+.nr .nr-cal__mark--ring { background: transparent; box-shadow: inset 0 0 0 1.5px var(--crimson); }
+.nr .nr-cal__day--disabled .nr-cal__mark { opacity: .4; }
+.nr .nr-cal__day--active .nr-cal__mark { background: #fff; }
+.nr .nr-cal__day--active .nr-cal__mark--ring { background: transparent; box-shadow: inset 0 0 0 1.5px #fff; }
+.nr .nr-cal__legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 2px; }
+.nr .nr-cal__legend-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: rgba(6, 9, 12, .64);
+  font-size: 12px; font-weight: 500; line-height: 16px; letter-spacing: .24px;
+}
+
+/* ── note ──────────────────────────────────────────
+   The only place crimson is set as small uppercase type. */
+.nr .nr-note {
+  padding: 18px 20px;
+  --pt: 18px; --pr: 20px; --pb: 18px; --pl: 20px;
+  background: var(--ground);
+  border-radius: 12px;
+  outline: 1px solid rgba(6, 9, 12, .06);
+  outline-offset: -1px;
+  display: flex; flex-direction: column; gap: 8px;
+  max-width: 380px;
+}
+.nr .nr-note__title {
+  color: var(--crimson);
+  font-size: 12px; font-weight: 700; line-height: 16px;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+.nr .nr-note__body {
+  margin: 0; max-width: none;
+  color: rgba(6, 9, 12, .72);
+  font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: .28px;
+}
+
+/* ── run of show ───────────────────────────────────
+   The component the whole system exists to produce, and the one drawn under
+   dimension lines on sheet 03. Its gaps step down by exactly one 4px unit at
+   each level of nesting: 24 padding, 20 to the list, 16 between items, 12
+   from a marker to its label. */
+.nr .nr-program {
+  padding: 24px;
+  --pt: 24px; --pr: 24px; --pb: 24px; --pl: 24px;
+  background: #fff;
+  border-radius: 16px;
+  outline: 1px solid rgba(6, 9, 12, .08);
+  outline-offset: -1px;
+  box-shadow: 0 8px 24px rgba(6, 9, 12, .02);
+  display: flex; flex-direction: column; gap: 20px;
+  max-width: 440px;
+}
+.nr .nr-program__title {
+  margin: 0; max-width: none;
+  color: var(--crimson);
+  font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: .4px;
+}
+.nr .nr-program__list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.nr .nr-program__item { position: relative; display: flex; align-items: center; gap: 12px; }
+.nr .nr-program__dot { flex: none; width: 20px; height: 20px; display: inline-block; position: relative; }
+.nr .nr-program__dot::before {
+  content: ""; position: absolute; top: 50%; left: 50%;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(6, 9, 12, .32);
+  transform: translate(-50%, -50%);
+}
+/* an act not in this booking keeps its row and empties its marker, so the
+   programme reads as one document with gaps rather than a shorter document */
+.nr .nr-program__item--inactive .nr-program__dot::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px rgba(6, 9, 12, .24);
+}
+.nr .nr-program__label {
+  flex: 1 1 0;
+  font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: .32px;
+}
+.nr .nr-program__item--inactive .nr-program__label { color: rgba(6, 9, 12, .4); }
+.nr .nr-program__info {
+  flex: none; display: inline-grid; place-items: center;
+  width: 22px; height: 22px;
+  border-radius: 999px;
+  color: rgba(6, 9, 12, .4);
+}
+.nr .nr-program__info svg { width: 16px; height: 16px; display: block; }
+
+/* ── badge / pill / card ───────────────────────────
+   The three surfaces that show the radius ladder doing its job. */
+.nr .nr-badge {
+  display: inline-flex; align-items: center;
+  padding: 12px 20px;
+  --pt: 12px; --pr: 20px; --pb: 12px; --pl: 20px;
+  border-radius: 24px;
+  background: rgba(6, 9, 12, .02);
+  outline: 1px solid rgba(6, 9, 12, .04);
+  outline-offset: -1px;
+  font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: .32px;
+}
+.nr .nr-pill {
+  display: inline-flex; align-items: center;
+  padding: 12px 20px;
+  --pt: 12px; --pr: 20px; --pb: 12px; --pl: 20px;
+  border-radius: 32px;
+  background: #fff;
+  outline: 1px solid rgba(6, 9, 12, .04);
+  outline-offset: -1px;
+  box-shadow: 0 8px 40px rgba(6, 9, 12, .08);
+  font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: .32px;
+  white-space: nowrap;
+}
+.nr .nr-card {
+  position: relative;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  gap: 12px;
+  width: 100%; max-width: 260px; height: 172px;
+  padding: 24px;
+  --pt: 24px; --pr: 24px; --pb: 24px; --pl: 24px;
+  border-radius: 16px;
+  background: #1a1f24;
+  outline: 1px solid rgba(255, 255, 255, .04);
+  outline-offset: -1px;
+  overflow: hidden;
+  color: #fff;
+}
+/* the card's image is set 116% wide at -8% left so it can pan horizontally
+   under the card as the shelf scrolls without ever showing an edge. This page
+   ships no photographs, so the plate stands in for it at exactly that box —
+   the geometry is the part worth showing anyway. */
+.nr .nr-card__plate {
+  position: absolute; top: 0; left: -8%;
+  width: 116%; height: 100%;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(115deg,
+      rgba(255, 255, 255, .05) 0 1px, transparent 1px 9px),
+    linear-gradient(120deg, #2a3038, #12161a);
+}
+.nr .nr-card__overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(rgba(6, 9, 12, 0) 0%, #06090c 100%);
+}
+.nr .nr-card__title {
+  position: relative; z-index: 2; margin: 0; max-width: none;
+  font-size: 24px; font-weight: 600; line-height: 32px; letter-spacing: .24px;
+}

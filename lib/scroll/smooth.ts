@@ -1,4 +1,5 @@
 import Lenis from "lenis";
+import { onFrame } from "@/lib/frame/ticker";
 
 /* Smooth scrolling, as a module singleton rather than React state.
  *
@@ -17,7 +18,6 @@ import Lenis from "lenis";
  * the two fight and the page snaps back. */
 
 let lenis: Lenis | null = null;
-let raf = 0;
 
 /* Per frame, the fraction of the remaining distance to close. Lower is
    glassier and laggier; higher is tighter and closer to raw scroll. 0.1 is
@@ -43,14 +43,14 @@ export function startSmoothScroll(): () => void {
     smoothWheel: true,
   });
 
-  const frame = (time: number) => {
-    lenis?.raf(time);
-    raf = requestAnimationFrame(frame);
-  };
-  raf = requestAnimationFrame(frame);
+  /* Priority 0: runs before every other subscriber, so everything reading
+     the scroll position this frame — the reel canvas, the cover flow — sees
+     the position AFTER it advanced. That ordering used to rest on React
+     mount order, which nothing guarantees; now it is explicit. */
+  const stop = onFrame((time) => lenis?.raf(time), 0);
 
   return () => {
-    cancelAnimationFrame(raf);
+    stop();
     lenis?.destroy();
     lenis = null;
   };
