@@ -40,11 +40,30 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   const q = <T extends Element>(sel: string) => document.querySelector<T>(sel);
   const qa = <T extends Element>(sel: string) => [...document.querySelectorAll<T>(sel)];
 
+  /* Backing-store resolution. A full-viewport canvas at 2× on a phone is
+     ~1.3M pixels cleared and filled per frame; 1.5× is visually the same
+     on a small, dense screen for well over half the fill cost back. */
+  const DPR_CAP = window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2;
+
   let reel: HTMLElement | null = null;
   let probe: HTMLElement | null = null;
   let stepEls: HTMLElement[] = [];
   let hereEl: HTMLElement | null = null;
   let squares: SVGRectElement[] = [];
+
+  /* Layout sizes the per-frame code needs, cached. The frame writes the
+     scroll vars and the step labels' styles, and any clientWidth read after
+     that forces the browser to recalc style and lay out synchronously,
+     mid-frame — once for the canvas, again for the probe, every frame. All
+     of these only change when the viewport does, so ResizeObservers keep
+     them fresh and the frame never has to ask. */
+  const size = { cw: 0, ch: 0, pw: 0, ph: 0 };
+  function measure() {
+    size.cw = canvas.clientWidth;
+    size.ch = canvas.clientHeight;
+    size.pw = probe?.clientWidth ?? 0;
+    size.ph = probe?.clientHeight ?? 0;
+  }
 
   function syncRefs() {
     reel     = q<HTMLElement>("[data-reel]");
@@ -546,11 +565,14 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
        rendering — lets a morph frame learn its target for free */
     poseOnly = false,
   ) {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const W = cv.clientWidth, H = cv.clientHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+    const W = size.cw, H = size.ch;
     if (!W || !H) return;
-    if (cv.width !== W * dpr || cv.height !== H * dpr) {
-      cv.width = W * dpr; cv.height = H * dpr;
+    /* rounded: a fractional dpr would never compare equal to the integer
+       backing size and reallocate the canvas every frame */
+    const bw = Math.round(W * dpr), bh = Math.round(H * dpr);
+    if (cv.width !== bw || cv.height !== bh) {
+      cv.width = bw; cv.height = bh;
     }
 
     const ctx = cv.getContext("2d")!;
@@ -563,8 +585,8 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     /* S1 pose: a dome — sphere centre pinned below the viewport's bottom
        edge, so only the northern hemisphere is on screen.
        S2 pose: the whole sphere, off to one side of the copy. */
-    const D = (probe && probe.clientWidth) || W;
-    const dropPx = (probe && probe.clientHeight) || 0;
+    const D = size.pw || W;
+    const dropPx = size.ph;
 
     const R1 = D * 0.46,           cx1 = W / 2,            cy1 = H + dropPx;
     const R2 = narrow ? W * 0.36 : Math.min(W, H) * 0.34;
@@ -749,7 +771,11 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
        the loop is clipped to the canvas so the hidden hemisphere in the
        S1 dome pose is never sampled at all */
     if (detail > 0.01) {
-      const gstep = Math.max(0.5, (2 * R) / P.dotsAcross);
+      /* Every grid sample is an inverse projection with four trig calls, and
+         the grid is dotsAcross² — ~22k a frame at 170. On a phone the globe
+         is small enough that 170 across means 2px dots nobody can resolve,
+         so touch gets 120: half the samples, the same map. */
+      const gstep = Math.max(0.5, (2 * R) / (DPR_CAP < 2 ? Math.min(P.dotsAcross, 120) : P.dotsAcross));
       const rDot = Math.max(0.9, gstep * P.dotScale);
       const gy0 = Math.max(cy - R, -gstep), gy1 = Math.min(cy + R, H + gstep);
       const gx0 = Math.max(cx - R, -gstep), gx1 = Math.min(cx + R, W + gstep);
@@ -1248,6 +1274,8 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   const requestDraw = () => { dirty = true; };
 
   let curP = 0, curZ = 0, curRoll = 0, curOut = 0;
+  /* the last settled rail frame drawn, so an unchanged one can be skipped */
+  let lastRailKey = "";
 
   function frame(now: number, dt: number) {
     /* The canvas deliberately survives navigation, which puts it outside
@@ -1276,11 +1304,14 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     }
 
     if (mode === "rail") {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const W = canvas.clientWidth, H = canvas.clientHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+      const W = size.cw, H = size.ch;
       if (!W || !H) return;
-      if (canvas.width !== W * dpr || canvas.height !== H * dpr) {
-        canvas.width = W * dpr; canvas.height = H * dpr;
+      /* rounded: a fractional dpr would never compare equal to the integer
+         backing size and reallocate the canvas every frame */
+      const bw = Math.round(W * dpr), bh = Math.round(H * dpr);
+      if (canvas.width !== bw || canvas.height !== bh) {
+        canvas.width = bw; canvas.height = bh;
       }
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -1288,6 +1319,15 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       ctx.clearRect(0, 0, W, H);
 
       const target = railPose(W, H);
+
+      /* Nothing moved: the frame would be identical, so leave the last one
+         up. Settled on /work the rail only changes when the gallery
+         publishes a new position, and repainting a full-screen canvas 60
+         times a second to draw the same rail was pure cost on a phone. */
+      const railKey = `${W}x${H}:${target.p.toFixed(5)}`;
+      if (!morphFrom && railKey === lastRailKey) return;
+      lastRailKey = morphFrom ? "" : railKey;
+
       const pose = morphFrom
         ? { cx: lerp(morphFrom.cx, target.cx, morph),
             cy: lerp(morphFrom.cy, target.cy, morph),
@@ -1366,7 +1406,12 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       curRoll = roll;
       curOut  = out;
 
-      const css = document.documentElement.style;
+      /* Written on the reel, not on <html>. Every consumer of these four
+         lives inside [data-reel], and a custom property set on the root
+         invalidates style for the whole document — once per scroll frame,
+         which was most of the cost of scrolling the reel on a phone. The
+         :root defaults in reel.css still cover the frames before this runs. */
+      const css = (reel ?? document.documentElement).style;
       css.setProperty("--p",    curP.toFixed(4));
       css.setProperty("--z",    curZ.toFixed(4));
       css.setProperty("--roll", curRoll.toFixed(4));
@@ -1374,7 +1419,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
       reel?.classList.toggle("s4-live", curOut > 0.5);
       reel?.classList.toggle("s2-live", curP > 0.6 && curZ < 0.2);
 
-      const W = canvas.clientWidth, H = canvas.clientHeight;
+      const W = size.cw, H = size.ch;
       if (W && H) {
         const g = railGeom(W, H);
 
@@ -1484,7 +1529,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
 
   const onVis = () => (document.hidden ? stop() : start());
   document.addEventListener("visibilitychange", onVis);
-  const ro = new ResizeObserver(() => { requestDraw(); layoutArc(); layoutSteps(); computeLogoShift(); lastT = -1; });
+  const ro = new ResizeObserver(() => { measure(); requestDraw(); layoutArc(); layoutSteps(); computeLogoShift(); lastT = -1; });
   ro.observe(canvas);
 
   /* ── route switching ─────────────────────────────── */
@@ -1497,8 +1542,10 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
   let currentPath = "";
   function setRoute(path: string) {
     currentPath = path;
+    lastRailKey = "";
     const next = routeFor(path);
     syncRefs();
+    measure();
 
     if (next !== mode) {
       /* Pick the object up exactly where it is — but only if it has ever
@@ -1522,7 +1569,7 @@ export function createReel(canvas: HTMLCanvasElement): ReelHandle {
     start();
   }
 
-  const ro2 = new ResizeObserver(() => requestDraw());
+  const ro2 = new ResizeObserver(() => { measure(); requestDraw(); });
   ro2.observe(document.documentElement);
 
   /* boot onto whatever route we woke up on, then the frame loop keeps it
