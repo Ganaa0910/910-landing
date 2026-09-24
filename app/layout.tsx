@@ -24,9 +24,6 @@ import "./globals.css";
    so it tracks the version rather than drifting as a hand-copy. */
 import "lenis/dist/lenis.css";
 import "./reel.css";
-/* the case-study drafting layer: 910's blueprint grammar. Loaded after
-   reel.css so its sheets can override the .cs- base. */
-import "./drafting.css";
 
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
