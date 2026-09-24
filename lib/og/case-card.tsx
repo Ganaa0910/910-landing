@@ -4,7 +4,7 @@ import { publicDataUri, wordmark } from "./assets";
 import { plex } from "./fonts";
 
 /**
- * The share card for one case study, 1200 × 630.
+ * The share card for one case study or toy, 1200 × 630.
  *
  * Every case study wears the client's colours on 910's structure — the
  * same rule the pages themselves follow — so the card reads the palette
@@ -43,7 +43,10 @@ const COVER_H = Math.round((COVER_W * 10) / 16);
 
 export function caseCardAlt(slug: string): string {
   const p = getProject(slug);
-  return p ? `${p.title} — 910studio case study` : "910studio case study";
+  if (!p) return "910studio case study";
+  return p.kind === "toy"
+    ? `${p.title} — from the 910studio toybox`
+    : `${p.title} — 910studio case study`;
 }
 
 export async function caseCard(slug: string): Promise<ImageResponse> {
@@ -67,6 +70,13 @@ export async function caseCard(slug: string): Promise<ImageResponse> {
   /* "Nair Entertainment" and "Some Gorillas" do not get the same size as
      "Uuye". One step down is enough to keep every title on one line. */
   const titleSize = project.title.length > 12 ? 58 : 76;
+
+  /* A toy is not a case study and does not live under /work. pomo has a
+     palette and a cover like everything else, so it gets the same card
+     rather than the generic one — only the eyebrow and the address change. */
+  const toy = project.kind === "toy";
+  const eyebrow = toy ? "Toybox" : "Case study";
+  const section = toy ? "toybox" : "work";
 
   return new ImageResponse(
     (
@@ -106,7 +116,7 @@ export async function caseCard(slug: string): Promise<ImageResponse> {
               color: accent,
             }}
           >
-            Case study · {project.year}
+            {eyebrow} · {project.year}
           </div>
         </div>
 
@@ -208,7 +218,7 @@ export async function caseCard(slug: string): Promise<ImageResponse> {
           }}
         >
           <div style={{ display: "flex", fontSize: 18, letterSpacing: "0.04em", color: ink3 }}>
-            910.studio/work/{project.slug}
+            910.studio/{section}/{project.slug}
           </div>
           <div style={{ display: "flex", width: 132, height: 6, background: accent }} />
         </div>
