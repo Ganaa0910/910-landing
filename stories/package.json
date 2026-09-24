@@ -1,0 +1,23 @@
+{
+  "name": "910-stories",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts --public-dir ../public",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.528",
+    "@remotion/cli": "^4.0.528",
+    "@remotion/google-fonts": "^4.0.528",
+    "@remotion/renderer": "^4.0.528",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "remotion": "^4.0.528"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}
