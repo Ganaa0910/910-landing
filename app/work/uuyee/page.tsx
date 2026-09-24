@@ -28,6 +28,7 @@ import {
   States,
 } from "@/components/case-study/drafting";
 import "./replica.css";
+import { ShareStory } from "@/components/case-study/share-story";
 
 /* ── the client's own values ───────────────────────
    Read out of uuyee-portfolio/src rather than remembered. The ring fields
@@ -170,6 +171,8 @@ export default function UuyeeCaseStudy() {
         <Meta label="scope" value="Design, Frontend, Deploy" />
         <Meta label="live" value="uuyee-portfolio.vercel.app" live />
       </div>
+
+      <ShareStory slug="uuyee" title="Uuye — a 910studio case study" />
 
       <Section num="01" label="The Brief" title="A working musician with nothing to put in a portfolio">
         <p>
