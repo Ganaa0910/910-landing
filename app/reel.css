@@ -688,6 +688,20 @@ h1 { margin:0; }
   .work-deck { perspective: 900px; }
 }
 
+/* Swipe mode (phones — cover-flow.tsx sets data-swipe off the same
+   breakpoint). The deck is moved by a horizontal drag, so the track drops
+   its scroll runway and the stage stops being sticky: one screen, then the
+   toybox. pan-y keeps vertical thumbs scrolling the page; the horizontal
+   ones come to the deck as pointer events. */
+.work-track[data-swipe] { height: auto; }
+.work-track[data-swipe] .work-stage { position: relative; }
+.work-track[data-swipe] .work-deck {
+  touch-action: pan-y;
+  user-select: none; -webkit-user-select: none;
+}
+.work-track[data-swipe] .work-item { -webkit-user-drag: none; -webkit-touch-callout: none; }
+.work-track[data-swipe] .work-item img { pointer-events: none; }
+
 /* Reduced motion still scrubs — it is the reader's own scroll — but the
    raking is the part that reads as motion for its own sake, so the deck
    flattens to a plain carousel. The entrance stagger and caption rise go
@@ -784,8 +798,8 @@ h1 { margin:0; }
    committing the route, so page-shell.tsx reads it back off the custom
    property instead of keeping its own copy to fall out of step with. */
 :root {
-  --t-page-out: 520ms;
-  --t-page-in:  900ms;
+  --t-page-out: 380ms;
+  --t-page-in:  640ms;
   /* The beat between the old page leaving and the new one arriving, held
      open so the object can finish becoming something else while the stage
      is empty. Measured from the route commit, not from the click. Must stay
@@ -822,16 +836,29 @@ h1 { margin:0; }
    normally the first time you navigate away.) */
 .shell-inner.cold { animation: none; }
 .shell.leaving .shell-inner {
-  animation: pageOut var(--t-page-out) cubic-bezier(.4, 0, .7, .2) forwards;
+  /* ease-in-out, not ease-in: an exit that is still accelerating when it
+     ends reads as the page being yanked, then a hard cut to blank */
+  animation: pageOut var(--t-page-out) cubic-bezier(.45, 0, .55, 1) forwards;
 }
 
+/* Fixed distances, not percentages. 7% of a wide monitor is a 100px throw,
+   which read as a snap however it was eased; the slide only has to say
+   which way you went. */
 @keyframes pageIn {
-  from { opacity: 0; transform: translateX(7%); }
+  from { opacity: 0; transform: translate3d(28px, 0, 0); }
   to   { opacity: 1; transform: none; }
 }
 @keyframes pageOut {
   from { opacity: 1; transform: none; }
-  to   { opacity: 0; transform: translateX(-9%); }
+  to   { opacity: 0; transform: translate3d(-20px, 0, 0); }
+}
+
+/* Phones fade without the slide. Moving a page-tall layer sideways makes
+   the GPU re-raster it as it goes, which is exactly the frames a low-end
+   phone drops; opacity alone composites for free. */
+@media (pointer: coarse) {
+  @keyframes pageIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pageOut { from { opacity: 1; } to { opacity: 0; } }
 }
 
 /* a slide that fights the reader is worse than no slide */
@@ -1000,6 +1027,31 @@ h1 { margin:0; }
 }
 .cs-meta p { margin: 7px 0 0; font-size: 12.5px; color: var(--cs-ink-2); }
 .cs-meta p.live { color: var(--cs-accent); }
+
+/* "Share to story" — components/case-study/share-story.tsx. Cartoon press,
+   same as every other interactive surface. */
+.cs-share { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin: 28px 0 0; }
+.cs-share-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--cs-on-accent); background: var(--cs-accent);
+  border: 1.5px solid var(--cs-ink); box-shadow: 4px 4px 0 0 var(--cs-ink);
+  padding: 12px 18px; cursor: pointer;
+  transition: translate .14s cubic-bezier(.4,0,.2,1), box-shadow .14s cubic-bezier(.4,0,.2,1);
+}
+.cs-share-btn:active { translate: 3px 3px; box-shadow: 1px 1px 0 0 var(--cs-ink); }
+.cs-share-btn:disabled { opacity: .55; cursor: progress; }
+.cs-share-note { margin: 0; font-size: 11px; line-height: 1.6; color: var(--cs-ink-3); max-width: 42ch; }
+.cs-share-card {
+  display: grid; gap: 14px; justify-items: start;
+  border: 1.5px solid var(--cs-ink); box-shadow: 6px 6px 0 0 var(--cs-rule);
+  padding: 18px 20px; max-width: 360px;
+  animation: nowIn 240ms cubic-bezier(.33,1,.68,1) both;
+}
+.cs-share-head { margin: 0; font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--cs-accent); }
+.cs-share-url { margin: 0; font-size: 12px; color: var(--cs-ink); user-select: all; -webkit-user-select: all; word-break: break-all; }
+.cs-share-steps { margin: 0; padding-left: 20px; list-style: decimal; font-size: 12px; line-height: 1.9; color: var(--cs-ink-2); }
+.cs-share-steps b { color: var(--cs-ink); font-weight: 600; }
 
 /* ── sections ─────────────────────────────────────── */
 .cs-section { padding: clamp(56px, 9vh, 104px) 0 0; }

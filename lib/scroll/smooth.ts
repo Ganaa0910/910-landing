@@ -21,14 +21,34 @@ let lenis: Lenis | null = null;
 
 /* Per frame, the fraction of the remaining distance to close. Lower is
    glassier and laggier; higher is tighter and closer to raw scroll. 0.1 is
-   Lenis's own default and reads as roughly a 165ms time constant at 60fps.
+   Lenis's own default and read as roughly a 165ms time constant at 60fps —
+   which on a long page felt like dragging the page through syrup. 0.16 is
+   about 95ms: still glides a wheel notch, no longer trails the hand.
    This is THE feel knob — if the page reads floaty, raise it. */
-const LERP = 0.1;
+const LERP = 0.16;
+
+/* Where interpolated scrolling costs more than it gives, and the page is
+   left on the browser's own scroller:
+   - a finger is the primary input. Lenis leaves touch alone anyway
+     (syncTouch:false), so on a phone it was only running a per-frame loop
+     and intercepting programmatic scrolls against the OS's momentum.
+   - four cores or fewer, or ≤4GB where the browser says. Interpolation
+     only reads as smooth when every frame lands; on a machine that drops
+     them it turns into visible stepping, which is worse than native. */
+function wantsNativeScroll(): boolean {
+  if (window.matchMedia("(pointer: coarse)").matches) return true;
+  const cores = navigator.hardwareConcurrency ?? 8;
+  const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
+  return cores <= 4 || mem <= 4;
+}
 
 export function startSmoothScroll(): () => void {
   /* honour the OS setting: interpolating someone's scroll when they have
      asked for less motion is exactly the thing they turned off */
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    wantsNativeScroll()
+  ) {
     return () => {};
   }
 

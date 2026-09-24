@@ -3,6 +3,7 @@ import { CaseStudy, Meta, Tail } from "@/components/case-study/shell";
 import { Beat, Palette, Specimen, Stage } from "@/components/case-study/showcase";
 import { Win98Specimen } from "./win98";
 import { CrtScreen } from "./crt";
+import { ShareStory } from "@/components/case-study/share-story";
 
 export const metadata: Metadata = {
   title: "HemiBros — Case Study",
@@ -31,6 +32,8 @@ export default function HemiBrosCaseStudy() {
         <Meta label="reference" value="Windows 98" />
         <Meta label="year" value="2025" />
       </div>
+
+      <ShareStory slug="hemibros" title="HemiBros — a 910studio case study" />
 
       {/* live chrome — press the buttons */}
       <Stage>

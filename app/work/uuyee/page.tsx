@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CaseStudy, Meta, Tail } from "@/components/case-study/shell";
 import { Beat, Palette, Shot, Specimen, Stage } from "@/components/case-study/showcase";
 import { RingFields } from "./rings";
+import { ShareStory } from "@/components/case-study/share-story";
 
 export const metadata: Metadata = {
   title: "Uuye — Case Study",
@@ -28,6 +29,8 @@ export default function UuyeeCaseStudy() {
         <Meta label="executor" value="910studio (solo)" />
         <Meta label="live" value="uuyee-portfolio.vercel.app" live />
       </div>
+
+      <ShareStory slug="uuyee" title="Uuye — a 910studio case study" />
 
       <Shot
         src="/demos/uuyee/assets/hero.png"

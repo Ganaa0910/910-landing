@@ -1,28 +1,26 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { wordmark } from "@/lib/og/assets";
+import { plex } from "@/lib/og/fonts";
+
+/**
+ * The card every 910.studio link falls back to.
+ *
+ * Next's file convention makes this `og:image` for the whole tree. Case
+ * studies override it with a card of their own — see
+ * lib/og/case-card.tsx — and the home page overrides it with a still
+ * from the reel.
+ *
+ * One caveat that cost a live bug: a segment which declares its own
+ * `openGraph` block does NOT inherit this. /work, /contact and /toybox
+ * all did, and all shipped with no og:image at all, so every link to
+ * them pasted into Slack or iMessage arrived bare. They now each
+ * re-export this file, which is enough — a file in the segment itself
+ * merges into a declared block, only inheritance is blocked.
+ */
 
 export const alt = "910studio — Creative Web Studio, Ulaanbaatar Mongolia";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-// Resolve a Google Font's binary URL via the CSS API so Google's version
-// rotations (v19 → v20, etc.) don't break the OG image silently.
-async function loadGoogleFont(family: string): Promise<ArrayBuffer | null> {
-  try {
-    const css = await fetch(
-      `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}&display=swap`,
-      { headers: { "User-Agent": "Mozilla/5.0" } },
-    ).then((r) => r.text());
-    const match = css.match(/url\((https:\/\/[^)]+\.(?:ttf|woff2))\)/);
-    if (!match) return null;
-    const font = await fetch(match[1]);
-    if (!font.ok) return null;
-    return await font.arrayBuffer();
-  } catch {
-    return null;
-  }
-}
 
 const PAPER = "#FBF9F6";
 const INK = "#2B221F";
@@ -30,7 +28,8 @@ const ACCENT = "#2660E8";
 
 /* The 910 mark on its 21px grid, matching public/logo.svg. Drawn as divs
    rather than an <svg> — this renders through Satori, where a grid of
-   absolutely-positioned boxes is far more predictable than path data. */
+   absolutely-positioned boxes is far more predictable than path data.
+   Only reached if the file cannot be read at render time. */
 const CELLS: ReadonlyArray<readonly [number, number]> = [
   [0, 0], [22, 0], [45, 0], [93, 0], [118, 0], [141, 0], [163, 0],
   [0, 22], [45, 22], [70, 22], [93, 22], [118, 22], [163, 22],
@@ -40,31 +39,11 @@ const CELLS: ReadonlyArray<readonly [number, number]> = [
 ];
 const SCALE = 1.35;
 
-/* Prefer the real lockup. Satori renders <img> from a data URI, so the
-   actual logo file is inlined rather than approximated — the wordmark is a
-   geometric grotesk that no Google font would match. Falls back to the
-   hand-plotted grid if the file can't be read at render time. */
-function logoDataUri(): string | null {
-  try {
-    const svg = readFileSync(join(process.cwd(), "public", "logo.svg"), "utf8");
-    return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
-  } catch {
-    return null;
-  }
-}
-
 export default async function OGImage() {
-  const [mono, monoBold] = await Promise.all([
-    loadGoogleFont("IBM Plex Mono:wght@400"),
-    loadGoogleFont("IBM Plex Mono:wght@500"),
-  ]);
-
-  const fonts = [
-    mono && { name: "IBM Plex Mono", data: mono, style: "normal" as const, weight: 400 as const },
-    monoBold && { name: "IBM Plex Mono", data: monoBold, style: "normal" as const, weight: 500 as const },
-  ].filter((f): f is NonNullable<typeof f> => f !== null);
-
-  const logo = logoDataUri();
+  const fonts = await plex();
+  /* INK is 910's own ink, so this recolour is a no-op here — it is the
+     same call the case cards make, where it is not. */
+  const logo = wordmark(INK);
 
   return new ImageResponse(
     (
@@ -77,7 +56,7 @@ export default async function OGImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "68px 76px",
-          fontFamily: "IBM Plex Mono",
+          fontFamily: "Plex",
           color: INK,
         }}
       >
@@ -141,6 +120,16 @@ export default async function OGImage() {
         <div style={{ display: "flex", width: 232, height: 8, background: ACCENT }} />
       </div>
     ),
-    { ...size, fonts },
+    {
+      ...size,
+      fonts,
+      /* A metadata image route sets `max-age=0, must-revalidate` on itself
+         and that beats anything in next.config's headers() — so the config
+         entry looks right and does nothing while every scrape re-runs the
+         render. It has to be set here. */
+      headers: {
+        "cache-control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+      },
+    },
   );
 }

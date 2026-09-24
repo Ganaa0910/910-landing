@@ -4,6 +4,7 @@ import { CaseStudy, Meta, Tail } from "@/components/case-study/shell";
 import { Beat, Palette, Shot, Specimen, Stage } from "@/components/case-study/showcase";
 import { Translator } from "./translator";
 import { RoomBackdrop } from "./backdrop";
+import { ShareStory } from "@/components/case-study/share-story";
 
 export const metadata: Metadata = {
   title: "Some Gorillas — Case Study",
@@ -37,6 +38,8 @@ export default function SomeGorillasCaseStudy() {
         <Meta label="with" value="A crypto lab" />
         <Meta label="live" value="somegorillas.com" live />
       </div>
+
+      <ShareStory slug="somegorillas" title="Some Gorillas — a 910studio case study" />
 
       <Shot
         src="/demos/somegorillas/assets/hero.png"

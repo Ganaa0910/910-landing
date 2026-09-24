@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { CaseStudy, Meta, Tail } from "@/components/case-study/shell";
 import { Beat, Pair, Palette, Shot, Specimen } from "@/components/case-study/showcase";
+import { ShareStory } from "@/components/case-study/share-story";
 
 export const metadata: Metadata = {
   title: "MarketIQ — Case Study",
@@ -34,6 +35,8 @@ export default function CMMCaseStudy() {
         <Meta label="scope" value="Design System, Frontend" />
         <Meta label="year" value="2026" />
       </div>
+
+      <ShareStory slug="cmm" title="MarketIQ — a 910studio case study" />
 
       <Shot
         src={`${IMG}/entity-dense.png`}

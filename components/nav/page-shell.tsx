@@ -37,7 +37,7 @@ function exitMs(): number {
     .getPropertyValue("--t-page-out")
     .trim();
   const ms = v.endsWith("ms") ? parseFloat(v) : parseFloat(v) * 1000;
-  return Number.isFinite(ms) && ms > 0 ? ms : 520;
+  return Number.isFinite(ms) && ms > 0 ? ms : 380;
 }
 
 /* Where the reel sits when you come back to it having never scrolled there
@@ -51,7 +51,7 @@ const REEL_S2 = 0.23;
    below has to match it: 420ms was a guess at how long an interpolated
    scroll from an unknown position would take, and from far down the work
    index it was not close. Now both come from one number. */
-const TO_TOP_S = 0.7;
+const TO_TOP_S = 0.5;
 const TO_TOP_MS = TO_TOP_S * 1000;
 
 type NavContextValue = {
@@ -106,6 +106,14 @@ export function NavProvider({ children }: { children: ReactNode }) {
     (href: string) => {
       if (href === pathname) return;
 
+      /* Start fetching the route now, while the exit plays, so the push at
+         the end of it lands on a payload that is already here. Without it
+         the fetch only began after the exit, and on a phone network the
+         reader sat on a blank page for however long that took. Links
+         prefetch on their own (TransitionLink); this covers callers that
+         navigate directly, like the cover flow. */
+      router.prefetch(href);
+
       const depart = (from: number) => {
         scrollMemory.current[pathname] = from;
         cameFromAnotherPage.current = true;
@@ -138,7 +146,13 @@ export function NavProvider({ children }: { children: ReactNode }) {
           the rack for the trip back.
           Reduced motion skips the ride and just goes. */
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const noRide = pathname === "/" || pathname === "/work";
+      /* Touch skips it too. A programmatic scroll on a phone fights
+         whatever momentum the page still has, and costs half a second
+         before the exit has even started. The exit is a fade there, which
+         reads fine from mid-page, and the commit lands the new page at the
+         top regardless. */
+      const touch = window.matchMedia("(pointer: coarse)").matches;
+      const noRide = pathname === "/" || pathname === "/work" || touch;
       if (!noRide && !reduced && window.scrollY > 8) {
         glidePageTo(0, TO_TOP_S) || scrollPageTo(0);
         if (timer.current) clearTimeout(timer.current);
@@ -239,6 +253,15 @@ export function TransitionLink({
   children: ReactNode;
 }) {
   const navigate = useTransitionNav();
+  const router = useRouter();
+
+  /* next/link prefetches on its own; a plain <a> does not, so without this
+     every transition fetched its route only after the exit had played.
+     Internal routes here are few and static, so warming them on mount is
+     cheap. */
+  useEffect(() => {
+    if (href.startsWith("/")) router.prefetch(href);
+  }, [href, router]);
 
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     /* let the browser handle anything that is not a plain left click —

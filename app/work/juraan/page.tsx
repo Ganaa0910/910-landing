@@ -3,6 +3,7 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import { CaseStudy, Meta, Tail } from "@/components/case-study/shell";
 import { Beat, Pair, Palette, Shot, Specimen } from "@/components/case-study/showcase";
+import { ShareStory } from "@/components/case-study/share-story";
 
 export const metadata: Metadata = {
   title: "Juraan — Case Study",
@@ -37,6 +38,8 @@ export default function JuraanCaseStudy() {
         <Meta label="executor" value="910studio (solo)" />
         <Meta label="live" value="juraan.com" live />
       </div>
+
+      <ShareStory slug="juraan" title="Juraan — a 910studio case study" />
 
       <Shot
         src={`${IMG}/exhibition.jpg`}
