@@ -1053,6 +1053,27 @@ h1 { margin:0; }
 .cs-share-steps { margin: 0; padding-left: 20px; list-style: decimal; font-size: 12px; line-height: 1.9; color: var(--cs-ink-2); }
 .cs-share-steps b { color: var(--cs-ink); font-weight: 600; }
 
+/* the format picker — two 9:16 previews, the chosen one outlined in accent */
+.cs-share-card { max-width: 400px; }
+.cs-share-pick { display: flex; gap: 14px; }
+.cs-share-opt {
+  /* fixed width: the case-study layers size media to their container, and
+     left to the grid these previews each took the full card width */
+  flex: none; width: min(140px, 38vw);
+  display: grid; gap: 8px; padding: 0; background: none; cursor: pointer;
+  border: 0; font: inherit; color: var(--cs-ink-3); text-align: left;
+}
+.cs-share-opt video, .cs-share-opt img {
+  display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover;
+  border: 1.5px solid var(--cs-rule); background: var(--cs-rule);
+  transition: border-color .14s, box-shadow .14s, translate .14s;
+}
+.cs-share-opt span { font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.cs-share-opt[aria-checked="true"] { color: var(--cs-accent); }
+.cs-share-opt[aria-checked="true"] video, .cs-share-opt[aria-checked="true"] img {
+  border-color: var(--cs-ink); box-shadow: 5px 5px 0 0 var(--cs-accent); translate: -2px -2px;
+}
+
 /* ── sections ─────────────────────────────────────── */
 .cs-section { padding: clamp(56px, 9vh, 104px) 0 0; }
 

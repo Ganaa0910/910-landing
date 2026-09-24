@@ -30,7 +30,7 @@ export interface ProjectPalette {
   accent: string;
   /* text on accent fills */
   onAccent: string;
-  /* optional second brand color — CMM's orange, Uuyee's amber */
+  /* optional second brand color — CMM's yellow, Uuyee's amber */
   signal?: string;
 }
 
@@ -93,6 +93,29 @@ export interface Project {
 }
 
 export const PROJECTS: Project[] = [
+  {
+    slug: "protech",
+    title: "Protech",
+    client: "Протек ХХК",
+    year: "2026",
+    scope: ["Frontend", "Backend", "Infrastructure"],
+    description:
+      "Mongolia's premium laptop and tablet store, built with no house colour at all. Storefront, admin console, API, and the server the whole thing runs on.",
+    image: "/demos/protech/assets/thumb.png",
+    featured: true,
+    /* There is no accent to pull. The storefront's --color-accent is
+       #0e0e0e — the same value as its ink, on purpose — so the card and
+       the case study are monochrome because the brand is. The signal is
+       the in-stock green, the only chromatic value the shop allows
+       itself and never as decoration. */
+    palette: palette({
+      mode: "light",
+      ground: "#FFFFFF",
+      ink: "#0E0E0E",
+      accent: "#0E0E0E",
+      signal: "#15A06E",
+    }),
+  },
   {
     slug: "juraan",
     title: "Juraan",
@@ -195,22 +218,22 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "cmm",
-    title: "MarketIQ",
+    title: "CMM",
     client: "Capital Markets Mongolia",
     year: "2026",
     scope: ["Design System", "Token Architecture", "Frontend"],
     description:
-      "Design system and frontend for Mongolia's first AI-native capital markets intelligence platform.",
+      "Design system and frontend for Capital Markets Mongolia: research, a company directory and the bond market on one platform.",
     image: "/demos/cmm/assets/thumb.png",
     featured: true,
-    /* the Dense direction's own tokens — brand purple on near-white, with
-       orange carrying signal */
+    /* the v2 "Electric Violet" tokens — the landing page's lilac paper and
+       violet-black ink under the #824BFF brand, with the pale yellow signal */
     palette: palette({
       mode: "light",
-      ground: "#F4F2FB",
-      ink: "#0C0A1D",
-      accent: "#3E149C",
-      signal: "#FCA311",
+      ground: "#F9F6FF",
+      ink: "#201C2B",
+      accent: "#824BFF",
+      signal: "#FFFB8A",
     }),
   },
 ];

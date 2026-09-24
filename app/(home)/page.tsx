@@ -79,8 +79,8 @@ export default function HomePage() {
         <h3>Notable Projects</h3>
         <ul>
           <li>
-            MarketIQ for Capital Markets Mongolia (2026) — Design system and frontend for
-            Mongolia&apos;s first AI-native capital markets intelligence platform. Scope:
+            Capital Markets Mongolia (2026) — Design system and frontend for
+            capitalmarkets.mn, Mongolia&apos;s capital markets research and data platform. Scope:
             design system, token architecture, frontend development. 9-week timeline.
           </li>
           <li>

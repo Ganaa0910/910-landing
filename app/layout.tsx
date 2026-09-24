@@ -275,7 +275,7 @@ export default function RootLayout({
                     name: "What projects has 910studio worked on?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Notable projects include MarketIQ for Capital Markets Mongolia — a design system and frontend for Mongolia's first AI-native capital markets intelligence platform, and Juraan — a cinematic portfolio with custom typeface for Mongolia's premier bronze sculptor Lkhagvasuren Nyamkhuu.",
+                      text: "Notable projects include Capital Markets Mongolia — a design system and frontend for capitalmarkets.mn, Mongolia's capital markets research and data platform, and Juraan — a cinematic portfolio with custom typeface for Mongolia's premier bronze sculptor Lkhagvasuren Nyamkhuu.",
                     },
                   },
                 ],
