@@ -94,6 +94,29 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "protech",
+    title: "Protech",
+    client: "Протек ХХК",
+    year: "2026",
+    scope: ["Frontend", "Backend", "Infrastructure"],
+    description:
+      "Mongolia's premium laptop and tablet store, built with no house colour at all. Storefront, admin console, API, and the server the whole thing runs on.",
+    image: "/demos/protech/assets/thumb.png",
+    featured: true,
+    /* There is no accent to pull. The storefront's --color-accent is
+       #0e0e0e — the same value as its ink, on purpose — so the card and
+       the case study are monochrome because the brand is. The signal is
+       the in-stock green, the only chromatic value the shop allows
+       itself and never as decoration. */
+    palette: palette({
+      mode: "light",
+      ground: "#FFFFFF",
+      ink: "#0E0E0E",
+      accent: "#0E0E0E",
+      signal: "#15A06E",
+    }),
+  },
+  {
     slug: "juraan",
     title: "Juraan",
     client: "Juraan (Lkhagvasuren Nyamkhuu)",
