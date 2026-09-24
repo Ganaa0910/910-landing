@@ -2,14 +2,36 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const SPECIMEN_LINES = [
-  { text: "Juraan", size: "clamp(4rem, 10vw, 7rem)", color: "#D4AF7A", label: "Display" },
-  { text: "God and Devil", size: "clamp(2.5rem, 6vw, 4.5rem)", color: "#e5e5e5", label: "Hero" },
-  { text: "The World of Juraan", size: "clamp(1.75rem, 4vw, 3rem)", color: "#e5e5e5", label: "H1" },
-  { text: "Bronze · Mythology · Mongolia", size: "clamp(1.25rem, 2.5vw, 2rem)", color: "#a3a3a3", label: "H2" },
+/* The Juraan typeface, rendered live from the actual .ttf that ships on the
+ * client's site — a specimen, not the page's type. The case study itself is
+ * set in Plex Mono like every other one; the custom font appears here as the
+ * subject, framed and measured.
+ *
+ * Every colour comes from --cs-*, so the guides are drawn in the project's
+ * own accent rather than in a colour picked to look good against bronze. */
+
+const SPECIMEN = [
+  { text: "Juraan", size: "clamp(4rem, 10vw, 7rem)", label: "Display", accent: true },
+  { text: "God and Devil", size: "clamp(2.5rem, 6vw, 4.5rem)", label: "Hero" },
+  { text: "The World of Juraan", size: "clamp(1.75rem, 4vw, 3rem)", label: "H1" },
+  { text: "Bronze · Mythology · Mongolia", size: "clamp(1.25rem, 2.5vw, 2rem)", label: "H2", dim: true },
 ];
 
-const CHARSET_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const SCALE = [
+  { label: "hero", px: "48–96px", w: "100%" },
+  { label: "h1", px: "40–64px", w: "75%" },
+  { label: "h2", px: "28–40px", w: "50%" },
+  { label: "h3", px: "20–28px", w: "35%" },
+];
+
+const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+const META = [
+  "Weight: Regular (400)",
+  "Format: TrueType",
+  "Licence: Custom / exclusive",
+  "Usage: Display only",
+];
 
 export function FontShowcase() {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,214 +54,177 @@ export function FontShowcase() {
   }, []);
 
   return (
-    <div ref={ref} className="mt-8 border border-zinc-800 overflow-hidden">
-      {/* Browser chrome bar */}
-      <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-950 px-4 py-3">
-        <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-          <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-          <span className="h-2.5 w-2.5 rounded-full bg-[#28c940]" />
+    <div ref={ref} className="cs-demo">
+      <div className="cs-demo-bar">
+        <div className="cs-dots">
+          <i />
+          <i />
+          <i />
         </div>
-        <span className="flex-1 text-center font-mono text-[10px] text-zinc-500">
-          JuraanFont-Regular.ttf — Custom Display Typeface
-        </span>
-        <span className="text-[9px] uppercase tracking-wider text-accent">Live Font</span>
+        <span className="cs-demo-url">JuraanFont-Regular.ttf — custom display typeface</span>
+        <span className="cs-demo-tag">Live font</span>
       </div>
 
       {visible ? (
-        <div className="bg-[#0a0a0a] p-6 sm:p-8">
-          {/* Load the actual font */}
+        <div className="fs-body">
           <style>{`
             @font-face {
               font-family: 'JuraanShowcase';
               src: url('/demos/juraan/assets/JuraanFont-Regular.ttf') format('truetype');
-              font-weight: normal;
-              font-style: normal;
-              font-display: swap;
+              font-weight: normal; font-style: normal; font-display: swap;
             }
-            .type-line {
-              position: relative;
-              padding: 16px 0;
+            .fs-body { padding: clamp(20px, 3vw, 32px); }
+            .fs-head {
+              display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
             }
-            .type-line::before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              border-top: 1px dashed rgba(212, 175, 122, 0.15);
+            .fs-head span {
+              font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+              color: var(--cs-ink-3);
             }
-            .type-line::after {
-              content: '';
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              right: 0;
-              border-top: 1px dashed rgba(212, 175, 122, 0.15);
+            .fs-head i { flex: 1; border-top: 1px dashed var(--cs-rule); }
+
+            /* the horizontal metric guides that make it read as a specimen
+               sheet rather than as decorative big text */
+            .fs-line {
+              position: relative; padding: 16px 0;
+              display: flex; align-items: baseline; gap: 16px;
             }
-            .baseline-guide {
-              position: relative;
+            .fs-line::before, .fs-line::after {
+              content: ''; position: absolute; left: 0; right: 0;
+              border-top: 1px dashed var(--cs-rule);
             }
-            .baseline-guide::before {
-              content: '';
-              position: absolute;
-              bottom: 0.18em;
-              left: 0;
-              right: 0;
-              border-top: 1px dashed rgba(212, 175, 122, 0.25);
+            .fs-line::before { top: 0; }
+            .fs-line::after { bottom: 0; }
+            .fs-line > b {
+              flex: 0 0 auto; width: 56px;
+              font-size: 9px; font-weight: 400; letter-spacing: .14em;
+              text-transform: uppercase; color: var(--cs-ink-3);
             }
-            .cap-guide::after {
-              content: '';
-              position: absolute;
-              top: 0.12em;
-              left: 0;
-              right: 0;
-              border-top: 1px dashed rgba(212, 175, 122, 0.12);
+            .fs-line > p {
+              margin: 0; line-height: 1.1;
+              font-family: 'JuraanShowcase', serif;
             }
-            .x-guide {
-              position: relative;
+
+            .fs-block { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--cs-rule); }
+
+            .fs-scale { display: flex; align-items: center; gap: 16px; padding: 7px 0;
+                        border-bottom: 1px dashed var(--cs-rule); }
+            .fs-scale b { width: 34px; flex: 0 0 auto; font-size: 9px; font-weight: 400;
+                          text-transform: uppercase; color: var(--cs-accent); }
+            .fs-scale i { height: 11px; background: var(--cs-accent); opacity: .22; }
+            .fs-scale span { flex: 0 0 auto; margin-left: auto; font-size: 9px; color: var(--cs-ink-3); }
+
+            /* one cell per glyph, each carrying its own cap-height, x-height,
+               baseline and descender rules */
+            .fs-set { display: grid; grid-template-columns: repeat(9, 1fr); }
+            @media (min-width: 640px) { .fs-set { grid-template-columns: repeat(13, 1fr); } }
+            .fs-cell { position: relative; aspect-ratio: 1 / 1.3;
+                       display: grid; place-items: center; }
+            .fs-cell u, .fs-cell s {
+              position: absolute; left: 0; right: 0; border-top: 1px dashed var(--cs-accent);
             }
-            .x-guide::before {
-              content: '';
-              position: absolute;
-              top: 50%;
-              left: 0;
-              right: 0;
-              border-top: 1px dashed rgba(212, 175, 122, 0.1);
+            .fs-cell u { top: 0; opacity: .18; }            /* cap height */
+            .fs-cell u + u { top: 38%; opacity: .12; }      /* x-height */
+            .fs-cell s { bottom: 15%; opacity: .24; }       /* baseline */
+            .fs-cell s + s { bottom: 0; opacity: .1; }      /* descender */
+            .fs-cell em {
+              position: absolute; top: 0; bottom: 0; left: 0;
+              border-left: 1px dashed var(--cs-accent); opacity: .1;
             }
+            .fs-cell em + em { left: auto; right: 0; border-left: 0;
+                               border-right: 1px dashed var(--cs-accent); }
+            .fs-cell span {
+              position: relative; z-index: 1; line-height: 1;
+              font-family: 'JuraanShowcase', serif;
+              font-size: clamp(2rem, 5vw, 3.5rem); color: var(--cs-ink);
+            }
+
+            .fs-metric { display: flex; align-items: center; gap: 8px; }
+            .fs-metric b { font-size: 8px; font-weight: 400; letter-spacing: .14em;
+                           text-transform: uppercase; color: var(--cs-ink-3); }
+            .fs-metric i { flex: 1; border-top: 1px dashed var(--cs-accent); opacity: .2; }
+
+            .fs-meta { display: flex; flex-wrap: wrap; gap: 8px 32px; margin-top: 22px;
+                       padding-top: 16px; border-top: 1px solid var(--cs-rule); }
+            .fs-meta span { font-size: 9px; color: var(--cs-ink-3); }
           `}</style>
 
-          {/* ── Type Specimen with alignment guides ── */}
-          <div className="mb-8">
-            <div className="mb-4 flex items-center gap-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">
-                type specimen
-              </p>
-              <div className="flex-1 border-t border-dashed border-zinc-800" />
-            </div>
+          <div className="fs-head">
+            <span>Type specimen</span>
+            <i />
+          </div>
 
-            {SPECIMEN_LINES.map((line) => (
-              <div key={line.label} className="type-line baseline-guide cap-guide x-guide">
-                <div className="flex items-baseline gap-4">
-                  <span className="w-14 flex-shrink-0 font-mono text-[9px] text-[#D4AF7A]/40 uppercase tracking-wider">
-                    {line.label}
-                  </span>
-                  <p
-                    className="leading-[1.1]"
-                    style={{
-                      fontFamily: "JuraanShowcase, serif",
-                      fontSize: line.size,
-                      color: line.color,
-                    }}
-                  >
-                    {line.text}
-                  </p>
-                </div>
+          {SPECIMEN.map((l) => (
+            <div key={l.label} className="fs-line">
+              <b>{l.label}</b>
+              <p
+                style={{
+                  fontSize: l.size,
+                  color: l.accent
+                    ? "var(--cs-accent)"
+                    : l.dim
+                      ? "var(--cs-ink-3)"
+                      : "var(--cs-ink)",
+                }}
+              >
+                {l.text}
+              </p>
+            </div>
+          ))}
+
+          <div className="fs-block">
+            <div className="fs-head">
+              <span>Fluid scale — CSS clamp()</span>
+              <i />
+            </div>
+            {SCALE.map((s) => (
+              <div key={s.label} className="fs-scale">
+                <b>{s.label}</b>
+                <i style={{ width: s.w }} />
+                <span>{s.px}</span>
               </div>
             ))}
           </div>
 
-          {/* ── Fluid Scale Demo ── */}
-          <div className="mb-8 border-t border-zinc-800 pt-6">
-            <div className="mb-4 flex items-center gap-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">
-                fluid scale — css clamp()
-              </p>
-              <div className="flex-1 border-t border-dashed border-zinc-800" />
+          <div className="fs-block">
+            <div className="fs-head">
+              <span>Character set</span>
+              <i />
             </div>
 
-            <div className="space-y-0">
-              {[
-                { label: "hero", formula: "clamp(3rem, 8vw, 6rem)", px: "48–96px" },
-                { label: "h1", formula: "clamp(2.5rem, 5vw, 4rem)", px: "40–64px" },
-                { label: "h2", formula: "clamp(1.75rem, 3vw, 2.5rem)", px: "28–40px" },
-                { label: "h3", formula: "clamp(1.25rem, 2vw, 1.75rem)", px: "20–28px" },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="flex items-center gap-4 py-2"
-                  style={{ borderBottom: "1px dashed rgba(63, 63, 70, 0.3)" }}
-                >
-                  <span className="w-8 font-mono text-[9px] text-accent uppercase">{s.label}</span>
-                  <div
-                    className="h-3 bg-[#D4AF7A]/20"
-                    style={{ width: s.label === "hero" ? "100%" : s.label === "h1" ? "75%" : s.label === "h2" ? "50%" : "35%" }}
-                  />
-                  <span className="flex-shrink-0 font-mono text-[9px] text-zinc-600">{s.px}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Character Set with per-letter alignment guides ── */}
-          <div className="border-t border-zinc-800 pt-6">
-            <div className="mb-4 flex items-center gap-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-600">
-                character set
-              </p>
-              <div className="flex-1 border-t border-dashed border-zinc-800" />
+            <div className="fs-metric" style={{ marginBottom: 4 }}>
+              <b>Cap height</b>
+              <i />
             </div>
 
-            {/* Metric labels */}
-            <div className="relative mb-1 flex items-center pl-1">
-              <span className="font-mono text-[8px] text-[#D4AF7A]/30 uppercase">cap height</span>
-              <div className="ml-2 flex-1 border-t border-dashed border-[#D4AF7A]/15" />
-            </div>
-
-            <div className="grid grid-cols-9 gap-0 sm:grid-cols-[repeat(13,1fr)]">
-              {CHARSET_LETTERS.map((letter) => (
-                <div
-                  key={letter}
-                  className="relative flex items-center justify-center"
-                  style={{ aspectRatio: "1 / 1.3" }}
-                >
-                  {/* Cap height line (top) */}
-                  <div className="absolute top-0 left-0 right-0 border-t border-dashed border-[#D4AF7A]/15" />
-                  {/* X-height / crossbar line (middle) */}
-                  <div className="absolute top-[38%] left-0 right-0 border-t border-dashed border-[#D4AF7A]/10" />
-                  {/* Baseline (bottom) */}
-                  <div className="absolute bottom-[15%] left-0 right-0 border-t border-dashed border-[#D4AF7A]/20" />
-                  {/* Descender line */}
-                  <div className="absolute bottom-0 left-0 right-0 border-t border-dashed border-[#D4AF7A]/8" />
-                  {/* Left vertical guide */}
-                  <div className="absolute top-0 bottom-0 left-0 border-l border-dashed border-[#D4AF7A]/8" />
-                  {/* Right vertical guide */}
-                  <div className="absolute top-0 bottom-0 right-0 border-r border-dashed border-[#D4AF7A]/8" />
-
-                  <span
-                    className="relative z-10 text-zinc-200"
-                    style={{
-                      fontFamily: "JuraanShowcase, serif",
-                      fontSize: "clamp(2rem, 5vw, 3.5rem)",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {letter}
-                  </span>
+            <div className="fs-set">
+              {LETTERS.map((letter) => (
+                <div key={letter} className="fs-cell">
+                  <u />
+                  <u />
+                  <s />
+                  <s />
+                  <em />
+                  <em />
+                  <span>{letter}</span>
                 </div>
               ))}
             </div>
 
-            {/* Baseline label */}
-            <div className="relative mt-1 flex items-center pl-1">
-              <span className="font-mono text-[8px] text-[#D4AF7A]/30 uppercase">baseline</span>
-              <div className="ml-2 flex-1 border-t border-dashed border-[#D4AF7A]/15" />
+            <div className="fs-metric" style={{ marginTop: 4 }}>
+              <b>Baseline</b>
+              <i />
             </div>
           </div>
 
-          {/* ── Font metadata ── */}
-          <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2 border-t border-zinc-800 pt-4">
-            <span className="font-mono text-[9px] text-zinc-600">Weight: Regular (400)</span>
-            <span className="font-mono text-[9px] text-zinc-600">Format: TrueType</span>
-            <span className="font-mono text-[9px] text-zinc-600">License: Custom / Exclusive</span>
-            <span className="font-mono text-[9px] text-zinc-600">Usage: Display only</span>
+          <div className="fs-meta">
+            {META.map((m) => (
+              <span key={m}>{m}</span>
+            ))}
           </div>
         </div>
       ) : (
-        <div
-          className="grid place-items-center font-mono text-[10px] uppercase tracking-wider text-zinc-600"
-          style={{ height: 600, background: "#0a0a0a" }}
-        >
+        <div className="cs-demo-ph" style={{ height: 600 }}>
           scroll to load font showcase
         </div>
       )}

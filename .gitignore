@@ -41,3 +41,8 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+# build caches anywhere in the tree (apps/*, turbo)
+node_modules/
+.next/
+.turbo/

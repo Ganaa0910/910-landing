@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import {
   IBM_Plex_Mono,
+  Inter,
+  Space_Grotesk,
+  Space_Mono,
   Syne,
   JetBrains_Mono,
   Bebas_Neue,
@@ -9,19 +12,52 @@ import {
 } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import { SmoothScroll } from "@/components/scroll/smooth-scroll";
+import { ReelCanvas } from "@/components/reel/reel-canvas";
+import { NavProvider, PageShell } from "@/components/nav/page-shell";
+import { SiteHeader } from "@/components/nav/site-header";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Nav } from "@/components/layout/nav";
-import { Footer } from "@/components/layout/footer";
-import { CustomCursor } from "@/components/CustomCursor";
-import { AudioToggle } from "@/components/ui/audio-toggle";
-import { LoadingScreen } from "@/components/ui/loading-screen";
-import { NowPlaying } from "@/components/ui/now-playing";
-import { PageTransition } from "@/components/ui/page-transition";
 import "./globals.css";
+/* Lenis's own stylesheet. Not optional: it releases the height clamp on
+   html/body that would otherwise cap the 620vh reel track, and stops native
+   scroll-behavior from fighting the interpolation. Imported from the package
+   so it tracks the version rather than drifting as a hand-copy. */
+import "lenis/dist/lenis.css";
+import "./reel.css";
+/* the case-study drafting layer: 910's blueprint grammar. Loaded after
+   reel.css so its sheets can override the .cs- base. */
+import "./drafting.css";
 
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
   weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
+
+/* Nair's shipped stack is `Google Sans, Product Sans, Inter, system-ui`.
+   Google Sans and Product Sans are Google-internal and not redistributable,
+   so the case study's type specimens set in Inter — the client's own next
+   fallback — and say so on the sheet. Cyrillic is not optional here: the
+   specimens are Mongolian. */
+const inter = Inter({
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin", "cyrillic"],
+});
+
+/* Uuye's shipped stack is Space Grotesk (display) + Space Mono (body), both
+   Google-hosted and freely redistributable — so unlike Nair's Google Sans,
+   the case study's replicas can set in the client's actual faces rather than
+   a fallback. */
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  weight: ["500", "700"],
+  subsets: ["latin"],
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  weight: ["400", "700"],
   subsets: ["latin"],
 });
 
@@ -251,17 +287,16 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${ibmPlexMono.variable} ${syne.variable} ${jetbrainsMono.variable} ${bebas.variable} ${anton.variable} ${blackOps.variable} ${christmasPipow.variable} antialiased`}
+        className={`${ibmPlexMono.variable} ${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${syne.variable} ${jetbrainsMono.variable} ${bebas.variable} ${anton.variable} ${blackOps.variable} ${christmasPipow.variable} antialiased`}
       >
-        <Nav />
-        <PageTransition>
-          {children}
-          <Footer />
-        </PageTransition>
-        <LoadingScreen />
-        <NowPlaying />
-        <CustomCursor />
-        <AudioToggle />
+        <NavProvider>
+          {/* before ReelCanvas: it has to advance the scroll position each
+              frame before the canvas reads it */}
+          <SmoothScroll />
+          <ReelCanvas />
+          <SiteHeader />
+          <PageShell>{children}</PageShell>
+        </NavProvider>
         <Analytics />
         <SpeedInsights />
       </body>
