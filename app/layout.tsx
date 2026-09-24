@@ -11,6 +11,7 @@ import {
   Black_Ops_One,
 } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SmoothScroll } from "@/components/scroll/smooth-scroll";
 import { ReelCanvas } from "@/components/reel/reel-canvas";
@@ -296,6 +297,17 @@ export default function RootLayout({
         </NavProvider>
         <Analytics />
         <SpeedInsights />
+        {/* Umami, self-hosted on our own box at s.910.studio. It sits next to
+            Vercel's two because it answers a different question: Vercel counts
+            at the edge and cannot be blocked, Umami counts in the browser and
+            can — so where they disagree, the gap IS the blocker rate. The id is
+            public by design; it ships in every bundle and identifies a site to
+            write to, not an account to read from. */}
+        <Script
+          src="https://s.910.studio/script.js"
+          data-website-id="2f8a9276-42ba-4ef0-870f-ed91202cae8f"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
