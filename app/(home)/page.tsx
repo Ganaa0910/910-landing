@@ -1,4 +1,33 @@
+import type { Metadata } from "next";
 import { Reel } from "@/components/reel/reel";
+
+/* The home page's share card is S1 itself: opengraph-image.png beside this
+   file is a frame of the intro, and og/home.mp4 is the intro recorded at
+   1200×630. Apps that play og:video (Discord, iMessage, Telegram) run the
+   build-up; everything else falls back to the still. This page sits in a
+   route group so the still applies to "/" alone — the rest of the site
+   keeps the generated card in app/opengraph-image.tsx. openGraph is
+   restated in full because a page's openGraph replaces the layout's. */
+export const metadata: Metadata = {
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://910.studio",
+    siteName: "910studio",
+    title: "910studio | Creative Web Studio in Ulaanbaatar",
+    description:
+      "Design systems, web platforms, and creative development. Based in Ulaanbaatar, Mongolia. Working globally.",
+    videos: [
+      {
+        url: "https://910.studio/og/home.mp4",
+        secureUrl: "https://910.studio/og/home.mp4",
+        type: "video/mp4",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+};
 
 export default function HomePage() {
   return (
